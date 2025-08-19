@@ -1,6 +1,7 @@
 import "./style.css";
 import Logo from "../../Assets/LogoOrangeNoBg.png";
 import Button from "../../Components/Button";
+import InstructionCard from "../../Components/InstructionCard";
 
 const Landing = () => {
   return (
@@ -35,6 +36,26 @@ const Landing = () => {
           Three simple steps to unlock your career potential and create a
           personalized roadmap for success.
         </h2>
+        <div className="landing-row-instructions">
+          <InstructionCard
+            title={"DISCOVER & ASSESS"}
+            paragraph={
+              "Complete our comprehensive assessment to identify your skills, interests, values, and career preferences. Our AI analyzes your unique profile to understand what drives you."
+            }
+          />
+          <InstructionCard
+            title={"EXPLORE & PLAN"}
+            paragraph={
+              "Receive personalized career recommendations and detailed roadmaps. Explore different paths, understand requirements, and see how your current skills align with your dream roles."
+            }
+          />
+          <InstructionCard
+            title={"EXECUTE & GROW"}
+            paragraph={
+              "Follow your custom action plan with guided learning resources, skill development tracks, and milestone tracking. Get ongoing support as you progress toward your goals."
+            }
+          />
+        </div>
       </section>
     </body>
   );

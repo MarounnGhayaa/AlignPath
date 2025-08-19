@@ -1,0 +1,15 @@
+.landing-instruction {
+  background-color: white;
+  width: 300px;
+  border-radius: 8px;
+}
+
+.landing-instruction h3 {
+  text-decoration: underline;
+  padding: 20px;
+}
+
+.landing-instruction p {
+  font-style: italic;
+  padding: 20px;
+}
