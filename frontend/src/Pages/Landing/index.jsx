@@ -2,6 +2,7 @@ import "./style.css";
 import Logo from "../../Assets/LogoOrangeNoBg.png";
 import Button from "../../Components/Button";
 import InstructionCard from "../../Components/InstructionCard";
+import SuccessCard from "../../Components/SuccessCard";
 
 const Landing = () => {
   return (
@@ -54,6 +55,36 @@ const Landing = () => {
             paragraph={
               "Follow your custom action plan with guided learning resources, skill development tracks, and milestone tracking. Get ongoing support as you progress toward your goals."
             }
+          />
+        </div>
+      </section>
+      <section className="landing-story-section">
+        <h1>Success Stories</h1>
+        <h2>Hear from others who transformed their careers with AlignPath</h2>
+        <div className="landing-row-stories">
+          <img
+            src={Logo}
+            alt="AlignPath Logo"
+            className="landing-logo-img-sc"
+          />
+          <SuccessCard
+            story={
+              "'AlignPath helped me transition from marketing to UX design in just 8 months. The personalized roadmap and skill assessments were exactly what I needed to make a confident career change.'"
+            }
+            name={"Faouzia Jomaa"}
+            position={"UX Designer at TechFlow"}
+          />
+          <SuccessCard
+            story={
+              "'As a recent graduate, I was overwhelmed by career options. AlignPath's assessment revealed strengths I didn't know I had and connected me with my dream job in data science.'"
+            }
+            name={"Jad Nader"}
+            position={"Data Scientist at Minders"}
+          />
+          <img
+            src={Logo}
+            alt="AlignPath Logo"
+            className="landing-logo-img-sc"
           />
         </div>
       </section>

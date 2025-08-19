@@ -1,0 +1,22 @@
+.landing-story {
+  background-color: #424242;
+  color: white;
+  width: 400px;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.landing-story p {
+  font-style: italic;
+  margin-bottom: 30px;
+  padding: 20px;
+}
+
+.landing-story h3 {
+  text-align: left;
+}
+
+.landing-story h4 {
+  text-align: left;
+  font-weight: normal;
+}
