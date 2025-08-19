@@ -1,3 +1,4 @@
+import "./style.css";
 const Button = ({ text, onClickListener, className, insiders }) => {
   return (
     <button onClick={onClickListener} className={className}>
