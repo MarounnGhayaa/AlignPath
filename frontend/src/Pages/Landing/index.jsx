@@ -14,6 +14,21 @@ const Landing = () => {
         </div>
         <Button text={"Sign In"} className="primary-button" />
       </header>
+      <main className="landing-hero">
+        <div className="landing-hero-text">
+          <h1>Navigate Your Career Journey with Confidence</h1>
+          <h2>
+            AlignPath connects your skills, passions, and goals to create
+            personalized career roadmaps that adapt as you grow.
+          </h2>
+          <div className="landing-row-btns">
+            <Button text={"Get Started"} className="primary-button" />
+            <Button text={"Success Stories"} className="secondary-button" />
+          </div>
+        </div>
+
+        <div className="landing-her-img"></div>
+      </main>
     </body>
   );
 };

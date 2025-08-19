@@ -31,3 +31,44 @@
 .landing-logo span {
   color: #f46530;
 }
+
+.landing-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 60px 50px;
+  gap: 50px;
+}
+
+.landing-hero h1 {
+  font-size: 40px;
+  margin-bottom: 30px;
+}
+
+.landing-hero h2 {
+  font-size: 20px;
+  font-style: italic;
+  margin-bottom: 40px;
+  font-weight: normal;
+  color: #555;
+  line-height: 1.5;
+}
+
+.landing-row-btns {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.landing-her-img {
+  flex: 1;
+  background: url("../../Assets/AlignPathWhite.png") no-repeat center/contain;
+  min-height: 300px;
+}
+
+.landing-hero-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
