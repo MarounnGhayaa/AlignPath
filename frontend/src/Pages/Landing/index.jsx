@@ -1,14 +1,20 @@
+import "./style.css";
+import Logo from "../../Assets/LogoOrangeNoBg.png";
 import Button from "../../Components/Button";
+
 const Landing = () => {
   return (
-    <>
-      <h1>Test Landing</h1>
-      <Button
-        className={"secondary-button"}
-        insiders={"insiders"}
-        text={"text"}
-      />
-    </>
+    <body className="landing-body">
+      <header className="landing-nav">
+        <div className="landing-logo">
+          <img src={Logo} alt="AlignPath Logo" className="landing-logo-img" />
+          <strong>
+            Align<span>Path</span>
+          </strong>
+        </div>
+        <Button text={"Sign In"} className="primary-button" />
+      </header>
+    </body>
   );
 };
 
