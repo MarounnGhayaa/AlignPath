@@ -72,3 +72,24 @@
   flex-direction: column;
   justify-content: center;
 }
+
+.landing-work-section {
+  text-align: center;
+  background-color: #424242;
+  padding: 60px 40px;
+}
+
+.landing-work-section h1 {
+  font-size: 40px;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.landing-work-section h2 {
+  font-size: 20px;
+  font-style: italic;
+  margin-bottom: 40px;
+  font-weight: normal;
+  color: white;
+  line-height: 1.5;
+}

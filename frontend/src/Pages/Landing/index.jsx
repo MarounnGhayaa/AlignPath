@@ -29,6 +29,13 @@ const Landing = () => {
 
         <div className="landing-her-img"></div>
       </main>
+      <section className="landing-work-section">
+        <h1>How AlignPath Works</h1>
+        <h2>
+          Three simple steps to unlock your career potential and create a
+          personalized roadmap for success.
+        </h2>
+      </section>
     </body>
   );
 };
