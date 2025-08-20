@@ -1,5 +1,6 @@
 import "./style.css";
 import Recommendation from "../../Components/Recommendation";
+import Statistic from "../../Components/Statistic";
 
 const Home = () => {
   return (
@@ -18,6 +19,11 @@ const Home = () => {
           title={"Marketing Manager"}
           description={'"Plan and execute strategies for the markets"'}
         />
+      </div>
+      <div className="homePage-stats">
+        <Statistic value={"50%"} statTitle={"Career Exploration"} />
+        <Statistic value={"20%"} statTitle={"Mentorship Exploration"} />
+        <Statistic value={"30%"} statTitle={"Skills Learned"} />
       </div>
     </div>
   );

@@ -20,3 +20,16 @@
   margin-top: 20px;
   margin-left: 40px;
 }
+
+.homePage-stats {
+  text-align: center;
+  background-color: #d9d9d9;
+  display: flex;
+  justify-content: space-evenly;
+  direction: row;
+  padding: 40px;
+  border-radius: 8px;
+  width: 60%;
+  margin-top: 20px;
+  margin-left: 40px;
+}

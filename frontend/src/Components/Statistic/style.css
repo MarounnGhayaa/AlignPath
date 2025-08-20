@@ -1,0 +1,16 @@
+.landing-stat {
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  border-style: solid;
+}
+
+.landing-stat h2 {
+  padding: 10px;
+}
+
+.landing-stat h3 {
+  font-style: italic;
+  padding: 10px;
+  width: 200px;
+}
