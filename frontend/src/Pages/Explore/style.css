@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #424242;
+}
+
+.explore-body {
+  padding: 50px;
+  text-align: center;
+  color: white;
+}
+
+.explore-heading {
+  display: flex;
+  justify-content: center;
+  direction: row;
+  gap: 30px;
+}
+.explore-description {
+  margin-top: 50px;
+  padding: 30px;
+  font-style: italic;
+  font-size: larger;
+  width: 600px;
+  justify-self: center;
+}
+
+.explore-description p {
+  margin-bottom: 50px;
+}
+
+.explore-row-btns {
+  display: flex;
+  justify-content: center;
+  direction: row;
+  gap: 30px;
+}
+
+.explore-designed-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.explore-WLogo {
+  height: 200px;
+  width: auto;
+}
+
+.explore-OLogo {
+  height: 100px;
+  width: 100px;
+  object-fit: contain;
+}
