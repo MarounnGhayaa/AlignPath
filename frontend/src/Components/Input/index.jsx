@@ -1,3 +1,5 @@
+import "./style.css";
+
 const Input = ({
   name,
   type,
@@ -11,13 +13,13 @@ const Input = ({
 }) => {
   return (
     <input
+      className="input-style"
       name={name}
       type={type}
       required={required}
       placeholder={hint}
       value={value}
       onChange={onChangeListener}
-      className={className}
       minLength={minLength}
       maxLength={maxLength}
     />
