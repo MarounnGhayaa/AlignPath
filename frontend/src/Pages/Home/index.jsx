@@ -1,5 +1,3 @@
-import NavBar from "../../Components/NavBar";
-
 const Home = () => {
   return <h1>Hello Home</h1>;
 };
