@@ -1,0 +1,45 @@
+.path-card {
+  text-align: center;
+  border-radius: 8px;
+  border-style: solid;
+  width: 400px;
+  padding: 20px;
+  margin: 40px;
+}
+
+.path-card-header {
+  display: flex;
+  justify-content: space-between;
+  direction: row;
+}
+
+.path-card-header h4 {
+  background-color: #424242;
+  color: white;
+  padding: 5px;
+  border-radius: 90px;
+  font-weight: lighter;
+  margin-bottom: 20px;
+}
+
+.path-card-subtitle {
+  text-align: left;
+}
+
+.path-card-progress {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  direction: row;
+}
+
+.path-card-footer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  direction: row;
+}
+
+.path-card-footer h5 {
+  margin-top: 10px;
+}

@@ -2,13 +2,13 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #424242;
 }
 
 .explore-body {
   padding: 50px;
   text-align: center;
   color: white;
+  background-color: #424242;
 }
 
 .explore-heading {
