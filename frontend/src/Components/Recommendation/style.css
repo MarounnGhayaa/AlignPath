@@ -1,0 +1,16 @@
+.recommendation-card {
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  border-style: solid;
+}
+
+.recommendation-card h4 {
+  padding: 20px;
+}
+
+.recommendation-card p {
+  font-style: italic;
+  padding: 20px;
+  width: 200px;
+}
