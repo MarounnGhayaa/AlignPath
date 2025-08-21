@@ -12,7 +12,7 @@ const MentorCard = ({ image, name, position, skills }) => {
         </div>
         <div className="mentor-titles">
           <h3>{name}</h3>
-          <p>{position}</p>
+          <strong>{position}</strong>
         </div>
       </div>
       <h4>Expertise</h4>

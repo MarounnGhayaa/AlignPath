@@ -122,10 +122,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 20px;
   flex: 1;
 }
 
-.profile-user-save-changes p {
+.profile-user-save-changes h4 {
   width: 200px;
 }

@@ -7,7 +7,7 @@ const SavedPath = ({ title, tag, subtitle, progress_value, saved_date }) => {
         <h3>{title}</h3>
         <h4>{tag}</h4>
       </div>
-      <p className="path-card-subtitle">{subtitle}</p>
+      <h4 className="path-card-subtitle">{subtitle}</h4>
       <div className="path-card-progress">
         <strong>Progress</strong>
         <strong>{progress_value}</strong>

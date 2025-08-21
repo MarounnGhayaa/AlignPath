@@ -19,7 +19,7 @@ const Profile = () => {
             </div>
             <div className="profile-user-titles">
               <h3>Username</h3>
-              <p>username@email.com</p>
+              <strong>username@email.com</strong>
             </div>
           </div>
           <div className="profile-user-field-section">
@@ -97,10 +97,10 @@ const Profile = () => {
             <div className="profile-side-section">
               <div className="profile-user-save-changes">
                 <h2>About</h2>
-                <p>
+                <h4>
                   Student name, based in location; planning to build a
                   successful career!{" "}
-                </p>
+                </h4>
                 <Button className="primary-button" text="Save Changes" />
               </div>
             </div>
