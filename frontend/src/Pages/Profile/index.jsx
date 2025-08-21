@@ -83,13 +83,28 @@ const Profile = () => {
         </div>
 
         <div className="profile-side-box">
-          <h2>Profile Picture</h2>
-          <div className="profile-user-upload-img">
-            <span>
-              <User />
-            </span>
+          <div className="profile-side-sections">
+            <div className="profile-side-section">
+              <h2>Profile Picture</h2>
+              <div className="profile-user-upload-img">
+                <span>
+                  <User />
+                </span>
+              </div>
+              <Button className="primary-button" text="Upload Picture" />
+            </div>
+
+            <div className="profile-side-section">
+              <div className="profile-user-save-changes">
+                <h2>About</h2>
+                <p>
+                  Student name, based in location; planning to build a
+                  successful career!{" "}
+                </p>
+                <Button className="primary-button" text="Save Changes" />
+              </div>
+            </div>
           </div>
-          <Button className={"primary-button"} text={"Upload Picture"} />
         </div>
       </div>
     </div>

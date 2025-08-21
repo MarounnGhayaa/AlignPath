@@ -11,7 +11,7 @@
 .profile-user-info {
   background-color: #d9d9d9;
   margin-top: 20px;
-  width: 60%;
+  width: 70%;
   border-radius: 8px;
 }
 
@@ -71,22 +71,37 @@
 .profile-main {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 20px;
 }
 
 .profile-side-box {
   margin-top: 20px;
-  width: 35%;
+  width: 30%;
   background: #d9d9d9;
   border-radius: 8px;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+}
+
+.profile-side-sections {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  gap: 20px;
+}
+
+.profile-side-section {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 45px;
-  text-align: center;
+  gap: 40px;
+  flex: 1;
 }
 
 .profile-user-upload-img {
@@ -98,4 +113,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.profile-user-save-changes {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  flex: 1;
+}
+
+.profile-user-save-changes p {
+  width: 200px;
 }
