@@ -1,0 +1,33 @@
+.problem-card {
+  background-color: white;
+  border-radius: 8px;
+  border-style: solid;
+  width: 700px;
+  padding: 20px;
+}
+
+.problem-card h3,
+h4 {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.problem-card-tags {
+  display: flex;
+  direction: row;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.problem-card-tags span {
+  background-color: #424242;
+  color: white;
+  border-radius: 90px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.problem-card-btn {
+  display: flex;
+  justify-content: flex-end;
+}
