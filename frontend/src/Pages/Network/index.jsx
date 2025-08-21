@@ -1,5 +1,7 @@
 import "./style.css";
 import SavedPath from "../../Components/SavedPath";
+import MentorCard from "../../Components/MentorCard";
+import { User } from "lucide-react";
 
 const Network = () => {
   return (
@@ -32,6 +34,27 @@ const Network = () => {
           }
           progress_value={"75%"}
           saved_date={"8/18/2025"}
+        />
+      </div>
+      <h1>Connected Mentors</h1>
+      <div className="network-mentors">
+        <MentorCard
+          image={<User />}
+          name={"Merwen Gh"}
+          position={"Senior Software Engineer at Google"}
+          skills={["react", "js", "oop"]}
+        />
+        <MentorCard
+          image={<User />}
+          name={"Merwen Gh"}
+          position={"Senior Software Engineer at Google"}
+          skills={["react", "js", "oop"]}
+        />
+        <MentorCard
+          image={<User />}
+          name={"Merwen Gh"}
+          position={"Senior Software Engineer at Google"}
+          skills={["react", "js", "oop"]}
         />
       </div>
     </div>

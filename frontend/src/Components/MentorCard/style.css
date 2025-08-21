@@ -1,0 +1,54 @@
+.mentor-card {
+  border-radius: 8px;
+  border-style: solid;
+  width: 400px;
+  padding: 20px;
+  margin: 40px;
+}
+
+.mentor-card h4 {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.mentor-header {
+  display: flex;
+  justify-content: space-evenly;
+  direction: row;
+  margin-bottom: 40px;
+}
+
+.mentor-img {
+  margin-top: 5px;
+  border-style: solid;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mentor-skills {
+  display: flex;
+  justify-content: space-evenly;
+  direction: row;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.mentor-skill {
+  background-color: #d9d9d9;
+  border-style: solid;
+  border-radius: 90px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.mentor-btn-txt,
+.mentor-row-btns {
+  display: flex;
+  justify-content: center;
+  direction: row;
+  gap: 10px;
+}
