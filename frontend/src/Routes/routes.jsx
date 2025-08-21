@@ -8,6 +8,7 @@ import Explore from "../Pages/Explore";
 import Network from "../Pages/Network";
 import Path from "../Pages/Path";
 import Profile from "../Pages/Profile";
+import PathNested from "../Pages/PathNested";
 
 const MyRoutes = () => {
   return (
@@ -20,6 +21,7 @@ const MyRoutes = () => {
         <Route path="/network" element={<Network />} />
         <Route path="/path" element={<Path />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/pathNested" element={<PathNested />} />
       </Route>
     </Routes>
   );

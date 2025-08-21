@@ -1,0 +1,10 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.pathNested-body h1 {
+  padding: 20px;
+  text-align: center;
+}
