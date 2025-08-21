@@ -4,11 +4,11 @@
   box-sizing: border-box;
 }
 
-.network-body h1 {
+.path-body h1 {
   margin: 40px;
 }
 
-.network-mentors {
+.path-paths {
   display: flex;
   justify-content: space-evenly;
   direction: row;

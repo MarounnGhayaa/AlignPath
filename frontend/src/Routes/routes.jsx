@@ -6,6 +6,7 @@ import MainLayout from "../Layouts/MainLayout";
 import Home from "../Pages/Home";
 import Explore from "../Pages/Explore";
 import Network from "../Pages/Network";
+import Path from "../Pages/Path";
 import Profile from "../Pages/Profile";
 
 const MyRoutes = () => {
@@ -17,6 +18,7 @@ const MyRoutes = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/network" element={<Network />} />
+        <Route path="/path" element={<Path />} />
         <Route path="/profile" element={<Profile />} />
       </Route>
     </Routes>
