@@ -67,3 +67,35 @@
   border-radius: 8px;
   margin-right: 40px;
 }
+
+.profile-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.profile-side-box {
+  margin-top: 20px;
+  width: 35%;
+  background: #d9d9d9;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 45px;
+  text-align: center;
+}
+
+.profile-user-upload-img {
+  margin-top: 5px;
+  border-style: solid;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
