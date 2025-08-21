@@ -1,0 +1,23 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.quest-body h1,
+p {
+  text-align: left;
+  padding: 20px;
+  margin-left: 50px;
+}
+
+.quest-body p {
+  margin-bottom: 50px;
+}
+
+.quest-body-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 50px;
+}
