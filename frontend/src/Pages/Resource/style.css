@@ -1,0 +1,23 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.resource-body h1,
+p {
+  text-align: left;
+  padding: 20px;
+  margin-left: 50px;
+}
+
+.resource-body p {
+  margin-bottom: 50px;
+}
+
+.resource-body-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 100px;
+}
