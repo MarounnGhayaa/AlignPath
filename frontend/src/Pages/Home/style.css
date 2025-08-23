@@ -4,8 +4,8 @@
   box-sizing: border-box;
 }
 
-.homePage {
-  padding: 20px;
+.homePage h1 {
+  margin: 40px;
 }
 
 .homePage-careers {
