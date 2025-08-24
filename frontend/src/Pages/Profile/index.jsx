@@ -32,8 +32,8 @@ const Profile = () => {
                 type="text"
                 required
                 hint="username"
-                minLength={2}
-                maxLength={50}
+                minLength={3}
+                maxLength={30}
               />
 
               <label htmlFor="email">
@@ -45,7 +45,7 @@ const Profile = () => {
                 required
                 hint="username@email.com"
                 minLength={5}
-                maxLength={50}
+                maxLength={100}
               />
 
               <label htmlFor="password">
@@ -56,8 +56,8 @@ const Profile = () => {
                 type="password"
                 required
                 hint="*************"
-                minLength={2}
-                maxLength={50}
+                minLength={8}
+                maxLength={128}
               />
 
               <label htmlFor="location">
@@ -69,7 +69,7 @@ const Profile = () => {
                 required
                 hint="Kobayat, Lebanon"
                 minLength={2}
-                maxLength={50}
+                maxLength={100}
               />
             </div>
             <div className="profile-logo-img">

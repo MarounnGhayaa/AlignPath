@@ -31,6 +31,8 @@ const RegisterForm = ({ toggle }) => {
               hint={"Example"}
               required={true}
               className={"input-style"}
+              minLength={3}
+              maxLength={100}
             />
           </div>
 
@@ -44,6 +46,8 @@ const RegisterForm = ({ toggle }) => {
               hint={"email@example.com"}
               required={true}
               className={"input-style"}
+              minLength={5}
+              maxLength={100}
             />
           </div>
 
@@ -57,6 +61,8 @@ const RegisterForm = ({ toggle }) => {
               hint={"************"}
               required={true}
               className={"input-style"}
+              minLength={8}
+              maxLength={128}
             />
           </div>
 
