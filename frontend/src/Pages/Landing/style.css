@@ -125,3 +125,17 @@
   width: 250px;
   height: auto;
 }
+.landing-nav-links {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+}
+
+.landing-nav-links a {
+  color: white;
+  text-decoration: none;
+}
+
+html {
+  scroll-behavior: smooth;
+}

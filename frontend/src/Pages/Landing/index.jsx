@@ -18,6 +18,14 @@ const Landing = () => {
             Align<span>Path</span>
           </strong>
         </div>
+        <div className="landing-nav-links">
+          <a href="#how-it-works">
+            <h3>How It Works</h3>
+          </a>
+          <a href="#success-stories">
+            <h3>Success Stories</h3>
+          </a>
+        </div>
         <Button
           text={"Sign In"}
           className="primary-button"
@@ -53,7 +61,7 @@ const Landing = () => {
           />
         </div>
       </main>
-      <section className="landing-work-section">
+      <section className="landing-work-section" id="how-it-works">
         <h1>How AlignPath Works</h1>
         <h2>
           Three simple steps to unlock your career potential and create a
@@ -80,7 +88,7 @@ const Landing = () => {
           />
         </div>
       </section>
-      <section className="landing-story-section">
+      <section className="landing-story-section" id="success-stories">
         <h1>Success Stories</h1>
         <h2>Hear from others who transformed their careers with AlignPath</h2>
         <div className="landing-row-stories">

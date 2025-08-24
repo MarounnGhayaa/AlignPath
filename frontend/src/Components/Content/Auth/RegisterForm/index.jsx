@@ -32,7 +32,7 @@ const RegisterForm = ({ toggle }) => {
               required={true}
               className={"input-style"}
               minLength={3}
-              maxLength={100}
+              maxLength={30}
             />
           </div>
 
