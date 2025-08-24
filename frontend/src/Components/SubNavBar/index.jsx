@@ -3,6 +3,7 @@ import { useState } from "react";
 import Quest from "../../Pages/Quest";
 import Problem from "../../Pages/Problem";
 import Resource from "../../Pages/Resource";
+import Skill from "../../Pages/Skill";
 
 const SubNavBar = () => {
   const [activeTab, setActiveTab] = useState("Quests");
@@ -26,7 +27,7 @@ const SubNavBar = () => {
       <div className="tabContent">
         {activeTab === "Quests" && <Quest />}
         {activeTab === "Problems" && <Problem />}
-        {activeTab === "Skills" && <h3>Skills</h3>}
+        {activeTab === "Skills" && <Skill />}
         {activeTab === "Resources" && <Resource />}
       </div>
     </div>
