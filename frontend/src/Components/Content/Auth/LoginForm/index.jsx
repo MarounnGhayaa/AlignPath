@@ -41,13 +41,13 @@ const LoginForm = ({ toggle }) => {
           <Button text={"Login"} className="primary-button auth-button" />
         </form>
 
-        <p className="auth-link">
+        <strong className="auth-link">
           Don't have an account?
           <span className="auth-link-span" onClick={toggle}>
             {" "}
             Sign Up Here
           </span>
-        </p>
+        </strong>
       </div>
     </div>
   );

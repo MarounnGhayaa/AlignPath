@@ -54,13 +54,13 @@ const RegisterForm = ({ toggle }) => {
           <Button text={"Signup"} className="primary-button auth-button" />
         </form>
 
-        <p className="auth-link">
+        <strong className="auth-link">
           Already have an account?
           <span className="auth-link-span" onClick={toggle}>
             {" "}
             Login Here
           </span>
-        </p>
+        </strong>
       </div>
     </div>
   );
