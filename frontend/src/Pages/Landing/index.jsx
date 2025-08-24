@@ -4,8 +4,11 @@ import HeroIMG from "../../Assets/AlignPathWhite.png";
 import Button from "../../Components/Button";
 import InstructionCard from "../../Components/InstructionCard";
 import SuccessCard from "../../Components/SuccessCard";
+import { useNavigate } from "react-router-dom";
 
 const Landing = () => {
+  const navigate = useNavigate();
+
   return (
     <body className="landing-body">
       <header className="landing-nav">
@@ -15,7 +18,13 @@ const Landing = () => {
             Align<span>Path</span>
           </strong>
         </div>
-        <Button text={"Sign In"} className="primary-button" />
+        <Button
+          text={"Sign In"}
+          className="primary-button"
+          onClickListener={() => {
+            navigate("/auth");
+          }}
+        />
       </header>
       <main className="landing-hero">
         <div className="landing-hero-text">
@@ -25,7 +34,13 @@ const Landing = () => {
             personalized career roadmaps that adapt as you grow.
           </h2>
           <div className="landing-row-btns">
-            <Button text={"Get Started"} className="primary-button" />
+            <Button
+              text={"Get Started"}
+              className="primary-button"
+              onClickListener={() => {
+                navigate("/auth");
+              }}
+            />
             <Button text={"Join as Mentor"} className="secondary-button" />
           </div>
         </div>

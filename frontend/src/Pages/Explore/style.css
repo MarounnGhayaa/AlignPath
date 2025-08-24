@@ -54,3 +54,12 @@
   width: 100px;
   object-fit: contain;
 }
+
+.explore-left-button {
+  background-color: #424242;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 40px;
+  cursor: pointer;
+}

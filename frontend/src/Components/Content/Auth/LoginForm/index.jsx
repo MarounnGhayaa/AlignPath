@@ -1,13 +1,22 @@
 import "../../Auth/style.css";
 import Button from "../../../Button";
 import Input from "../../../Input";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({ toggle }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="auth-body">
       <div className="auth-container">
         <h1 className="auth-h1">
-          <Button text={"←"} className="left-button" />
+          <Button
+            text={"←"}
+            className="left-button"
+            onClickListener={() => {
+              navigate("/");
+            }}
+          />
           <span>AlignPath</span>
         </h1>
 

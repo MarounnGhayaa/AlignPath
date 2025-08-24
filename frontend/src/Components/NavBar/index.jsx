@@ -1,11 +1,13 @@
 import "./style.css";
 import Logo from "../../Assets/LogoOrangeNoBg.png";
 import Button from "../../Components/Button";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
+
   return (
     <header className="sharedNav">
       <div className="sharedNav-logo">
@@ -48,7 +50,13 @@ const NavBar = () => {
           Profile
         </Link>
       </div>
-      <Button text={"Log Out"} className="primary-button" />
+      <Button
+        text={"Log Out"}
+        className="primary-button"
+        onClickListener={() => {
+          navigate("/");
+        }}
+      />
     </header>
   );
 };

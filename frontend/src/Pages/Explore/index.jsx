@@ -2,13 +2,22 @@ import "./style.css";
 import Button from "../../Components/Button";
 import OrangeLogo from "../../Assets/LogoOrangeNoBg.png";
 import WhiteLogo from "../../Assets/LogoWhiteNoBg.png";
+import { useNavigate } from "react-router-dom";
 
 const Explore = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="explore-body">
       <div className="explore-heading">
-        <h1>←</h1>
-        <h1>Software Engineering</h1>
+        <Button
+          insiders={"←  "}
+          text={"Title"}
+          className={"explore-left-button"}
+          onClickListener={() => {
+            navigate("/home");
+          }}
+        />
       </div>
       <div className="explore-description">
         <p>
@@ -18,8 +27,20 @@ const Explore = () => {
         </p>
       </div>
       <div className="explore-row-btns">
-        <Button className={"primary-button"} text={"Save Path"} />
-        <Button className={"secondary-button"} text={"Connect with Mentors"} />
+        <Button
+          className={"primary-button"}
+          text={"Save Path"}
+          onClickListener={() => {
+            navigate("/path");
+          }}
+        />
+        <Button
+          className={"secondary-button"}
+          text={"Connect with Mentors"}
+          onClickListener={() => {
+            navigate("/network");
+          }}
+        />
       </div>
       <footer className="explore-designed-row">
         <img src={WhiteLogo} alt="AlignPath Logo" className="explore-WLogo" />

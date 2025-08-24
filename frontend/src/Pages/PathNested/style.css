@@ -8,3 +8,11 @@
   padding: 20px;
   text-align: center;
 }
+
+.pathNested-left-button {
+  background-color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 40px;
+  cursor: pointer;
+}
