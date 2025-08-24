@@ -1,5 +1,6 @@
 import "./style.css";
 import Logo from "../../Assets/LogoOrangeNoBg.png";
+import HeroIMG from "../../Assets/AlignPathWhite.png";
 import Button from "../../Components/Button";
 import InstructionCard from "../../Components/InstructionCard";
 import SuccessCard from "../../Components/SuccessCard";
@@ -25,11 +26,17 @@ const Landing = () => {
           </h2>
           <div className="landing-row-btns">
             <Button text={"Get Started"} className="primary-button" />
-            <Button text={"Success Stories"} className="secondary-button" />
+            <Button text={"Join as Mentor"} className="secondary-button" />
           </div>
         </div>
 
-        <div className="landing-her-img"></div>
+        <div className="landing-hero-img-cont">
+          <img
+            src={HeroIMG}
+            alt="AlignPath Logo"
+            className="landing-hero-img"
+          />
+        </div>
       </main>
       <section className="landing-work-section">
         <h1>How AlignPath Works</h1>
