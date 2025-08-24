@@ -12,7 +12,7 @@ const Path = () => {
           subtitle={
             "Complete roadmap to becoming a full stack developer with React and Node.js"
           }
-          progress_value={"75%"}
+          progress_value={"75"}
           saved_date={"8/18/2025"}
         />
         <SavedPath
@@ -21,7 +21,7 @@ const Path = () => {
           subtitle={
             "Complete roadmap to becoming a full stack developer with React and Node.js"
           }
-          progress_value={"75%"}
+          progress_value={"5"}
           saved_date={"8/18/2025"}
         />
         <SavedPath
@@ -30,7 +30,7 @@ const Path = () => {
           subtitle={
             "Complete roadmap to becoming a full stack developer with React and Node.js"
           }
-          progress_value={"75%"}
+          progress_value={"45"}
           saved_date={"8/18/2025"}
         />
       </div>
