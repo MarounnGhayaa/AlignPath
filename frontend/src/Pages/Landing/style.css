@@ -121,8 +121,9 @@
 }
 
 .landing-logo-img-sc {
+  margin-top: 40px;
   width: 250px;
-  height: auto;
+  height: 250px;
 }
 .landing-nav-links {
   display: flex;
