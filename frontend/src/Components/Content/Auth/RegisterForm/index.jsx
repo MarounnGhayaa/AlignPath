@@ -65,6 +65,17 @@ const RegisterForm = ({ toggle }) => {
               maxLength={128}
             />
           </div>
+          <section className="auth-radio-row">
+            <label className="auth-radio">
+              <input type="radio" name="role" value="student" />
+              <strong>Student</strong>
+            </label>
+
+            <label className="auth-radio">
+              <input type="radio" name="role" value="mentor" />
+              <strong>Mentor</strong>
+            </label>
+          </section>
 
           <Button text={"Signup"} className="primary-button auth-button" />
         </form>
