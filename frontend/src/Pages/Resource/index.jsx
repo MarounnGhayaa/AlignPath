@@ -7,9 +7,9 @@ const Resource = () => {
       <h1>Learning Resources</h1>
       <p>Curated materials to support your learning journey</p>
       <div className="resource-body-row">
-        <ResourceCard title={"doc"} type={"documentation"} />
-        <ResourceCard title={"vid"} type={"video"} />
-        <ResourceCard title={"comm"} type={"community"} />
+        <ResourceCard title={"Documentation"} type={"documentation"} />
+        <ResourceCard title={"Video tutorials"} type={"video"} />
+        <ResourceCard title={"Community"} type={"community"} />
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
   background-color: white;
   border-radius: 8px;
   border-style: solid;
+  border-color: #d9d9d9;
   width: 400px;
   padding: 20px;
 }
@@ -11,6 +12,11 @@ h4 {
   text-align: left;
   max-width: 350px;
   margin-bottom: 20px;
+}
+
+.resource-card h4 {
+  font-weight: normal;
+  font-size: 18px;
 }
 
 .resource-card-btn {
