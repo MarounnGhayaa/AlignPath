@@ -1,6 +1,7 @@
 .mentor-card {
   border-radius: 8px;
   border-style: solid;
+  border-color: #d9d9d9;
   width: 400px;
   padding: 20px;
   margin: 40px;
@@ -16,6 +17,10 @@
   justify-content: space-evenly;
   direction: row;
   margin-bottom: 40px;
+}
+
+.mentor-titles strong {
+  font-weight: normal;
 }
 
 .mentor-img {
@@ -38,9 +43,10 @@
 }
 
 .mentor-skill {
-  background-color: #d9d9d9;
+  background-color: #feeded;
   border-style: solid;
   border-radius: 90px;
+  border-color: #f46530;
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -48,7 +54,9 @@
 .mentor-btn-txt,
 .mentor-row-btns {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   direction: row;
+  padding-right: 20px;
+  margin-left: 20px;
   gap: 10px;
 }
