@@ -10,7 +10,7 @@ const Recommendation = ({ title, description }) => {
     <div className="recommendation-card">
       <h4>{title}</h4>
       <Briefcase />
-      <p>{description}</p>
+      <h6>{description}</h6>
       <Button
         text={"Explore"}
         className={"primary-button"}
