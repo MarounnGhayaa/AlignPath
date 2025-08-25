@@ -1,6 +1,6 @@
 import "./style.css";
 import Logo from "../../Assets/LogoOrangeNoBg.png";
-import HeroIMG from "../../Assets/AlignPathWhite.png";
+import HeroIMG from "../../Assets/HeroImage.png";
 import Button from "../../Components/Button";
 import InstructionCard from "../../Components/InstructionCard";
 import SuccessCard from "../../Components/SuccessCard";
@@ -118,6 +118,9 @@ const Landing = () => {
           />
         </div>
       </section>
+      <footer className="landing-footer">
+        <strong>© 2025 AlignPath. All rights reserved.</strong>
+      </footer>
     </body>
   );
 };

@@ -4,21 +4,21 @@
   width: 400px;
   border-radius: 8px;
   padding: 20px;
+  text-align: left;
 }
 
-.landing-story p {
-  font-style: italic;
+.landing-story h6 {
   margin-bottom: 30px;
   padding: 20px;
+  font-size: 18px;
+  font-weight: normal;
 }
 
 .landing-story h3 {
-  text-align: left;
   margin-left: 30px;
 }
 
 .landing-story h4 {
-  text-align: left;
   font-weight: normal;
   margin-left: 30px;
 }

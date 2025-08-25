@@ -5,11 +5,11 @@
 }
 
 .landing-instruction h3 {
-  text-decoration: underline;
-  padding: 20px;
+  padding-top: 20px;
 }
 
-.landing-instruction p {
-  font-style: italic;
-  padding: 20px;
+.landing-instruction h6 {
+  font-size: 18px;
+  font-weight: normal;
+  padding: 30px;
 }

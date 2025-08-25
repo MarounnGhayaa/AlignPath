@@ -36,7 +36,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 60px 50px;
+  padding: 150px;
   gap: 50px;
 }
 
@@ -47,7 +47,6 @@
 
 .landing-hero h2 {
   font-size: 20px;
-  font-style: italic;
   margin-bottom: 40px;
   color: #555;
   width: 800px;
@@ -60,7 +59,9 @@
 
 .landing-hero-img {
   border-radius: 8px;
-  min-height: 300px;
+  height: 300px;
+  width: 300px;
+  object-fit: cover;
 }
 
 .landing-hero-text {
@@ -84,7 +85,6 @@
 
 .landing-work-section h2 {
   font-size: 20px;
-  font-style: italic;
   margin-bottom: 40px;
   font-weight: normal;
   color: white;
@@ -109,7 +109,6 @@
 
 .landing-story-section h2 {
   font-size: 20px;
-  font-style: italic;
   margin-bottom: 40px;
   font-weight: normal;
   line-height: 1.5;
@@ -138,4 +137,13 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+.landing-footer {
+  text-align: center;
+  margin-top: 50px;
+  padding: 50px;
+  background-color: #424242;
+  color: white;
+  width: 100%;
 }
