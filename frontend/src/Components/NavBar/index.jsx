@@ -54,6 +54,8 @@ const NavBar = () => {
         text={"Log Out"}
         className="primary-button"
         onClickListener={() => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
           navigate("/");
         }}
       />

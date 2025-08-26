@@ -2,9 +2,12 @@ import "../../Auth/style.css";
 import Button from "../../../Button";
 import Input from "../../../Input";
 import { useNavigate } from "react-router-dom";
+import { useLoginForm } from "./logic.js";
 
 const LoginForm = ({ toggle }) => {
   const navigate = useNavigate();
+  const { email, setEmail, password, setPassword, errorMessage, loginUser } =
+    useLoginForm();
 
   return (
     <div className="auth-body">
@@ -20,19 +23,21 @@ const LoginForm = ({ toggle }) => {
           <span>AlignPath</span>
         </h1>
 
-        <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+        <form className="auth-form" onSubmit={loginUser}>
           <div>
             <label htmlFor="email" className="auth-label">
               Email
             </label>
             <Input
-              type={"text"}
-              name={"email"}
-              hint={"email@example.com"}
+              type="email"
+              name="email"
+              hint="email@example.com"
               required={true}
-              className={"input-style"}
+              className="input-style"
               minLength={5}
               maxLength={100}
+              value={email}
+              onChangeListener={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -41,17 +46,25 @@ const LoginForm = ({ toggle }) => {
               Password
             </label>
             <Input
-              type={"password"}
-              name={"password"}
-              hint={"************"}
+              type="password"
+              name="password"
+              hint="************"
               required={true}
-              className={"input-style"}
+              className="input-style"
               minLength={8}
               maxLength={128}
+              value={password}
+              onChangeListener={(e) => setPassword(e.target.value)}
             />
           </div>
 
-          <Button text={"Login"} className="primary-button auth-button" />
+          {errorMessage && <p className="auth-error">{errorMessage}</p>}
+
+          <Button
+            text={"Login"}
+            className="primary-button auth-button"
+            onClickListener={loginUser}
+          />
         </form>
 
         <strong className="auth-link">

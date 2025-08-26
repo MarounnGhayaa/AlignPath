@@ -98,8 +98,9 @@
 
 .auth-error {
   color: red;
-  margin-top: 10px;
   font-size: 14px;
+  width: max-content;
+  align-self: flex-start;
 }
 
 .auth-radio-row {
