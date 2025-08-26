@@ -39,7 +39,7 @@ const MyRoutes = () => {
         <Route
           path="/network"
           element={
-            <ProtectedRoute allowedRoles={["mentor"]}>
+            <ProtectedRoute allowedRoles={["student", "mentor"]}>
               <Network />
             </ProtectedRoute>
           }
