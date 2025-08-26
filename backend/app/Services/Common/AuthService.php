@@ -32,12 +32,14 @@ class AuthService {
             'username' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
+            'role' => 'required|string|in:student,mentor',
         ]);
 
         $user = new User;
         $user->username = $request->username;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
+        $user->role = $request->role;
         $user->save();
 
         $token = Auth::login($user);
