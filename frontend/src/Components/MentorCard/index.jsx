@@ -2,8 +2,11 @@ import "./style.css";
 import Button from "../Button";
 import { Calendar } from "lucide-react";
 import { MessageCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const MentorCard = ({ image, name, position, skills }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="mentor-card">
       <div className="mentor-header">
@@ -32,6 +35,9 @@ const MentorCard = ({ image, name, position, skills }) => {
               Message
             </strong>
           }
+          onClickListener={() => {
+            navigate("/chat");
+          }}
         />
         <Button className={"secondary-button"} text={<Calendar />} />
       </div>

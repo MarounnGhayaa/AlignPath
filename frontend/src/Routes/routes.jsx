@@ -9,6 +9,7 @@ import Network from "../Pages/Network";
 import Path from "../Pages/Path";
 import Profile from "../Pages/Profile";
 import PathNested from "../Pages/PathNested";
+import Chat from "../Pages/Chat";
 
 const MyRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const MyRoutes = () => {
         <Route path="/path" element={<Path />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/pathNested" element={<PathNested />} />
+        <Route path="/chat" element={<Chat />} />
       </Route>
     </Routes>
   );
