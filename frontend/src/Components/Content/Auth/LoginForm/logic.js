@@ -1,16 +1,16 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../../../Services/axios";
+import { useSelector, useDispatch } from "react-redux";
+import { setField, setEmail, setPassword, setErrorMessage } from "../../../../Features/Login/loginSlice";
 
 export const useLoginForm = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const dispatch = useDispatch();
+  const { email, password, errorMessage } = useSelector((global) => global.login);
 
   const loginUser = async (e) => {
     e.preventDefault();
-    setErrorMessage("");
+    dispatch(setErrorMessage(""));
 
     try {
       const response = await API.post("/guest/login", {
@@ -27,11 +27,15 @@ export const useLoginForm = () => {
       navigate("/home");
     } catch (error) {
       if (error.response) {
-        setErrorMessage(error.response.data.message || "Incorrect Email or Password");
+        dispatch(setErrorMessage(error.response.data.message || "Incorrect Email or Password"));
       } else {
-        setErrorMessage("Something went wrong. Please try again.");
+        dispatch(setErrorMessage("Something went wrong. Please try again."));
       }
     }
+  };
+
+    const handleFieldChange = (field, value) => {
+    dispatch(setField({ field, value }));
   };
 
   return {
@@ -40,6 +44,7 @@ export const useLoginForm = () => {
     password,
     setPassword,
     errorMessage,
+    handleFieldChange,
     loginUser,
   };
 };

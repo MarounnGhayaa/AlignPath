@@ -13,7 +13,7 @@ const Landing = () => {
   const navigate = useNavigate();
 
   return (
-    <body className="landing-body">
+    <div className="landing-body">
       <header className="landing-nav">
         <div className="landing-logo">
           <img src={Logo} alt="AlignPath Logo" className="landing-logo-img" />
@@ -138,7 +138,7 @@ const Landing = () => {
       <footer id="land-footer" className="landing-footer-style">
         <Footer />
       </footer>
-    </body>
+    </div>
   );
 };
 

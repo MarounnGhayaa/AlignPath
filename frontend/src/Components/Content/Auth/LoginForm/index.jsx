@@ -6,7 +6,7 @@ import { useLoginForm } from "./logic.js";
 
 const LoginForm = ({ toggle }) => {
   const navigate = useNavigate();
-  const { email, setEmail, password, setPassword, errorMessage, loginUser } =
+  const { email, password, errorMessage, handleFieldChange, loginUser } =
     useLoginForm();
 
   return (
@@ -37,7 +37,9 @@ const LoginForm = ({ toggle }) => {
               minLength={5}
               maxLength={100}
               value={email}
-              onChangeListener={(e) => setEmail(e.target.value)}
+              onChangeListener={(e) =>
+                handleFieldChange("email", e.target.value)
+              }
             />
           </div>
 
@@ -54,7 +56,9 @@ const LoginForm = ({ toggle }) => {
               minLength={8}
               maxLength={128}
               value={password}
-              onChangeListener={(e) => setPassword(e.target.value)}
+              onChangeListener={(e) =>
+                handleFieldChange("password", e.target.value)
+              }
             />
           </div>
 
