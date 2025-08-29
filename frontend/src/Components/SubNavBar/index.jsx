@@ -11,7 +11,7 @@ const SubNavBar = () => {
   const tabs = ["Quests", "Problems", "Skills", "Resources"];
 
   return (
-    <div>
+    <div className="sub-body">
       <div className="subNavbar">
         {tabs.map((tab) => (
           <button
