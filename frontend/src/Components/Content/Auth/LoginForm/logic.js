@@ -34,7 +34,7 @@ export const useLoginForm = () => {
     }
   };
 
-    const handleFieldChange = (field, value) => {
+  const handleFieldChange = (field, value) => {
     dispatch(setField({ field, value }));
   };
 

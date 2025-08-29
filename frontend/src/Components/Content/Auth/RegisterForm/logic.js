@@ -1,18 +1,16 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../../../Services/axios";
+import { useSelector, useDispatch } from "react-redux";
+import { setField, setUsername, setEmail, setPassword, setRole, setErrorMessage } from "../../../../Features/Register/registerSlice";
 
 export const useRegisterForm = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("student");
-  const [errorMessage, setErrorMessage] = useState("");
+  const dispatch = useDispatch();
+  const { username, email, password, role, errorMessage } = useSelector((global) => global.register);
 
   const registerUser = async (e) => {
     e.preventDefault();
-    setErrorMessage("");
+    dispatch(setErrorMessage(""));
 
     try {
       const response = await API.post("/guest/register", {
@@ -31,12 +29,16 @@ export const useRegisterForm = () => {
       navigate("/home");
     } catch (error) {
       if (error.response) {
-        setErrorMessage(error.response.data.message || "Registration failed");
+        dispatch(setErrorMessage(error.response.data.message || "Registration failed"));
       } else {
-        setErrorMessage("Something went wrong. Please try again.");
+        dispatch(setErrorMessage("Something went wrong. Please try again."));
       }
     }
   };
+
+    const handleFieldChange = (field, value) => {
+      dispatch(setField({ field, value }));
+    };
 
   return {
     username,
@@ -48,6 +50,7 @@ export const useRegisterForm = () => {
     role,
     setRole,
     errorMessage,
+    handleFieldChange,
     registerUser,
   };
 };

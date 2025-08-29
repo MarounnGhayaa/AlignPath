@@ -9,14 +9,11 @@ const RegisterForm = ({ toggle }) => {
 
   const {
     username,
-    setUsername,
     email,
-    setEmail,
     password,
-    setPassword,
     role,
-    setRole,
     errorMessage,
+    handleFieldChange,
     registerUser,
   } = useRegisterForm();
 
@@ -48,7 +45,9 @@ const RegisterForm = ({ toggle }) => {
               minLength={3}
               maxLength={30}
               value={username}
-              onChangeListener={(e) => setUsername(e.target.value)}
+              onChangeListener={(e) =>
+                handleFieldChange("username", e.target.value)
+              }
             />
           </div>
 
@@ -65,7 +64,9 @@ const RegisterForm = ({ toggle }) => {
               minLength={5}
               maxLength={100}
               value={email}
-              onChangeListener={(e) => setEmail(e.target.value)}
+              onChangeListener={(e) =>
+                handleFieldChange("email", e.target.value)
+              }
             />
           </div>
 
@@ -82,7 +83,9 @@ const RegisterForm = ({ toggle }) => {
               minLength={8}
               maxLength={128}
               value={password}
-              onChangeListener={(e) => setPassword(e.target.value)}
+              onChangeListener={(e) =>
+                handleFieldChange("password", e.target.value)
+              }
             />
           </div>
           <section className="auth-radio-row">
@@ -92,7 +95,7 @@ const RegisterForm = ({ toggle }) => {
                 name="role"
                 value="student"
                 checked={role === "student"}
-                onChange={() => setRole("student")}
+                onChange={() => handleFieldChange("role", "student")}
               />
               <strong>Student</strong>
             </label>
@@ -103,7 +106,7 @@ const RegisterForm = ({ toggle }) => {
                 name="role"
                 value="mentor"
                 checked={role === "mentor"}
-                onChange={() => setRole("mentor")}
+                onChange={() => handleFieldChange("role", "mentor")}
               />
               <strong>Mentor</strong>
             </label>
