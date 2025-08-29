@@ -109,7 +109,9 @@ const RegisterForm = ({ toggle }) => {
             </label>
           </section>
 
-          {errorMessage && <p className="auth-error">{errorMessage}</p>}
+          {errorMessage && (
+            <strong className="auth-error">{errorMessage}</strong>
+          )}
 
           <Button
             text={"Signup"}
@@ -119,10 +121,9 @@ const RegisterForm = ({ toggle }) => {
         </form>
 
         <strong className="auth-link">
-          Already have an account?
+          Already have an account?{" "}
           <span className="auth-link-span" onClick={toggle}>
-            {" "}
-            Login Here
+            Login
           </span>
         </strong>
       </div>

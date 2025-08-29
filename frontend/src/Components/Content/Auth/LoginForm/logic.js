@@ -25,11 +25,12 @@ export const useLoginForm = () => {
       localStorage.setItem("user", JSON.stringify(user));
 
       navigate("/home");
-      return { success: true, user };
     } catch (error) {
-      const message = error.response?.data?.message || "Login failed";
-      setErrorMessage(message);
-      return { success: false, message };
+      if (error.response) {
+        setErrorMessage(error.response.data.message || "Incorrect Email or Password");
+      } else {
+        setErrorMessage("Something went wrong. Please try again.");
+      }
     }
   };
 

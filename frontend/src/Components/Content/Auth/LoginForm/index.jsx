@@ -58,7 +58,9 @@ const LoginForm = ({ toggle }) => {
             />
           </div>
 
-          {errorMessage && <p className="auth-error">{errorMessage}</p>}
+          {errorMessage && (
+            <strong className="auth-error">{errorMessage}</strong>
+          )}
 
           <Button
             text={"Login"}
@@ -68,10 +70,9 @@ const LoginForm = ({ toggle }) => {
         </form>
 
         <strong className="auth-link">
-          Don't have an account?
+          Don't have an account?{" "}
           <span className="auth-link-span" onClick={toggle}>
-            {" "}
-            Sign Up Here
+            Signup
           </span>
         </strong>
       </div>
