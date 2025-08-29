@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use  App\Services\Common\AuthService;
 
-class AuthController extends Controller{
+class AuthController extends Controller {
 
     public function login(Request $request){
         $user = AuthService::login($request);
