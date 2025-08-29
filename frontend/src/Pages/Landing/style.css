@@ -60,7 +60,7 @@
 .landing-hero-img {
   border-radius: 8px;
   height: 300px;
-  width: 300px;
+  width: 350px;
   object-fit: cover;
 }
 
@@ -75,6 +75,7 @@
   text-align: center;
   background-color: #424242;
   padding: 60px 40px;
+  margin-bottom: 60px;
 }
 
 .landing-work-section h1 {
@@ -93,8 +94,9 @@
 
 .landing-row-instructions {
   display: flex;
-  justify-content: space-evenly;
   direction: row;
+  justify-content: center;
+  gap: 75px;
 }
 
 .landing-story-section {
@@ -116,8 +118,9 @@
 
 .landing-row-stories {
   display: flex;
-  justify-content: space-evenly;
   direction: row;
+  justify-content: center;
+  gap: 75px;
 }
 
 .landing-logo-img-sc {
@@ -140,11 +143,10 @@ html {
   scroll-behavior: smooth;
 }
 
-.landing-footer {
-  text-align: center;
-  margin-top: 50px;
-  padding: 50px;
-  background-color: #424242;
-  color: white;
-  width: 100%;
+.landing-footer-style {
+  margin-top: 100px;
+}
+
+.reach-out-decoration {
+  text-decoration: none;
 }

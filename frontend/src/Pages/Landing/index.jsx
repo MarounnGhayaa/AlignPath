@@ -5,6 +5,9 @@ import Button from "../../Components/Button";
 import InstructionCard from "../../Components/InstructionCard";
 import SuccessCard from "../../Components/SuccessCard";
 import { useNavigate } from "react-router-dom";
+import { Handshake, Notebook, Sprout } from "lucide-react";
+import Footer from "../../Components/Footer";
+import { HashLink } from "react-router-hash-link";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -49,7 +52,18 @@ const Landing = () => {
                 navigate("/auth");
               }}
             />
-            <Button text={"Join as Mentor"} className="secondary-button" />
+            <Button
+              text={
+                <HashLink
+                  smooth
+                  to="#land-footer"
+                  className="secondary-button reach-out-decoration"
+                >
+                  Reach Out
+                </HashLink>
+              }
+              className="secondary-button"
+            />
           </div>
         </div>
 
@@ -69,18 +83,21 @@ const Landing = () => {
         </h2>
         <div className="landing-row-instructions">
           <InstructionCard
+            icon={<Handshake />}
             title={"DISCOVER & ASSESS"}
             paragraph={
               "Complete our comprehensive assessment to identify your skills, interests, values, and career preferences. Our AI analyzes your unique profile to understand what drives you."
             }
           />
           <InstructionCard
+            icon={<Notebook />}
             title={"EXPLORE & PLAN"}
             paragraph={
               "Receive personalized career recommendations and detailed roadmaps. Explore different paths, understand requirements, and see how your current skills align with your dream roles."
             }
           />
           <InstructionCard
+            icon={<Sprout />}
             title={"EXECUTE & GROW"}
             paragraph={
               "Follow your custom action plan with guided learning resources, skill development tracks, and milestone tracking. Get ongoing support as you progress toward your goals."
@@ -118,8 +135,8 @@ const Landing = () => {
           />
         </div>
       </section>
-      <footer className="landing-footer">
-        <strong>© 2025 AlignPath. All rights reserved.</strong>
+      <footer id="land-footer" className="landing-footer-style">
+        <Footer />
       </footer>
     </body>
   );
