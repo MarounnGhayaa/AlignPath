@@ -8,8 +8,8 @@ const Recommendation = ({ title, description }) => {
 
   return (
     <div className="recommendation-card">
-      <h4>{title}</h4>
       <Briefcase />
+      <h4>{title}</h4>
       <h6>{description}</h6>
       <Button
         text={"Explore"}

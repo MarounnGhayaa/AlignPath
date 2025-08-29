@@ -1,6 +1,7 @@
 .recommendation-card {
   background-color: white;
   padding: 40px;
+  border-width: 1px;
   border-radius: 8px;
   border-style: solid;
   border-color: #d9d9d9;
@@ -11,14 +12,14 @@
 }
 
 .recommendation-card h4 {
-  padding: 10px;
+  padding-top: 20px;
 }
 
 .recommendation-card h6 {
-  padding: 20px;
+  padding: 10px;
   width: 200px;
   margin-bottom: 20px;
   font-size: 18px;
   font-weight: normal;
-  text-align: left;
+  text-align: center;
 }
