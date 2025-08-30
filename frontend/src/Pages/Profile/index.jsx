@@ -3,8 +3,20 @@ import { User } from "lucide-react";
 import Input from "../../Components/Input";
 import WhiteLogo from "../../Assets/LogoWhite.png";
 import Button from "../../Components/Button";
+import { useProfileLogic } from "./logic";
 
 const Profile = () => {
+  const {
+    username,
+    email,
+    password,
+    location,
+    errorMessage,
+    successMessage,
+    handleFieldChange,
+    handleSaveChanges,
+  } = useProfileLogic();
+
   return (
     <div className="profile-body">
       <h1>My Profile</h1>
@@ -18,10 +30,11 @@ const Profile = () => {
               </span>
             </div>
             <div className="profile-user-titles">
-              <h3>Username</h3>
-              <strong>username@email.com</strong>
+              <h3>{username}</h3>
+              <strong>{email}</strong>
             </div>
           </div>
+
           <div className="profile-user-field-section">
             <div className="profile-user-fields">
               <label htmlFor="username">
@@ -34,6 +47,10 @@ const Profile = () => {
                 hint="username"
                 minLength={3}
                 maxLength={30}
+                value={username}
+                onChangeListener={(e) =>
+                  handleFieldChange("username", e.target.value)
+                }
               />
 
               <label htmlFor="email">
@@ -46,6 +63,10 @@ const Profile = () => {
                 hint="username@email.com"
                 minLength={5}
                 maxLength={100}
+                value={email}
+                onChangeListener={(e) =>
+                  handleFieldChange("email", e.target.value)
+                }
               />
 
               <label htmlFor="password">
@@ -58,6 +79,10 @@ const Profile = () => {
                 hint="*************"
                 minLength={8}
                 maxLength={128}
+                value={password}
+                onChangeListener={(e) =>
+                  handleFieldChange("password", e.target.value)
+                }
               />
 
               <label htmlFor="location">
@@ -65,13 +90,18 @@ const Profile = () => {
               </label>
               <Input
                 name="location"
-                type="string"
+                type="text"
                 required
                 hint="Kobayat, Lebanon"
                 minLength={2}
                 maxLength={100}
+                value={location}
+                onChangeListener={(e) =>
+                  handleFieldChange("location", e.target.value)
+                }
               />
             </div>
+
             <div className="profile-logo-img">
               <img
                 src={WhiteLogo}
@@ -98,10 +128,29 @@ const Profile = () => {
               <div className="profile-user-save-changes">
                 <h2>About</h2>
                 <h4>
-                  Student name, based in location; planning to build a
-                  successful career!{" "}
+                  {username
+                    ? `${username}, based in ${
+                        location || "Somewhere on earth"
+                      }; planning to build a successful career!`
+                    : "Student name, based in location; planning to build a successful career!"}
                 </h4>
-                <Button className="primary-button" text="Save Changes" />
+
+                <Button
+                  className="primary-button"
+                  text="Save Changes"
+                  onClickListener={handleSaveChanges}
+                />
+
+                {errorMessage && (
+                  <p className="profile-error-message">
+                    <strong>{errorMessage}</strong>
+                  </p>
+                )}
+                {successMessage && (
+                  <p className="profile-success-message">
+                    <strong>{successMessage}</strong>
+                  </p>
+                )}
               </div>
             </div>
           </div>

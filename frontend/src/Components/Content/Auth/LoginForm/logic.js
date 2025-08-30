@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import API from "../../../../Services/axios";
 import { useSelector, useDispatch } from "react-redux";
-import { setField, setEmail, setPassword, setErrorMessage } from "../../../../Features/Login/loginSlice";
+import { setField, setEmail, setPassword, setErrorMessage, clearFields } from "../../../../Features/Login/loginSlice";
 
 export const useLoginForm = () => {
   const navigate = useNavigate();
@@ -23,6 +23,8 @@ export const useLoginForm = () => {
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
+
+      dispatch(clearFields());
 
       navigate("/home");
     } catch (error) {

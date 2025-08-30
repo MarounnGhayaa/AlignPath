@@ -140,3 +140,17 @@
   font-weight: normal;
   font-size: 18px;
 }
+
+.profile-user-save-changes p {
+  width: 300px;
+}
+
+.profile-error-message {
+  color: red;
+  font-size: 14px;
+}
+
+.profile-success-message {
+  color: green;
+  font-size: 14px;
+}

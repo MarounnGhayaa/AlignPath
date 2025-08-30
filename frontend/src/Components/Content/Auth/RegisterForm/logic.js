@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import API from "../../../../Services/axios";
 import { useSelector, useDispatch } from "react-redux";
-import { setField, setUsername, setEmail, setPassword, setRole, setErrorMessage } from "../../../../Features/Register/registerSlice";
+import { setField, setUsername, setEmail, setPassword, setRole, setErrorMessage, clearFields } from "../../../../Features/Register/registerSlice";
 
 export const useRegisterForm = () => {
   const navigate = useNavigate();
@@ -25,6 +25,8 @@ export const useRegisterForm = () => {
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
+
+      dispatch(clearFields());
 
       navigate("/home");
     } catch (error) {

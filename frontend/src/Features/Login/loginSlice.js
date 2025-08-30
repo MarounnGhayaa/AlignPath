@@ -23,6 +23,11 @@ const LoginSlice = createSlice({
         setErrorMessage: (state, action) => {
             state.errorMessage = action.payload;
         },
+        clearFields: (state) => {
+            state.email = "";
+            state.password = "";
+            state.errorMessage = "";
+        }
     }
 });
 
@@ -30,7 +35,8 @@ export const {
     setField,
     setEmail,
     setPassword,
-    setErrorMessage
+    setErrorMessage,
+    clearFields
 } = LoginSlice.actions;
 
 export const loginReducer = LoginSlice.reducer;

@@ -31,6 +31,13 @@ const RegisterSlice = createSlice({
         setErrorMessage: (state, action) => {
             state.errorMessage = action.payload;
         },
+        clearFields: (state) => {
+            state.username = "";
+            state.email = "";
+            state.password = "";
+            state.role = "";
+            state.errorMessage = "";
+        }
     }
 });
 
@@ -40,7 +47,8 @@ export const {
     setEmail,
     setPassword,
     setRole,
-    setErrorMessage
+    setErrorMessage,
+    clearFields
 } = RegisterSlice.actions;
 
 export const registerReducer = RegisterSlice.reducer;
