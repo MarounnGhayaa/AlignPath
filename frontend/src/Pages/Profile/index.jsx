@@ -1,7 +1,7 @@
 import "./style.css";
 import { User } from "lucide-react";
 import Input from "../../Components/Input";
-import WhiteLogo from "../../Assets/LogoWhite.png";
+import Avatar from "../../Assets/Avatar.png";
 import Button from "../../Components/Button";
 import { useProfileLogic } from "./logic";
 
@@ -102,11 +102,11 @@ const Profile = () => {
               />
             </div>
 
-            <div className="profile-logo-img">
+            <div className="profile-avatar-img">
               <img
-                src={WhiteLogo}
-                alt="AlignPath Logo"
-                className="profile-WLogo"
+                src={Avatar}
+                alt="AlignPath Avatar"
+                className="profile-avatar"
               />
             </div>
           </div>

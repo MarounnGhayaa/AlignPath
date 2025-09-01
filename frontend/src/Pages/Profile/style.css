@@ -62,15 +62,15 @@
   gap: 20px;
 }
 
-.profile-logo-img {
+.profile-avatar-img {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 40%;
 }
 
-.profile-WLogo {
-  max-height: 100%;
+.profile-avatar {
+  max-height: 400px;
   max-width: 100%;
   object-fit: contain;
   border-radius: 8px;
