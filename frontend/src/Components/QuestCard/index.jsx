@@ -1,7 +1,10 @@
 import "./style.css";
 import Button from "../Button";
+import { useNavigate } from "react-router-dom";
 
 const QuestCard = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="quest-card">
       <h3>Introduction to programming</h3>
@@ -11,7 +14,11 @@ const QuestCard = () => {
         <span>2 hours</span>
       </div>
       <div className="quest-card-btn">
-        <Button className={"primary-button"} text={"Start Quest"} />
+        <Button
+          className={"primary-button"}
+          text={"Start Quest"}
+          onClickListener={() => navigate("/solveQuest")}
+        />
       </div>
     </div>
   );

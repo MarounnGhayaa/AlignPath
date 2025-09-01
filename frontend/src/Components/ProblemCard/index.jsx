@@ -1,7 +1,10 @@
 import "./style.css";
 import Button from "../Button";
+import { useNavigate } from "react-router-dom";
 
 const ProblemCard = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="problem-card">
       <h3>Array Manipulation Challenge</h3>
@@ -11,7 +14,11 @@ const ProblemCard = () => {
         <span>100 points</span>
       </div>
       <div className="problem-card-btn">
-        <Button className={"primary-button"} text={"Solve Problem"} />
+        <Button
+          className={"primary-button"}
+          text={"Solve Problem"}
+          onClickListener={() => navigate("/solveProblem")}
+        />
       </div>
     </div>
   );

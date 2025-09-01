@@ -13,6 +13,8 @@ import Path from "../Pages/Path";
 import Profile from "../Pages/Profile";
 import PathNested from "../Pages/PathNested";
 import Chat from "../Pages/Chat";
+import SolveQuest from "../Pages/SolveQuest";
+import SolveProblem from "../Pages/SolveProblem";
 
 const MyRoutes = () => {
   return (
@@ -73,6 +75,22 @@ const MyRoutes = () => {
           element={
             <ProtectedRoute allowedRoles={["student", "mentor"]}>
               <Chat />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/solveQuest"
+          element={
+            <ProtectedRoute allowedRoles={["student", "mentor"]}>
+              <SolveQuest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/solveProblem"
+          element={
+            <ProtectedRoute allowedRoles={["student", "mentor"]}>
+              <SolveProblem />
             </ProtectedRoute>
           }
         />
