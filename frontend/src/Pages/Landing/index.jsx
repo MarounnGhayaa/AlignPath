@@ -7,7 +7,6 @@ import SuccessCard from "../../Components/SuccessCard";
 import { useNavigate } from "react-router-dom";
 import { Handshake, Notebook, Sprout } from "lucide-react";
 import Footer from "../../Components/Footer";
-import { HashLink } from "react-router-hash-link";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -52,18 +51,9 @@ const Landing = () => {
                 navigate("/auth");
               }}
             />
-            <Button
-              text={
-                <HashLink
-                  smooth
-                  to="#land-footer"
-                  className="secondary-button reach-out-decoration"
-                >
-                  Reach Out
-                </HashLink>
-              }
-              className="secondary-button"
-            />
+            <a href="#land-footer">
+              <Button text={"Reach Out"} className="secondary-button" />
+            </a>
           </div>
         </div>
 

@@ -1,13 +1,13 @@
 .landing-footer {
   background-color: #424242;
   color: white;
-  padding: 40px 20px 20px 20px;
+  padding: 20px 20px 20px 20px;
   text-align: center;
 }
 
 .landing-footer-main {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   gap: 180px;
   border-top: 1px solid #555;
@@ -74,6 +74,13 @@
   padding-right: 40px;
 }
 
+.landing-footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
+}
+
 .landing-footer-links a {
   color: #fff;
   text-decoration: none;
@@ -83,10 +90,4 @@
 
 .landing-footer-links a:hover {
   color: #ff6600;
-}
-
-.landing-footer-copyRight {
-  margin-top: 15px;
-  font-size: 12px;
-  color: #aaa;
 }

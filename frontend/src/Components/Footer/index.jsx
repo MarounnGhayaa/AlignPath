@@ -19,6 +19,12 @@ const Footer = () => {
         <div className="landing-footer-logo">
           <img src={Logo} alt="AlignPath Logo" />
         </div>
+        <div className="landing-footer-links">
+          <a href="#">HELP</a>
+          <a href="#">ABOUT US</a>
+          <a href="#">CONTACT US</a>
+          <a href="#">PRIVACY POLICY</a>
+        </div>
         <div className="landing-footer-info">
           <div className="landing-footer-location">
             <FaMapMarkerAlt />
@@ -54,18 +60,6 @@ const Footer = () => {
               </a>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="landing-footer-alignment">
-        <div className="landing-footer-links">
-          <a href="#">ABOUT US</a>
-          <a href="#">CONTACT US</a>
-          <a href="#">HELP</a>
-          <a href="#">PRIVACY POLICY</a>
-          <a href="#">DISCLAIMER</a>
-        </div>
-        <div className="landing-footer-copyRight">
-          <p>Copyright © 2025 • AlignPath Inc.</p>
         </div>
       </div>
     </footer>

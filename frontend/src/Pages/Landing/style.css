@@ -149,4 +149,11 @@ html {
 
 .reach-out-decoration {
   text-decoration: none;
+  background-color: #ffd07b;
+  color: #000;
+  border-style: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
 }
