@@ -18,11 +18,12 @@
 .path-card-header h4 {
   background-color: #424242;
   color: white;
-  padding-left: 20px;
-  padding-right: 20px;
   border-radius: 90px;
   font-weight: lighter;
   margin-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 3px;
 }
 
 .path-card-subtitle {

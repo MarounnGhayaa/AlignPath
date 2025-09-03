@@ -44,6 +44,14 @@
 .solve-problem-options {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   margin-bottom: 70px;
+}
+
+.solve-problem-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  cursor: pointer;
 }

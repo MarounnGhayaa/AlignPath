@@ -10,6 +10,6 @@
 
 .path-paths {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: start;
   direction: row;
 }

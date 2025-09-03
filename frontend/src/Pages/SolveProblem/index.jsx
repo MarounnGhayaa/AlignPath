@@ -20,15 +20,15 @@ const SolveProblem = () => {
             </strong>
           </section>
           <section className="solve-problem-options">
-            <label>
+            <label className="solve-problem-radio">
               <input type="radio" name="option1" value="" />
               <strong>Option 1</strong>
             </label>
-            <label>
+            <label className="solve-problem-radio">
               <input type="radio" name="option2" value="" />
               <strong>Option 2</strong>
             </label>
-            <label>
+            <label className="solve-problem-radio">
               <input type="radio" name="option3" value="" />
               <strong>Option 3</strong>
             </label>

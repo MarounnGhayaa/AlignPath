@@ -28,17 +28,17 @@ const Explore = () => {
       </div>
       <div className="explore-row-btns">
         <Button
-          className={"primary-button"}
-          text={"Save Path"}
-          onClickListener={() => {
-            navigate("/path");
-          }}
-        />
-        <Button
           className={"secondary-button"}
           text={"Connect with Mentors"}
           onClickListener={() => {
             navigate("/network");
+          }}
+        />
+        <Button
+          className={"primary-button"}
+          text={"Save Path"}
+          onClickListener={() => {
+            navigate("/path");
           }}
         />
       </div>
