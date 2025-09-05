@@ -28,7 +28,7 @@ export const useRegisterForm = () => {
 
       dispatch(clearFields());
 
-      navigate("/home");
+      navigate("/preferences");
     } catch (error) {
       if (error.response) {
         dispatch(setErrorMessage(error.response.data.message || "Registration failed"));

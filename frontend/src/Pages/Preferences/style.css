@@ -1,0 +1,51 @@
+.pref-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 100px;
+}
+
+.pref-container {
+  background-color: #f5f5f5;
+  padding: 40px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.pref-button {
+  padding: 8px 20px;
+  font-size: 18px;
+  align-self: center;
+  margin-top: 10px;
+}
+
+.pref-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
+}
+
+.pref-form h1 {
+  text-align: center;
+}
+
+.pref-form h5 {
+  color: #707070;
+  text-align: center;
+}
+
+.pref-label {
+  font-weight: bold;
+  text-align: left;
+  font-size: 16px;
+  color: #424242;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

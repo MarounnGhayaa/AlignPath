@@ -15,12 +15,21 @@ import PathNested from "../Pages/PathNested";
 import Chat from "../Pages/Chat";
 import SolveQuest from "../Pages/SolveQuest";
 import SolveProblem from "../Pages/SolveProblem";
+import Preferences from "../Pages/Preferences";
 
 const MyRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/auth" element={<Auth />} />
+      <Route
+        path="/preferences"
+        element={
+          <ProtectedRoute allowedRoles={["student", "mentor"]}>
+            <Preferences />
+          </ProtectedRoute>
+        }
+      />
       <Route element={<MainLayout />}>
         <Route
           path="/home"
