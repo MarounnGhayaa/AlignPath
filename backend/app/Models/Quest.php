@@ -9,4 +9,12 @@ class Quest extends Model
 {
     /** @use HasFactory<\Database\Factories\QuestFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'path_id',
+        'title',
+        'subtitle',
+        'difficulty',
+        'duration'
+    ];
 }
