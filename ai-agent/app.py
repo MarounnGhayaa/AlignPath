@@ -13,8 +13,6 @@ GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 SHARED_TOKEN = os.getenv("FASTAPI_AGENT_SHARED_SECRET")
 if not GEMINI_KEY:
     raise RuntimeError("GEMINI_API_KEY not set")
-if not SHARED_TOKEN:
-    raise RuntimeError("FASTAPI_AGENT_SHARED_SECRET not set")
 
 genai.configure(api_key=GEMINI_KEY)
 MODEL_NAME = "gemini-1.5-flash"
