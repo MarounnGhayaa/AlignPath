@@ -5,62 +5,57 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\UserPath;
-use App\Models\AIRecommendation;
+use App\Models\Recommendation;
+use App\Models\Path;
 
 class AiAgentController extends Controller
 {
     protected $fastApiBase;
     protected $fastApiToken;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->fastApiBase = env("FASTAPI_AGENT_URL");
         $this->fastApiToken = env("FASTAPI_AGENT_SHARED_SECRET");
     }
 
-    /**
-     * Accept a recommended path
-     */
-    public function acceptPath(Request $request)
-    {
+    public function acceptPath(Request $request) {
         $user = $request->user();
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         $request->validate([
-            'path_id' => 'required|exists:paths,id',
+            'recommendation_id' => 'required|exists:recommendations,id',
         ]);
 
-        $pathId = $request->input('path_id');
+        $recommendationId = $request->input('recommendation_id');
+        $recommendation = Recommendation::findOrFail($recommendationId);
 
-        // Insert into users_paths if not already saved
+        $path = Path::create([
+            'name' => $recommendation->career_name,
+            'tag' => $recommendation->description,
+        ]);
+
         $exists = UserPath::where('user_id', $user->id)
-            ->where('path_id', $pathId)
+            ->where('path_id', $path->id)
             ->exists();
 
         if (!$exists) {
             UserPath::create([
                 'user_id' => $user->id,
-                'path_id' => $pathId,
+                'path_id' => $path->id,
                 'progress_percentage' => 0,
                 'date_saved' => now(),
             ]);
         }
 
-        // Update AIRecommendations status
-        AIRecommendation::where('user_id', $user->id)
-            ->where('path_id', $pathId)
-            ->update(['status' => 'accepted']);
+        $recommendation->update(['status' => 'accepted']);
 
         return response()->json([
             'message' => 'Path accepted and saved successfully'
         ]);
     }
 
-    /**
-     * Dismiss a recommended path
-     */
     public function dismissPath(Request $request)
     {
         $user = $request->user();
@@ -69,38 +64,30 @@ class AiAgentController extends Controller
         }
 
         $request->validate([
-            'path_id' => 'required|exists:paths,id',
+            'recommendation_id' => 'required|exists:recommendations,id',
         ]);
 
-        $pathId = $request->input('path_id');
+        $recommendationId = $request->input('recommendation_id');
+        $recommendation = Recommendation::findOrFail($recommendationId);
 
-        // Update AIRecommendations status
-        AIRecommendation::where('user_id', $user->id)
-            ->where('path_id', $pathId)
-            ->update(['status' => 'dismissed']);
+        $recommendation->update(['status' => 'dismissed']);
 
         return response()->json([
-            'message' => 'Path dismissed successfully'
+            'message' => 'Recommendation dismissed successfully'
         ]);
     }
 
-    /**
-     * Call FastAPI to recommend careers based on user preferences
-     */
-    public function recommendCareers(Request $request)
-    {
+    public function recommendCareers(Request $request) {
         $user = $request->user();
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        // Pull user preferences from DB
-        $prefs = $user->preference; // relation User → UserPreference
+        $prefs = $user->preference;
         if (!$prefs) {
             return response()->json(['error' => 'No preferences found'], 404);
         }
 
-        // Build interests string from skills, interests, values, careers
         $interests = implode(", ", [
             $prefs->skills,
             $prefs->interests,
@@ -108,9 +95,8 @@ class AiAgentController extends Controller
             $prefs->careers
         ]);
 
-        // Call FastAPI
         $response = Http::withHeaders([
-            "Authorization" => "Bearer super_secret_between_laravel_and_ai"
+            "Authorization" => "Bearer {$this->fastApiToken}"
         ])->post("{$this->fastApiBase}/recommend-careers", [
             "interests" => $interests
         ]);
@@ -119,12 +105,19 @@ class AiAgentController extends Controller
             return response()->json(['error' => 'AI agent failed', 'details' => $response->json()], 502);
         }
 
-        return $response->json();
+        $recommendedCareers = $response->json();
+
+        foreach ($recommendedCareers['career_paths'] as $career) {
+            Recommendation::create([
+                'user_id' => $user->id,
+                'career_name' => $career['title'],
+                'description' => $career['description'] ?? null,
+            ]);
+        }
+
+        return response()->json($recommendedCareers);
     }
 
-    /**
-     * Call FastAPI to generate quests for a given career
-     */
     public function generateQuests(Request $request)
     {
         $request->validate([

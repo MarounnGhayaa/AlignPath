@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class UserPath extends Model {
     use HasFactory;
 
+    protected $table = 'users_paths';
+
     protected $fillable = [
         'user_id',
         'path_id',
