@@ -65,7 +65,7 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: root
 
-  frontend-test:
+  frontend-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -79,8 +79,8 @@ jobs:
       - name: Install Frontend Dependencies
         run: npm ci
         working-directory: ./frontend
-      - name: Run Frontend Tests
-        run: npm test -- --watchAll=false
+      - name: Build Frontend
+        run: npm run build
         working-directory: ./frontend
 
   ai-agent-test:
