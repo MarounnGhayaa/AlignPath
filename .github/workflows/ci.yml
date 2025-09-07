@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+      - name: Install Composer Dependencies
+        run: composer install --no-ansi --no-interaction --no-progress --prefer-dist
+        working-directory: ./backend
+      - name: Run Backend Tests
+        run: php ./vendor/bin/phpunit
+        working-directory: ./backend
+
+  frontend-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "./frontend/package-lock.json"
+      - name: Install Frontend Dependencies
+        run: npm ci
+        working-directory: ./frontend
+      - name: Run Frontend Tests
+        run: npm test -- --watchAll=false
+        working-directory: ./frontend
+
+  ai-agent-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python Dependencies
+        run: pip install -r requirements.txt
+        working-directory: ./ai-agent
+      - name: Run AI Agent Tests
+        run: pytest
+        working-directory: ./ai-agent
