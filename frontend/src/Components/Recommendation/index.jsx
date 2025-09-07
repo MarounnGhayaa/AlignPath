@@ -12,7 +12,7 @@ const Recommendation = ({ title, description }) => {
       <h4>{title}</h4>
       <h6>{description}</h6>
       <Button
-        text={"Explore Path"}
+        text={"Explore"}
         className={"primary-button"}
         onClickListener={() => {
           navigate("/explore");
