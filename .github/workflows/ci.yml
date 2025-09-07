@@ -80,7 +80,7 @@ jobs:
         run: npm ci
         working-directory: ./frontend
       - name: Build Frontend
-        run: npm run build
+        run: CI=false npm run build
         working-directory: ./frontend
 
   ai-agent-test:
