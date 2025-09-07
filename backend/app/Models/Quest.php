@@ -14,7 +14,8 @@ class Quest extends Model
         'path_id',
         'title',
         'subtitle',
+        'description',
         'difficulty',
-        'duration'
+        'duration',
     ];
 }

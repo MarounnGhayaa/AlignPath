@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('title');
             $table->string('subtitle');
             $table->enum('difficulty', ['easy', 'medium', 'hard'])->default('easy');
-            $table->decimal('duration');
+            $table->string('duration');
             $table->timestamps();
         });
     }

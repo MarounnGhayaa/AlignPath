@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\UserPath;
 use App\Models\Recommendation;
 use App\Models\Path;
+use App\Models\Quest;
 
 class AiAgentController extends Controller
 {
@@ -122,6 +123,7 @@ class AiAgentController extends Controller
     {
         $request->validate([
             'career' => 'required|string',
+            'path_id' => 'required|exists:paths,id',
         ]);
 
         $response = Http::withHeaders([
@@ -134,6 +136,18 @@ class AiAgentController extends Controller
             return response()->json(['error' => 'AI agent failed', 'details' => $response->json()], 502);
         }
 
-        return $response->json();
+        $generatedQuests = $response->json();
+
+        foreach ($generatedQuests['quests'] as $questData) {
+            Quest::create([
+                'title' => $questData['title'],
+                'subtitle' => $questData['subtitle'] ?? '',
+                'path_id' => $request->input('path_id'),
+                'difficulty' => $questData['difficulty'] ?? null,
+                'duration' => $questData['duration'] ?? null,
+            ]);
+        }
+
+        return response()->json($generatedQuests);
     }
 }
