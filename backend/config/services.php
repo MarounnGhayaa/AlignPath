@@ -39,4 +39,7 @@ return [
         'model' => env('GEMINI_MODEL', 'gemini-2.5-flash'),
     ],
 
+    'huggingface' => [
+        'key' => env('HUGGINGFACE_API_KEY'),
+    ],
 ];
