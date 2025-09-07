@@ -53,6 +53,10 @@ const Home = () => {
                 recommendationId={rec.id}
               />
             ))
+          ) : loading ? (
+            <p>Loading recommendations...</p>
+          ) : error ? (
+            <p>Error: {error.message}</p>
           ) : (
             <p>No recommendations found.</p>
           )}

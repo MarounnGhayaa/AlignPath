@@ -67,9 +67,13 @@ export const usePreferencesLogic = () => {
 
   const recommendCareers = async () => {
     try {
-       await API.post(`/user/ai/recommend-careers`, {
+       await API.post(
+        `/user/ai/recommend-careers`,
+        {},
+        {
           headers: { Authorization: `Bearer ${token}` },
-        });
+        }
+      );
       } catch (error) {
         console.error("Error fetching recommendations:", error);
       }
