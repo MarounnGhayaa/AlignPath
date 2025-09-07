@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->foreign("path_id")->references("id")->on("paths")->onDelete("cascade");
             $table->string('title');
             $table->string('subtitle');
+            $table->string('question');
             $table->string('first_answer');
             $table->string('second_answer');
             $table->string('third_answer');
