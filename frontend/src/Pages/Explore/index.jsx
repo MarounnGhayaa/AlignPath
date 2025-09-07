@@ -35,7 +35,7 @@ const Explore = () => {
         return;
       }
 
-      await API.post(
+      const acceptPathResponse = await API.post(
         `user/ai/accept-path`,
         {
           recommendation_id: recommendationId,
@@ -47,9 +47,24 @@ const Explore = () => {
         }
       );
 
+      const { path_id, career_name } = acceptPathResponse.data;
+
+      await API.post(
+        `user/ai/generate-quests`,
+        {
+          career: career_name,
+          path_id: path_id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       navigate("/path");
     } catch (error) {
-      console.error("Error saving path:", error);
+      console.error("Error saving path or generating quests:", error);
     }
   };
 

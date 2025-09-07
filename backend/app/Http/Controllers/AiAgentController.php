@@ -53,7 +53,9 @@ class AiAgentController extends Controller
         $recommendation->update(['status' => 'accepted']);
 
         return response()->json([
-            'message' => 'Path accepted and saved successfully'
+            'message' => 'Path accepted and saved successfully',
+            'path_id' => $path->id,
+            'career_name' => $recommendation->career_name
         ]);
     }
 
