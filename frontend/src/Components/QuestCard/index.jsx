@@ -1,24 +1,19 @@
 import "./style.css";
 import Button from "../Button";
-import { useNavigate } from "react-router-dom";
 
-const QuestCard = () => {
-  const navigate = useNavigate();
-
+const QuestCard = ({ title, subtitle, difficulty, duration }) => {
   return (
     <div className="quest-card">
-      <h3>Introduction to programming</h3>
-      <h4>Learn the basics of programming logic and problem solving.</h4>
+      <div className="quest-card-header">
+        <h3>{title}</h3>
+      </div>
+      <h4 className="quest-card-subtitle">{subtitle}</h4>
       <div className="quest-card-tags">
-        <span>Beginner</span>
-        <span>2 hours</span>
+        <span>{difficulty}</span>
+        <span>{duration}</span>
       </div>
       <div className="quest-card-btn">
-        <Button
-          className={"primary-button"}
-          text={"Start Quest"}
-          onClickListener={() => navigate("/solveQuest")}
-        />
+        <Button className={"primary-button"} text={"Start Quest"} />
       </div>
     </div>
   );

@@ -1,11 +1,15 @@
 import "./style.css";
 import Button from "../Button";
-import { useNavigate } from "react-router-dom";
 import ProgressBar from "../ProgressBar";
 
-const SavedPath = ({ title, tag, subtitle, progress_value, saved_date }) => {
-  const navigate = useNavigate();
-
+const SavedPath = ({
+  title,
+  tag,
+  subtitle,
+  progress_value,
+  saved_date,
+  onClickListener,
+}) => {
   return (
     <div className="path-card">
       <div className="path-card-header">
@@ -25,9 +29,7 @@ const SavedPath = ({ title, tag, subtitle, progress_value, saved_date }) => {
         <Button
           className={"primary-button"}
           text={"Continue"}
-          onClickListener={() => {
-            navigate("/pathNested");
-          }}
+          onClickListener={onClickListener}
         />
       </div>
     </div>

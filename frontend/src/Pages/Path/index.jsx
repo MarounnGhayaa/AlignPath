@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import API from "../../Services/axios";
 import SavedPath from "../../Components/SavedPath";
+import { useNavigate } from "react-router-dom";
 
 const Path = () => {
   const [savedPaths, setSavedPaths] = useState([]);
@@ -10,6 +11,7 @@ const Path = () => {
   const [error, setError] = useState(null);
   const auth = useSelector((state) => state.auth) || {};
   const token = auth.token || localStorage.getItem("token");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSavedPaths = async () => {
@@ -50,16 +52,23 @@ const Path = () => {
       <h1>Saved Paths</h1>
       <div className="path-paths">
         {savedPaths.length > 0 ? (
-          savedPaths.map((path, index) => (
-            <SavedPath
-              key={index}
-              title={path.title}
-              tag={"Path"}
-              subtitle={path.tag || "No description provided."}
-              progress_value={path.progress_percentage}
-              saved_date={new Date(path.date_saved).toLocaleDateString()}
-            />
-          ))
+          savedPaths.map((path, index) => {
+            return (
+              <SavedPath
+                key={index}
+                title={path.title}
+                tag={"Path"}
+                subtitle={path.tag || "No description provided."}
+                progress_value={path.progress_percentage}
+                saved_date={new Date(path.date_saved).toLocaleDateString()}
+                onClickListener={() => {
+                  navigate("/pathNested", {
+                    state: { pathId: path.id, title: path.title },
+                  });
+                }}
+              />
+            );
+          })
         ) : (
           <p>No saved paths found.</p>
         )}

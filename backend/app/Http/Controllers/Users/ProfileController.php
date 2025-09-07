@@ -35,6 +35,7 @@ class ProfileController extends Controller {
         $userPaths = UserPath::where('user_id', $user->id)
             ->join('paths', 'users_paths.path_id', '=', 'paths.id')
             ->select(
+                'paths.id as id',
                 'paths.name as title',
                 'paths.tag as tag',
                 'users_paths.progress_percentage',
