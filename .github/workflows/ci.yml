@@ -14,17 +14,41 @@ jobs:
   backend-test:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
+
       - name: Install Composer Dependencies
         run: composer install --no-ansi --no-interaction --no-progress --prefer-dist
         working-directory: ./backend
+
+      - name: Setup Laravel
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan migrate --force
+        working-directory: ./backend
+
       - name: Run Backend Tests
-        run: php ./vendor/bin/phpunit
+        run: php artisan test
         working-directory: ./backend
 
   frontend-test:
