@@ -6,6 +6,7 @@ use App\Http\Controllers\Users\ProfileController;
 use App\Http\Controllers\GeminiController;
 use App\Http\Controllers\Users\UserPreferenceController;
 use App\Http\Controllers\AiAgentController;
+use App\Http\Controllers\Users\RecommendationController;
 
 Route::group(["prefix" => "v0.1"], function () {
     Route::group(["middleware" => "auth:api"], function () {
@@ -23,6 +24,7 @@ Route::group(["prefix" => "v0.1"], function () {
                 Route::post('/recommend-careers', [AiAgentController::class, 'recommendCareers']);
                 Route::post('/generate-quests', [AiAgentController::class, 'generateQuests']);
             });
+            Route::get('/recommendations', [RecommendationController::class, 'getUserRecommendations']);
         });
     });
 

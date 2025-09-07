@@ -2,25 +2,67 @@ import "./style.css";
 import Recommendation from "../../Components/Recommendation";
 import Statistic from "../../Components/Statistic";
 import AiChat from "../AiChat";
+import { useEffect, useState } from "react";
+import API from "../../Services/axios";
 
 const Home = () => {
+  const getRecommendations = async (token) => {
+    try {
+      const response = await API.get(`user/recommendations`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching recommendations:", error);
+      throw error;
+    }
+  };
+  const [recommendations, setRecommendations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const data = await getRecommendations(token);
+        setRecommendations(data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecommendations();
+  }, []);
+
+  if (loading) {
+    return <div className="homePage-body">Loading recommendations...</div>;
+  }
+
+  if (error) {
+    return <div className="homePage-body">Error: {error.message}</div>;
+  }
+
   return (
     <div className="homePage-body">
       <div className="homePage">
         <h1>Welcome, Student!</h1>
         <div className="homePage-careers">
-          <Recommendation
-            title={"Software Engineering"}
-            description={'"Develop software applications and systems"'}
-          />
-          <Recommendation
-            title={"Graphic Designer"}
-            description={'"Create visual fronts, designs and user interfaces"'}
-          />
-          <Recommendation
-            title={"Marketing Manager"}
-            description={'"Plan and execute strategies for the markets"'}
-          />
+          {recommendations.length > 0 ? (
+            recommendations.map((rec) => (
+              <Recommendation
+                key={rec.id}
+                title={rec.career_name}
+                description={rec.description}
+              />
+            ))
+          ) : (
+            <p>No recommendations found.</p>
+          )}
         </div>
         <div className="homePage-stats">
           <Statistic value={"50%"} statTitle={"Career Exploration"} />

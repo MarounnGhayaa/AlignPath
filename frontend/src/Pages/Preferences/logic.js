@@ -65,6 +65,16 @@ export const usePreferencesLogic = () => {
     dispatch(clearFields());
   };
 
+  const recommendCareers = async () => {
+    try {
+       await API.post(`/user/ai/recommend-careers`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch (error) {
+        console.error("Error fetching recommendations:", error);
+      }
+  };
+
   return {
     skills,
     interests,
@@ -75,5 +85,6 @@ export const usePreferencesLogic = () => {
     handleFieldChange,
     handleSavePreferences,
     handleClear,
+    recommendCareers
   };
 };
