@@ -13,9 +13,12 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger("path_id");
             $table->foreign("path_id")->references("id")->on("paths")->onDelete("cascade");
-            $table->string('name');
-            $table->string('description');
-            $table->string('topic');
+            $table->string('title');
+            $table->string('subtitle');
+            $table->string('first_answer');
+            $table->string('second_answer');
+            $table->string('third_answer');
+            $table->string('correct_answer');
             $table->integer('points');
             $table->timestamps();
         });

@@ -8,6 +8,7 @@ use App\Models\UserPath;
 use App\Models\Recommendation;
 use App\Models\Path;
 use App\Models\Quest;
+use App\Models\Problem;
 
 class AiAgentController extends Controller
 {
@@ -152,4 +153,53 @@ class AiAgentController extends Controller
 
         return response()->json($generatedQuests);
     }
+
+    public function generateQuestsAndProblems(Request $request)
+{
+    $request->validate([
+        'career' => 'required|string',
+        'path_id' => 'required|exists:paths,id',
+    ]);
+
+    $response = Http::withHeaders([
+        "Authorization" => "Bearer {$this->fastApiToken}"
+    ])->post("{$this->fastApiBase}/generate-quests-and-problems", [
+        "career" => $request->input('career')
+    ]);
+
+    if ($response->failed()) {
+        return response()->json(['error' => 'AI agent failed', 'details' => $response->json()], 502);
+    }
+
+    $generatedData = $response->json();
+
+    // Save quests
+    foreach ($generatedData['quests'] as $questData) {
+        Quest::create([
+            'title' => $questData['title'],
+            'subtitle' => $questData['subtitle'] ?? '',
+            'path_id' => $request->input('path_id'),
+            'difficulty' => $questData['difficulty'] ?? null,
+            'duration' => $questData['duration'] ?? null,
+        ]);
+    }
+
+    // Save problems
+    foreach ($generatedData['problems'] as $problemData) {
+        Problem::create([
+            'title'          => $problemData['title'],
+            'subtitle'       => $problemData['subtitle'] ?? '',
+            'path_id'        => $request->input('path_id'),
+            'question'       => $problemData['question'],
+            'first_answer'   => $problemData['first_answer'],
+            'second_answer'  => $problemData['second_answer'],
+            'third_answer'   => $problemData['third_answer'],
+            'correct_answer' => $problemData['correct_answer'],
+            'points'         => $problemData['points'] ?? 0,
+        ]);
+    }
+
+    return response()->json($generatedData);
+}
+
 }

@@ -25,6 +25,7 @@ Route::group(["prefix" => "v0.1"], function () {
                 Route::post('/dismiss-path', [AiAgentController::class, 'dismissPath']);
                 Route::post('/recommend-careers', [AiAgentController::class, 'recommendCareers']);
                 Route::post('/generate-quests', [AiAgentController::class, 'generateQuests']);
+                Route::post('/generate-quests-and-problems', [AiAgentController::class, 'generateQuestsAndProblems']);
             });
             Route::get('/quests/{pathId}', [QuestController::class, 'getQuestsByPath']);
             Route::get('/recommendations', [RecommendationController::class, 'getUserRecommendations']);

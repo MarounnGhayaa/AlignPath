@@ -41,8 +41,23 @@ class Quest(BaseModel):
     difficulty: str
     duration: str
 
+class Problem(BaseModel):
+    path_name: str
+    title: str
+    subtitle: str
+    question: str
+    first_answer: str
+    second_answer: str
+    third_answer: str
+    correct_answer: str
+    points: int
+
 class QuestResponse(BaseModel):
     quests: List[Quest] = Field(default_factory=list)
+
+class QuestsAndProblemsResponse(BaseModel):
+    quests: List[Quest] = Field(default_factory=list)
+    problems: List[Problem] = Field(default_factory=list)
 
 class InterestsIn(BaseModel):
     interests: str
@@ -150,3 +165,83 @@ Respond as JSON ONLY, matching this schema:
     text = call_gemini(prompt)
     data = extract_json(text) or {"quests": []}
     return QuestResponse(**data)
+
+@app.post("/generate-quests-and-problems", response_model=QuestsAndProblemsResponse)
+async def generate_quests_and_problems(body: CareerIn, authorization: Optional[str] = Header(None)):
+    verify_shared_token(authorization)
+
+    prompt = f"""
+You are a careful JSON-only API.
+Career: "{body.career}"
+
+Task:
+1) Generate exactly 10 beginner-friendly quests with:
+   - path_name (the career name)
+   - title (short quest title)
+   - subtitle (short description of the quest)
+   - difficulty (easy|medium|hard)
+   - duration (string like "2 hours" or "30 minutes")
+
+2) Also generate exactly 10 multiple-choice problems for this career with:
+   - path_name
+   - title
+   - subtitle
+   - question
+   - first_answer
+   - second_answer
+   - third_answer
+   - correct_answer (must be exactly one of "first_answer", "second_answer", "third_answer")
+   - points (integer) (must be how many points does this problem deserves and the total of all problems is 100)
+
+Respond as JSON ONLY, matching this schema exactly:
+
+{{
+  "quests": [
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "difficulty": "easy|medium|hard", "duration": "string" }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "difficulty": "easy|medium|hard", "duration": "string" }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "difficulty": "easy|medium|hard", "duration": "string" }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "difficulty": "easy|medium|hard", "duration": "string" }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "difficulty": "easy|medium|hard", "duration": "string" }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "difficulty": "easy|medium|hard", "duration": "string" }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "difficulty": "easy|medium|hard", "duration": "string" }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "difficulty": "easy|medium|hard", "duration": "string" }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "difficulty": "easy|medium|hard", "duration": "string" }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "difficulty": "easy|medium|hard", "duration": "string" }},
+  ],
+  "problems": [
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "question": "string",
+       "first_answer": "string", "second_answer": "string", "third_answer": "string",
+       "correct_answer": "first_answer|second_answer|third_answer", "points": 1 }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "question": "string",
+       "first_answer": "string", "second_answer": "string", "third_answer": "string",
+       "correct_answer": "first_answer|second_answer|third_answer", "points": 1 }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "question": "string",
+       "first_answer": "string", "second_answer": "string", "third_answer": "string",
+       "correct_answer": "first_answer|second_answer|third_answer", "points": 1 }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "question": "string",
+       "first_answer": "string", "second_answer": "string", "third_answer": "string",
+       "correct_answer": "first_answer|second_answer|third_answer", "points": 1 }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "question": "string",
+       "first_answer": "string", "second_answer": "string", "third_answer": "string",
+       "correct_answer": "first_answer|second_answer|third_answer", "points": 1 }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "question": "string",
+       "first_answer": "string", "second_answer": "string", "third_answer": "string",
+       "correct_answer": "first_answer|second_answer|third_answer", "points": 1 }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "question": "string",
+       "first_answer": "string", "second_answer": "string", "third_answer": "string",
+       "correct_answer": "first_answer|second_answer|third_answer", "points": 1 }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "question": "string",
+       "first_answer": "string", "second_answer": "string", "third_answer": "string",
+       "correct_answer": "first_answer|second_answer|third_answer", "points": 1 }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "question": "string",
+       "first_answer": "string", "second_answer": "string", "third_answer": "string",
+       "correct_answer": "first_answer|second_answer|third_answer", "points": 1 }},
+    {{ "path_name": "string", "title": "string", "subtitle": "string", "question": "string",
+       "first_answer": "string", "second_answer": "string", "third_answer": "string",
+       "correct_answer": "first_answer|second_answer|third_answer", "points": 1 }},
+  ]
+}}
+"""
+    text = call_gemini(prompt)
+    data = extract_json(text) or {"quests": [], "problems": []}
+    return QuestsAndProblemsResponse(**data)
