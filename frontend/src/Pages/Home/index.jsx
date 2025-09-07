@@ -50,6 +50,7 @@ const Home = () => {
                 key={rec.id}
                 title={rec.career_name}
                 description={rec.description}
+                recommendationId={rec.id}
               />
             ))
           ) : (

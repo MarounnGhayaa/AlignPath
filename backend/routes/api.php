@@ -12,6 +12,7 @@ Route::group(["prefix" => "v0.1"], function () {
     Route::group(["middleware" => "auth:api"], function () {
         Route::group(["prefix" => "user"], function () {
             Route::get('/getInfo/{id}', [ProfileController::class, 'getUserInfo']);
+            Route::get('/paths', [ProfileController::class, 'getUserPaths']);
             Route::put('/updateInfo/{id}', [ProfileController::class, 'updateUserInfo']);
 
             Route::post('/preferences', [UserPreferenceController::class, 'storeUserPreferences']);

@@ -3,7 +3,7 @@ import Button from "../Button";
 import { Briefcase } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const Recommendation = ({ title, description }) => {
+const Recommendation = ({ title, description, recommendationId }) => {
   const navigate = useNavigate();
 
   return (
@@ -15,7 +15,9 @@ const Recommendation = ({ title, description }) => {
         text={"Explore"}
         className={"primary-button"}
         onClickListener={() => {
-          navigate("/explore", { state: { title, description } });
+          navigate("/explore", {
+            state: { title, description, recommendationId },
+          });
         }}
       />
     </div>

@@ -18,7 +18,7 @@ class RecommendationController extends Controller
         }
 
         $recommendations = Recommendation::where('user_id', $user->id)
-                                    ->select('career_name', 'description')
+                                    ->select('id', 'career_name', 'description')
                                     ->get();
 
         return response()->json($recommendations);
