@@ -15,7 +15,7 @@ const Recommendation = ({ title, description }) => {
         text={"Explore"}
         className={"primary-button"}
         onClickListener={() => {
-          navigate("/explore");
+          navigate("/explore", { state: { title, description } });
         }}
       />
     </div>

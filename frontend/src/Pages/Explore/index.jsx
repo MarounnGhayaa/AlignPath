@@ -1,18 +1,21 @@
 import "./style.css";
+import React from "react";
 import Button from "../../Components/Button";
 import OrangeLogo from "../../Assets/LogoOrangeNoBg.png";
 import WhiteLogo from "../../Assets/LogoWhiteNoBg.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Explore = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { title, description } = location.state || {};
 
   return (
     <div className="explore-body">
       <div className="explore-heading">
         <Button
           insiders={"←  "}
-          text={"Title"}
+          text={title || "Title"}
           className={"explore-left-button"}
           onClickListener={() => {
             navigate("/home");
@@ -20,11 +23,7 @@ const Explore = () => {
         />
       </div>
       <div className="explore-description">
-        <p>
-          Build innovative software solutions, work with cutting-edge
-          technologies, and shape the digital future. Software engineers are the
-          architects of our technological world.
-        </p>
+        <p>{description || "Description"}</p>
       </div>
       <div className="explore-row-btns">
         <Button

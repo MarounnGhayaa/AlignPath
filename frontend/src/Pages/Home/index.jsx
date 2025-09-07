@@ -39,14 +39,6 @@ const Home = () => {
     fetchRecommendations();
   }, []);
 
-  if (loading) {
-    return <div className="homePage-body">Loading recommendations...</div>;
-  }
-
-  if (error) {
-    return <div className="homePage-body">Error: {error.message}</div>;
-  }
-
   return (
     <div className="homePage-body">
       <div className="homePage">
