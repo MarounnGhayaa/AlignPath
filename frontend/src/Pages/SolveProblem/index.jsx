@@ -29,12 +29,19 @@ const SolveProblem = () => {
           return;
         }
 
-        const response = await API.get(`/user/problems/${problemId}`, {
+        const response = await API.get(`/user/problem/${problemId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setProblem(response.data);
+        setProblem({
+          ...response.data,
+          options: [
+            response.data.first_answer,
+            response.data.second_answer,
+            response.data.third_answer,
+          ],
+        });
       } catch (err) {
         console.error("Error fetching problem:", err);
         setError("Failed to load problem.");
@@ -58,25 +65,26 @@ const SolveProblem = () => {
     return <div className="solve-problem-body">No problem found.</div>;
   }
 
+  const { title = "", question = "", options = [], points = 0 } = problem;
+
   return (
     <div className="solve-problem-body">
       <div className="solve-problem-container">
         <header className="solve-problem-header">
-          <h2>{problem.title}</h2>
-          <h2>/{problem.points}</h2>
+          <h2>{title}</h2>
+          <h2>/{points}</h2>
         </header>
         <div className="solve-problem-content">
           <section className="solve-problem-subtitle">
-            <strong>{problem.question}</strong>
+            <strong>{question}</strong>
           </section>
           <section className="solve-problem-options">
-            {problem.options &&
-              problem.options.map((option, index) => (
-                <label key={index} className="solve-problem-radio">
-                  <input type="radio" name="option" value={option} />
-                  <strong>{option}</strong>
-                </label>
-              ))}
+            {options.map((option, index) => (
+              <label key={index} className="solve-problem-radio">
+                <input type="radio" name="option" value={option} />
+                <strong>{option}</strong>
+              </label>
+            ))}
           </section>
           <Button
             text={"Submit Answer"}

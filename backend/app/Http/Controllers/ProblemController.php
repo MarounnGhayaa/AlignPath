@@ -19,4 +19,20 @@ class ProblemController extends Controller
 
         return response()->json($problems);
     }
+
+    public function getProblemById(Request $request, $problemId)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $problem = Problem::find($problemId);
+
+        if (!$problem) {
+            return response()->json(['error' => 'Problem not found'], 404);
+        }
+
+        return response()->json($problem);
+    }
 }

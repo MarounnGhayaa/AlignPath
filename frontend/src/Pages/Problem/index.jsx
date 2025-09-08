@@ -60,6 +60,7 @@ const Problem = ({ pathId }) => {
           problems.map((problem) => (
             <ProblemCard
               key={problem.id}
+              id={problem.id}
               title={problem.title}
               subtitle={problem.subtitle}
               points={problem.points}

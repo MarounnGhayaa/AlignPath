@@ -31,6 +31,7 @@ Route::group(["prefix" => "v0.1"], function () {
             Route::get('/quests/{pathId}', [QuestController::class, 'getQuestsByPath']);
 
             Route::get('/problems/{pathId}', [ProblemController::class, 'getProblemsByPath']);
+            Route::get('/problem/{problemId}', [ProblemController::class, 'getProblemById']);
 
             Route::get('/recommendations', [RecommendationController::class, 'getUserRecommendations']);
         });
