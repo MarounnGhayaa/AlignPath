@@ -44,6 +44,9 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate
+          php artisan jwt:secret --force
+          php artisan config:clear
+          php artisan cache:clear
           php artisan migrate --force
         working-directory: ./backend
         env:
@@ -53,6 +56,9 @@ jobs:
           DB_DATABASE: test_db
           DB_USERNAME: root
           DB_PASSWORD: root
+          APP_ENV: testing
+          APP_KEY: base64:SomeRandomKeyHere
+          JWT_SECRET: base64:SomeRandomJWTSecretHere
 
       - name: Run Backend Tests
         run: php artisan test
@@ -64,6 +70,8 @@ jobs:
           DB_DATABASE: test_db
           DB_USERNAME: root
           DB_PASSWORD: root
+          APP_ENV: testing
+          JWT_SECRET: base64:SomeRandomJWTSecretHere
 
   frontend-build:
     runs-on: ubuntu-latest
