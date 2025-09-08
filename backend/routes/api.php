@@ -8,6 +8,7 @@ use App\Http\Controllers\Users\UserPreferenceController;
 use App\Http\Controllers\AiAgentController;
 use App\Http\Controllers\Users\RecommendationController;
 use App\Http\Controllers\QuestController;
+use App\Http\Controllers\ProblemController;
 
 Route::group(["prefix" => "v0.1"], function () {
     Route::group(["middleware" => "auth:api"], function () {
@@ -28,6 +29,9 @@ Route::group(["prefix" => "v0.1"], function () {
                 Route::post('/generate-quests-and-problems', [AiAgentController::class, 'generateQuestsAndProblems']);
             });
             Route::get('/quests/{pathId}', [QuestController::class, 'getQuestsByPath']);
+
+            Route::get('/problems/{pathId}', [ProblemController::class, 'getProblemsByPath']);
+
             Route::get('/recommendations', [RecommendationController::class, 'getUserRecommendations']);
         });
     });

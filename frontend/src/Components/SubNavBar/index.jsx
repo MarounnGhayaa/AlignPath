@@ -26,7 +26,7 @@ const SubNavBar = ({ pathId }) => {
 
       <div className="tabContent">
         {activeTab === "Quests" && <Quest pathId={pathId} />}
-        {activeTab === "Problems" && <Problem />}
+        {activeTab === "Problems" && <Problem pathId={pathId} />}
         {activeTab === "Skills" && <Skill />}
         {activeTab === "Resources" && <Resource />}
       </div>

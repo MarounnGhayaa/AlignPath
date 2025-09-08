@@ -96,7 +96,7 @@ const MyRoutes = () => {
           }
         />
         <Route
-          path="/solveProblem"
+          path="/solveProblem/:problemId"
           element={
             <ProtectedRoute allowedRoles={["student", "mentor"]}>
               <SolveProblem />
