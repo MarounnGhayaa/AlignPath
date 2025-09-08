@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import API from "../../Services/axios";
 import SavedPath from "../../Components/SavedPath";
 import { useNavigate } from "react-router-dom";
+import FloatingChatbot from "../../Components/FloatingChatbot";
 
 const Path = () => {
   const [savedPaths, setSavedPaths] = useState([]);
@@ -73,6 +74,7 @@ const Path = () => {
           <p>No saved paths found.</p>
         )}
       </div>
+      <FloatingChatbot />
     </div>
   );
 };

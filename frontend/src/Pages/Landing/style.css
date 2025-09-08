@@ -11,6 +11,8 @@
   padding: 10px 20px;
   background-color: #424242;
   width: 100%;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .landing-logo {
@@ -38,6 +40,7 @@
   justify-content: space-between;
   padding: 150px;
   gap: 50px;
+  flex-wrap: wrap;
 }
 
 .landing-hero h1 {
@@ -49,12 +52,14 @@
   font-size: 20px;
   margin-bottom: 40px;
   color: #555;
-  width: 800px;
+  width: 100%;
+  max-width: 800px;
 }
 
 .landing-row-btns {
   display: flex;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .landing-hero-img {
@@ -62,6 +67,7 @@
   height: 300px;
   width: 350px;
   object-fit: cover;
+  max-width: 100%;
 }
 
 .landing-hero-text {
@@ -69,6 +75,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 300px;
 }
 
 .landing-work-section {
@@ -94,9 +101,10 @@
 
 .landing-row-instructions {
   display: flex;
-  direction: row;
+  flex-direction: row;
   justify-content: center;
   gap: 75px;
+  flex-wrap: wrap;
 }
 
 .landing-story-section {
@@ -118,20 +126,25 @@
 
 .landing-row-stories {
   display: flex;
-  direction: row;
+  flex-direction: row;
   justify-content: center;
   gap: 75px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .landing-logo-img-sc {
   margin-top: 40px;
   width: 250px;
   height: 250px;
+  max-width: 100%;
 }
+
 .landing-nav-links {
   display: flex;
   flex-direction: row;
   gap: 40px;
+  flex-wrap: wrap;
 }
 
 .landing-nav-links a {
@@ -156,4 +169,147 @@ html {
   padding: 10px;
   font-size: 18px;
   font-weight: bold;
+}
+
+@media (max-width: 1024px) {
+  .landing-hero {
+    padding: 100px 40px;
+    gap: 40px;
+  }
+
+  .landing-hero h1 {
+    font-size: 35px;
+  }
+
+  .landing-hero h2 {
+    font-size: 18px;
+  }
+
+  .landing-hero-img {
+    height: 250px;
+    width: 300px;
+  }
+
+  .landing-row-instructions,
+  .landing-row-stories {
+    gap: 50px;
+  }
+
+  .landing-logo-img-sc {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .landing-nav {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .landing-logo {
+    font-size: 24px;
+  }
+
+  .landing-logo-img {
+    width: 80px;
+  }
+
+  .landing-nav-links {
+    gap: 20px;
+  }
+
+  .landing-hero {
+    padding: 80px 20px;
+    flex-direction: column;
+    text-align: center;
+    gap: 30px;
+  }
+
+  .landing-hero h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+
+  .landing-hero h2 {
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+
+  .landing-hero-img {
+    height: 200px;
+    width: 250px;
+  }
+
+  .landing-row-btns {
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .landing-work-section,
+  .landing-story-section {
+    padding: 40px 20px;
+  }
+
+  .landing-work-section h1,
+  .landing-story-section h1 {
+    font-size: 28px;
+  }
+
+  .landing-work-section h2,
+  .landing-story-section h2 {
+    font-size: 16px;
+  }
+
+  .landing-row-instructions,
+  .landing-row-stories {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .landing-logo-img-sc {
+    width: 150px;
+    height: 150px;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .landing-hero {
+    padding: 60px 15px;
+  }
+
+  .landing-hero h1 {
+    font-size: 24px;
+  }
+
+  .landing-hero h2 {
+    font-size: 14px;
+  }
+
+  .landing-hero-img {
+    height: 180px;
+    width: 220px;
+  }
+
+  .landing-work-section,
+  .landing-story-section {
+    padding: 30px 15px;
+  }
+
+  .landing-work-section h1,
+  .landing-story-section h1 {
+    font-size: 24px;
+  }
+
+  .landing-work-section h2,
+  .landing-story-section h2 {
+    font-size: 14px;
+  }
+
+  .landing-logo-img-sc {
+    width: 120px;
+    height: 120px;
+  }
 }

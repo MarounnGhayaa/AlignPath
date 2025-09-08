@@ -4,21 +4,91 @@
   box-sizing: border-box;
 }
 
-.quest-body h1,
-p {
-  text-align: left;
+.quest-body {
   padding: 20px;
-  margin-left: 50px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.quest-body h1 {
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 10px;
 }
 
 .quest-body p {
+  text-align: center;
+  padding: 20px;
   margin-bottom: 50px;
   font-size: 18px;
+  color: #666;
 }
 
 .quest-body-row {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 50px;
+  justify-content: center;
+  gap: 30px;
+  padding: 20px;
+}
+
+@media (max-width: 1024px) {
+  .quest-body {
+    padding: 15px;
+  }
+
+  .quest-body h1 {
+    font-size: 28px;
+    padding: 15px;
+  }
+
+  .quest-body p {
+    font-size: 16px;
+    padding: 15px;
+    margin-bottom: 40px;
+  }
+
+  .quest-body-row {
+    gap: 25px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .quest-body {
+    padding: 10px;
+  }
+
+  .quest-body h1 {
+    font-size: 24px;
+    padding: 10px;
+  }
+
+  .quest-body p {
+    font-size: 14px;
+    padding: 10px;
+    margin-bottom: 30px;
+  }
+
+  .quest-body-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .quest-body h1 {
+    font-size: 20px;
+  }
+
+  .quest-body p {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .quest-body-row {
+    gap: 15px;
+  }
 }

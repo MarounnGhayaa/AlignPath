@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../../Services/axios";
 import { useSelector } from "react-redux";
+import FloatingChatbot from "../../Components/FloatingChatbot";
 
 const SolveProblem = () => {
   const navigate = useNavigate();
@@ -93,6 +94,8 @@ const SolveProblem = () => {
           />
         </div>
       </div>
+
+      <FloatingChatbot />
     </div>
   );
 };

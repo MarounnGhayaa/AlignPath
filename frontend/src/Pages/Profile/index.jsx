@@ -4,6 +4,7 @@ import Input from "../../Components/Input";
 import Avatar from "../../Assets/Avatar.png";
 import Button from "../../Components/Button";
 import { useProfileLogic } from "./logic";
+import FloatingChatbot from "../../Components/FloatingChatbot";
 
 const Profile = () => {
   const {
@@ -156,6 +157,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      <FloatingChatbot />
     </div>
   );
 };

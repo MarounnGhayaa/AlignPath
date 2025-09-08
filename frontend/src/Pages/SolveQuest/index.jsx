@@ -1,6 +1,7 @@
 import "./style.css";
 import Button from "../../Components/Button";
 import { useNavigate } from "react-router-dom";
+import FloatingChatbot from "../../Components/FloatingChatbot";
 
 const SolveQuest = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const SolveQuest = () => {
           </section>
         </div>
       </div>
+      <FloatingChatbot />
     </div>
   );
 };

@@ -2,6 +2,7 @@ import "./style.css";
 import SubNavBar from "../../Components/SubNavBar";
 import Button from "../../Components/Button";
 import { useNavigate, useLocation } from "react-router-dom";
+import FloatingChatbot from "../../Components/FloatingChatbot";
 
 const PathNested = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const PathNested = () => {
         />
       </h1>
       <SubNavBar pathId={pathId} />
+      <FloatingChatbot />
     </div>
   );
 };

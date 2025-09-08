@@ -3,6 +3,7 @@ import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { SendHorizontal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import FloatingChatbot from "../../Components/FloatingChatbot";
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const Chat = () => {
           </div>
         </div>
       </div>
+      <FloatingChatbot />
     </div>
   );
 };

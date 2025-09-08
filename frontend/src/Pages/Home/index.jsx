@@ -1,8 +1,9 @@
 import "./style.css";
 import Recommendation from "../../Components/Recommendation";
 import Statistic from "../../Components/Statistic";
-import AiChat from "../AiChat";
+import FloatingChatbot from "../../Components/FloatingChatbot";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import API from "../../Services/axios";
 
 const Home = () => {
@@ -22,8 +23,23 @@ const Home = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userName, setUserName] = useState("Student");
+  const registerState = useSelector((state) => state.register) || {};
 
   useEffect(() => {
+    const user =
+      registerState.user || JSON.parse(localStorage.getItem("user") || "null");
+    if (user) {
+      if (user.name) {
+        setUserName(user.name);
+      } else if (user.username) {
+        setUserName(user.username);
+      } else if (user.email) {
+        const emailPrefix = user.email.split("@")[0];
+        setUserName(emailPrefix);
+      }
+    }
+
     const fetchRecommendations = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -37,12 +53,12 @@ const Home = () => {
     };
 
     fetchRecommendations();
-  }, []);
+  }, [registerState.user]);
 
   return (
     <div className="homePage-body">
       <div className="homePage">
-        <h1>Welcome, Student!</h1>
+        <h1>Welcome, {userName}!</h1>
         <div className="homePage-careers">
           {recommendations.length > 0 ? (
             recommendations.map((rec) => (
@@ -67,9 +83,7 @@ const Home = () => {
           <Statistic value={"30%"} statTitle={"Skills Learned"} />
         </div>
       </div>
-      <div className="homePage-chatbot">
-        <AiChat />
-      </div>
+      <FloatingChatbot />
     </div>
   );
 };

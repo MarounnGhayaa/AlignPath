@@ -1,6 +1,7 @@
 import "./style.css";
 import MentorCard from "../../Components/MentorCard";
 import { User } from "lucide-react";
+import FloatingChatbot from "../../Components/FloatingChatbot";
 
 const Network = () => {
   return (
@@ -26,6 +27,7 @@ const Network = () => {
           skills={["react", "js", "oop"]}
         />
       </div>
+      <FloatingChatbot />
     </div>
   );
 };

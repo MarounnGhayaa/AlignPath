@@ -7,6 +7,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import API from "../../Services/axios";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import FloatingChatbot from "../../Components/FloatingChatbot";
 
 const Explore = () => {
   const navigate = useNavigate();
@@ -104,6 +105,7 @@ const Explore = () => {
         <img src={OrangeLogo} alt="AlignPath Logo" className="explore-OLogo" />
         <img src={WhiteLogo} alt="AlignPath Logo" className="explore-WLogo" />
       </footer>
+      <FloatingChatbot />
     </div>
   );
 };

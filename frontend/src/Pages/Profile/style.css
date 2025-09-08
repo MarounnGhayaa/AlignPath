@@ -6,22 +6,25 @@
 
 .profile-body {
   padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .profile-user-info {
   background-color: #f5f5f5;
   margin-top: 20px;
-  width: 70%;
+  width: 100%;
   border-radius: 8px;
 }
 
 .profile-user-header {
   display: flex;
   justify-content: left;
-  direction: row;
+  flex-direction: row;
   padding: 20px;
   margin-left: 20px;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .profile-user-titles h3 {
@@ -51,12 +54,15 @@
   align-items: stretch;
   padding: 20px;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .profile-user-fields {
   margin: 20px 0;
   padding: 20px;
-  width: 50%;
+  width: 100%;
+  min-width: 300px;
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -66,7 +72,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40%;
+  width: 100%;
+  min-width: 200px;
+  flex: 1;
 }
 
 .profile-avatar {
@@ -74,7 +82,7 @@
   max-width: 100%;
   object-fit: contain;
   border-radius: 8px;
-  margin-right: 40px;
+  margin-right: 0;
 }
 
 .profile-main {
@@ -82,11 +90,13 @@
   justify-content: space-between;
   align-items: stretch;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .profile-side-box {
   margin-top: 20px;
-  width: 30%;
+  width: 100%;
+  max-width: 400px;
   background: #f5f5f5;
   border-radius: 8px;
   padding: 20px;
@@ -136,13 +146,16 @@
 }
 
 .profile-user-save-changes h4 {
-  width: 200px;
+  width: 100%;
+  max-width: 200px;
   font-weight: normal;
   font-size: 18px;
+  text-align: center;
 }
 
 .profile-user-save-changes p {
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
 }
 
 .profile-error-message {
@@ -153,4 +166,101 @@
 .profile-success-message {
   color: green;
   font-size: 14px;
+}
+
+/* Tablet Responsive Design */
+@media (max-width: 1024px) {
+  .profile-body {
+    padding: 30px;
+  }
+
+  .profile-main {
+    flex-direction: column;
+  }
+
+  .profile-side-box {
+    max-width: 100%;
+  }
+
+  .profile-user-field-section {
+    flex-direction: column;
+  }
+
+  .profile-user-fields {
+    width: 100%;
+  }
+
+  .profile-avatar-img {
+    width: 100%;
+  }
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .profile-body {
+    padding: 20px;
+  }
+
+  .profile-user-header {
+    flex-direction: column;
+    text-align: center;
+    margin-left: 0;
+    padding: 15px;
+  }
+
+  .profile-user-field-section {
+    padding: 15px;
+  }
+
+  .profile-user-fields {
+    padding: 15px;
+    margin: 10px 0;
+  }
+
+  .profile-side-box {
+    padding: 15px;
+  }
+
+  .profile-side-section {
+    padding: 15px;
+    gap: 20px;
+  }
+
+  .profile-user-save-changes {
+    padding: 15px;
+  }
+
+  .profile-user-save-changes h4 {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-body {
+    padding: 10px;
+  }
+
+  .profile-user-header {
+    padding: 10px;
+  }
+
+  .profile-user-field-section {
+    padding: 10px;
+  }
+
+  .profile-user-fields {
+    padding: 10px;
+  }
+
+  .profile-side-box {
+    padding: 10px;
+  }
+
+  .profile-side-section {
+    padding: 10px;
+  }
+
+  .profile-user-save-changes {
+    padding: 10px;
+  }
 }
