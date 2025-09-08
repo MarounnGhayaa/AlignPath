@@ -34,6 +34,13 @@ const Profile = () => {
               <h3>{username}</h3>
               <strong>{email}</strong>
             </div>
+            <div className="profile-header-actions">
+              <Button
+                className="primary-button"
+                text="Save Changes"
+                onClickListener={handleSaveChanges}
+              />
+            </div>
           </div>
 
           <div className="profile-user-field-section">
@@ -102,46 +109,16 @@ const Profile = () => {
                 }
               />
             </div>
-
-            <div className="profile-avatar-img">
-              <img
-                src={Avatar}
-                alt="AlignPath Avatar"
-                className="profile-avatar"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="profile-side-box">
-          <div className="profile-side-sections">
             <div className="profile-side-section">
-              <h2>Profile Picture</h2>
-              <div className="profile-user-upload-img">
-                <span>
-                  <User />
-                </span>
-              </div>
-              <Button className="primary-button" text="Upload Picture" />
-            </div>
-
-            <div className="profile-side-section">
-              <div className="profile-user-save-changes">
-                <h2>About</h2>
-                <h4>
+              <div className="profile-about-section">
+                <h3>About</h3>
+                <p className="profile-about-text">
                   {username
                     ? `${username}, based in ${
                         location || "Somewhere on earth"
                       }; planning to build a successful career!`
                     : "Student name, based in location; planning to build a successful career!"}
-                </h4>
-
-                <Button
-                  className="primary-button"
-                  text="Save Changes"
-                  onClickListener={handleSaveChanges}
-                />
-
+                </p>
                 {errorMessage && (
                   <p className="profile-error-message">
                     <strong>{errorMessage}</strong>
@@ -152,6 +129,13 @@ const Profile = () => {
                     <strong>{successMessage}</strong>
                   </p>
                 )}
+              </div>
+              <div className="profile-avatar-img">
+                <img
+                  src={Avatar}
+                  alt="AlignPath Avatar"
+                  className="profile-avatar"
+                />
               </div>
             </div>
           </div>
