@@ -5,11 +5,12 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class AuthTest extends TestCase {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function user_can_register_successfully() {
         $payload = [
             'username' => 'Maroun',
@@ -31,7 +32,7 @@ class AuthTest extends TestCase {
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function registration_requires_all_fields() {
         $response = $this->postJson('/api/v0.1/guest/register', []);
 
@@ -39,7 +40,7 @@ class AuthTest extends TestCase {
                  ->assertJsonValidationErrors(['username', 'email', 'password', 'role']);
     }
 
-    /** @test */
+    #[Test]
     public function user_can_login_with_correct_credentials() {
         $user = User::factory()->create([
             'email' => 'maroun@example.com',
@@ -59,7 +60,7 @@ class AuthTest extends TestCase {
                  ]);
     }
 
-    /** @test */
+    #[Test]
     public function login_fails_with_invalid_credentials() {
         $user = User::factory()->create([
             'email' => 'maroun@example.com',

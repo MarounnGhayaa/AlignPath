@@ -5,11 +5,12 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class UserPreferenceTest extends TestCase {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function unauthenticated_user_cannot_store_preferences() {
         $response = $this->postJson('/api/v0.1/user/preferences', [
             'skills' => 'PHP',
@@ -18,21 +19,21 @@ class UserPreferenceTest extends TestCase {
             'careers' => 'Software Engineer',
         ]);
 
-        $response->assertStatus(401); // unauthenticated
+        $response->assertStatus(401);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_required_fields_when_storing_preferences() {
         $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')
                          ->postJson('/api/v0.1/user/preferences', []);
 
-        $response->assertStatus(422) // validation error
+        $response->assertStatus(422)
                  ->assertJsonValidationErrors(['skills', 'interests', 'values', 'careers']);
     }
 
-    /** @test */
+    #[Test]
     public function authenticated_user_can_store_preferences() {
         $user = User::factory()->create();
 
