@@ -36,6 +36,14 @@ jobs:
         with:
           php-version: "8.2"
 
+      - name: Cache Composer Dependencies
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
       - name: Install Composer Dependencies
         run: composer install --no-ansi --no-interaction --no-progress --prefer-dist
         working-directory: ./backend
@@ -43,10 +51,8 @@ jobs:
       - name: Setup Laravel
         run: |
           cp .env.example .env
-          php artisan key:generate
+          php artisan key:generate --ansi
           php artisan jwt:secret --force
-          php artisan config:clear
-          php artisan cache:clear
           php artisan migrate --force
         working-directory: ./backend
         env:
@@ -57,8 +63,7 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: root
           APP_ENV: testing
-          APP_KEY: base64:SomeRandomKeyHere
-          JWT_SECRET: base64:SomeRandomJWTSecretHere
+          CACHE_DRIVER: file
 
       - name: Run Backend Tests
         run: php artisan test
@@ -71,22 +76,25 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: root
           APP_ENV: testing
-          JWT_SECRET: base64:SomeRandomJWTSecretHere
+          CACHE_DRIVER: file
 
   frontend-build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
           cache-dependency-path: "./frontend/package-lock.json"
+
       - name: Install Frontend Dependencies
         run: npm ci
         working-directory: ./frontend
+
       - name: Build Frontend
         run: CI=false npm run build
         working-directory: ./frontend
@@ -96,13 +104,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python
+
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - name: Install Python Dependencies
         run: pip install -r requirements.txt
         working-directory: ./ai-agent
+
       - name: Run AI Agent Tests
         run: pytest --maxfail=1 --disable-warnings || true
         working-directory: ./ai-agent
