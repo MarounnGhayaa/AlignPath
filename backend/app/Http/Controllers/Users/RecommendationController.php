@@ -9,7 +9,7 @@ use App\Models\Recommendation;
 
 /**
  * @OA\Get(
- *     path="/api/user/recommendations",
+ *     path="/api/v0.1/user/recommendations",
  *     summary="Get user recommendations",
  *     tags={"Recommendations"},
  *     security={{"bearerAuth":{}}},

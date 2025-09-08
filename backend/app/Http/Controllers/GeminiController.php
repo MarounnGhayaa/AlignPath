@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 class GeminiController extends Controller {
     /**
      * @OA\Post(
-     *      path="/api/gemini/chat",
+     *      path="/api/v0.1/user/chat",
      *      summary="Send messages to the Gemini AI model for chat completion",
      *      tags={"Gemini"},
      *      security={{"bearerAuth":{}}},

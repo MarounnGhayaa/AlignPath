@@ -22,7 +22,7 @@ class AiAgentController extends Controller
 
     /**
      * @OA\Post(
-     *      path="/api/ai-agent/accept-path",
+     *      path="/api/v0.1/user/ai/accept-path",
      *      summary="Accept a recommended path",
      *      tags={"AI Agent"},
      *      security={{"bearerAuth":{}}},
@@ -96,7 +96,7 @@ class AiAgentController extends Controller
 
     /**
      * @OA\Post(
-     *      path="/api/ai-agent/dismiss-path",
+     *      path="/api/v0.1/user/ai/dismiss-path",
      *      summary="Dismiss a recommended path",
      *      tags={"AI Agent"},
      *      security={{"bearerAuth":{}}},
@@ -147,7 +147,7 @@ class AiAgentController extends Controller
 
     /**
      * @OA\Post(
-     *      path="/api/ai-agent/recommend-careers",
+     *      path="/api/v0.1/user/ai/recommend-careers",
      *      summary="Get career recommendations from AI agent",
      *      tags={"AI Agent"},
      *      security={{"bearerAuth":{}}},
@@ -226,7 +226,7 @@ class AiAgentController extends Controller
 
     /**
      * @OA\Post(
-     *      path="/api/ai-agent/generate-quests",
+     *      path="/api/v0.1/user/ai/generate-quests",
      *      summary="Generate quests for a given career path",
      *      tags={"AI Agent"},
      *      security={{"bearerAuth":{}}},
@@ -301,7 +301,7 @@ class AiAgentController extends Controller
 
     /**
      * @OA\Post(
-     *      path="/api/ai-agent/generate-quests-and-problems",
+     *      path="/api/v0.1/user/ai/generate-quests-and-problems",
      *      summary="Generate quests and problems for a given career path",
      *      tags={"AI Agent"},
      *      security={{"bearerAuth":{}}},

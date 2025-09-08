@@ -13,7 +13,7 @@ use App\Models\Path;
 class ProfileController extends Controller {
     /**
      * @OA\Get(
-     *     path="/api/user/{id}",
+     *     path="/api/v0.1/user/{id}",
      *     summary="Get user info by ID",
      *     tags={"Profile"},
      *     security={{"bearerAuth":{}}},
@@ -29,7 +29,7 @@ class ProfileController extends Controller {
 
     /**
      * @OA\Put(
-     *     path="/api/user/{id}",
+     *     path="/api/v0.1/user/{id}",
      *     summary="Update user info",
      *     tags={"Profile"},
      *     security={{"bearerAuth":{}}},
@@ -50,7 +50,7 @@ class ProfileController extends Controller {
 
     /**
      * @OA\Get(
-     *     path="/api/user/paths",
+     *     path="/api/v0.1/user/paths",
      *     summary="Get authenticated user's saved paths",
      *     tags={"Profile"},
      *     security={{"bearerAuth":{}}},

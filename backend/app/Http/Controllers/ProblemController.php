@@ -10,7 +10,7 @@ class ProblemController extends Controller
 {
         /**
          * @OA\Get(
-         *     path="/api/problems/path/{pathId}",
+         *     path="/api/v0.1/user/problems/path/{pathId}",
          *     summary="List problems by path",
          *     tags={"Problems"},
          *     security={{"bearerAuth":{}}},
@@ -39,7 +39,7 @@ class ProblemController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/problems/{problemId}",
+     *     path="/api/v0.1/user/problems/{problemId}",
      *     summary="Get problem by ID",
      *     tags={"Problems"},
      *     security={{"bearerAuth":{}}},

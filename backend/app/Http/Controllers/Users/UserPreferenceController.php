@@ -9,7 +9,7 @@ use App\Services\Users\User_PreferencesService;
 class UserPreferenceController extends Controller  {
     /**
      * @OA\Post(
-     *     path="/api/user/preferences",
+     *     path="/api/v0.1/user/preferences",
      *     summary="Store or update authenticated user's preferences",
      *     tags={"User Preferences"},
      *     security={{"bearerAuth":{}}},

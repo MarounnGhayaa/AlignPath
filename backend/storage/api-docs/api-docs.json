@@ -6,13 +6,13 @@
         "version": "v0.1"
     },
     "paths": {
-        "/api/ai-agent/accept-path": {
+        "/api/v0.1/user/ai/accept-path": {
             "post": {
                 "tags": [
                     "AI Agent"
                 ],
                 "summary": "Accept a recommended path",
-                "operationId": "3296f2cbaa4d22bb4dd10ebc48a32a8c",
+                "operationId": "bf6a65e083135402bbdaccaeaecfc4ba",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -98,13 +98,13 @@
                 ]
             }
         },
-        "/api/ai-agent/dismiss-path": {
+        "/api/v0.1/user/ai/dismiss-path": {
             "post": {
                 "tags": [
                     "AI Agent"
                 ],
                 "summary": "Dismiss a recommended path",
-                "operationId": "00c4c2b98ecf2d87171c5a21c2f18973",
+                "operationId": "06c82a01af1acec8c1df5e74bbf2888a",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -182,13 +182,13 @@
                 ]
             }
         },
-        "/api/ai-agent/recommend-careers": {
+        "/api/v0.1/user/ai/recommend-careers": {
             "post": {
                 "tags": [
                     "AI Agent"
                 ],
                 "summary": "Get career recommendations from AI agent",
-                "operationId": "eb050ba3f80f74ba9a9d70a667728c34",
+                "operationId": "1149588f58b8fe70daaafef9cec81dd3",
                 "responses": {
                     "200": {
                         "description": "Successful response with recommended careers",
@@ -278,13 +278,13 @@
                 ]
             }
         },
-        "/api/ai-agent/generate-quests": {
+        "/api/v0.1/user/ai/generate-quests": {
             "post": {
                 "tags": [
                     "AI Agent"
                 ],
                 "summary": "Generate quests for a given career path",
-                "operationId": "75a1ba00d9a073530f83cce96d783023",
+                "operationId": "0eda70975f6e139c3cc291def9d6bf89",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -392,13 +392,13 @@
                 ]
             }
         },
-        "/api/ai-agent/generate-quests-and-problems": {
+        "/api/v0.1/user/ai/generate-quests-and-problems": {
             "post": {
                 "tags": [
                     "AI Agent"
                 ],
                 "summary": "Generate quests and problems for a given career path",
-                "operationId": "885488175727bafcab0ac77865f8ab8f",
+                "operationId": "dddd92a8b11212eba7077576d796e21a",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -546,13 +546,13 @@
                 ]
             }
         },
-        "/api/login": {
+        "/api/v0.1/guest/login": {
             "post": {
                 "tags": [
                     "Auth"
                 ],
                 "summary": "User login",
-                "operationId": "21d7350452aa3f98023cd3e06f03361c",
+                "operationId": "9754b377e9153b15a245d5d33e2a294a",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -618,13 +618,13 @@
                 }
             }
         },
-        "/api/register": {
+        "/api/v0.1/guest/register": {
             "post": {
                 "tags": [
                     "Auth"
                 ],
                 "summary": "User registration",
-                "operationId": "ee5fe2ba9d9c47a4f05c63880c45ab49",
+                "operationId": "3b7959a61b434c4cbca243b962521e80",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -701,13 +701,13 @@
                 }
             }
         },
-        "/api/gemini/chat": {
+        "/api/v0.1/user/chat": {
             "post": {
                 "tags": [
                     "Gemini"
                 ],
                 "summary": "Send messages to the Gemini AI model for chat completion",
-                "operationId": "be9c1f01600c9cd6ddcc388c84d56411",
+                "operationId": "6062baf16680ead1f82d9ae9836c2151",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -821,13 +821,13 @@
                 ]
             }
         },
-        "/api/problems/path/{pathId}": {
+        "/api/v0.1/user/problems/path/{pathId}": {
             "get": {
                 "tags": [
                     "Problems"
                 ],
                 "summary": "List problems by path",
-                "operationId": "62ffcd975ad390315e955762efd85eb4",
+                "operationId": "fb63cdb0c8320009802fa4846b0096f2",
                 "parameters": [
                     {
                         "name": "pathId",
@@ -877,13 +877,13 @@
                 ]
             }
         },
-        "/api/problems/{problemId}": {
+        "/api/v0.1/user/problems/{problemId}": {
             "get": {
                 "tags": [
                     "Problems"
                 ],
                 "summary": "Get problem by ID",
-                "operationId": "90a44040cd10b03a1bfd154418acc1d4",
+                "operationId": "b6a8f69459e47639eb254debc86f7ee7",
                 "parameters": [
                     {
                         "name": "problemId",
@@ -946,13 +946,13 @@
                 ]
             }
         },
-        "/api/quests/path/{pathId}": {
+        "/api/v0.1/user/quests/path/{pathId}": {
             "get": {
                 "tags": [
                     "Quests"
                 ],
                 "summary": "List quests by path",
-                "operationId": "4cfab142cd6c5064348c045601ff5f1d",
+                "operationId": "db128331ece47a21fcd4357fc60e99fc",
                 "parameters": [
                     {
                         "name": "pathId",
@@ -1002,13 +1002,13 @@
                 ]
             }
         },
-        "/api/user/{id}": {
+        "/api/v0.1/user/{id}": {
             "get": {
                 "tags": [
                     "Profile"
                 ],
                 "summary": "Get user info by ID",
-                "operationId": "4f5ba376617c9f724f65bbcbac42fb92",
+                "operationId": "cb2e73a502f02280d57d886d0086f58f",
                 "parameters": [
                     {
                         "name": "id",
@@ -1043,7 +1043,7 @@
                     "Profile"
                 ],
                 "summary": "Update user info",
-                "operationId": "a33dfc394f11c8356a69daf34176aa43",
+                "operationId": "a1c678a6aa7267754fc5eafcf49f58a4",
                 "parameters": [
                     {
                         "name": "id",
@@ -1084,13 +1084,13 @@
                 ]
             }
         },
-        "/api/user/paths": {
+        "/api/v0.1/user/paths": {
             "get": {
                 "tags": [
                     "Profile"
                 ],
                 "summary": "Get authenticated user's saved paths",
-                "operationId": "6baf918d40b9491a11c29b461f370b97",
+                "operationId": "fced1f1b7996ef078bb2b0a11eecac27",
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -1151,13 +1151,13 @@
                 ]
             }
         },
-        "/api/user/recommendations": {
+        "/api/v0.1/user/recommendations": {
             "get": {
                 "tags": [
                     "Recommendations"
                 ],
                 "summary": "Get user recommendations",
-                "operationId": "420c3794167b6fa8cb78a4939bee2f2c",
+                "operationId": "7cd8173b04e4549bc75c9396db369314",
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -1210,13 +1210,13 @@
                 ]
             }
         },
-        "/api/user/preferences": {
+        "/api/v0.1/user/preferences": {
             "post": {
                 "tags": [
                     "User Preferences"
                 ],
                 "summary": "Store or update authenticated user's preferences",
-                "operationId": "364b6338e3dcb1ac3976e5751a8af3da",
+                "operationId": "b19848b1dde2d5ca39c3b079f1793ee7",
                 "requestBody": {
                     "required": true,
                     "content": {

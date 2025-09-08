@@ -10,7 +10,7 @@ class QuestController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/quests/path/{pathId}",
+     *     path="/api/v0.1/user/quests/path/{pathId}",
      *     summary="List quests by path",
      *     tags={"Quests"},
      *     security={{"bearerAuth":{}}},
