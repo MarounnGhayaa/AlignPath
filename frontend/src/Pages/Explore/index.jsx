@@ -36,7 +36,7 @@ const Explore = () => {
       }
 
       const acceptPathResponse = await API.post(
-        `user/ai/accept-path`,
+        `user/accept-path`,
         {
           recommendation_id: recommendationId,
         },
@@ -50,7 +50,7 @@ const Explore = () => {
       const { path_id, career_name } = acceptPathResponse.data;
 
       await API.post(
-        `user/ai/generate-quests-and-problems`,
+        `user/generate-quests-and-problems`,
         {
           career: career_name,
           path_id: path_id,

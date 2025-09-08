@@ -68,7 +68,7 @@ export const usePreferencesLogic = () => {
   const recommendCareers = async () => {
     try {
        await API.post(
-        `/user/ai/recommend-careers`,
+        `/user/recommend-careers`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },

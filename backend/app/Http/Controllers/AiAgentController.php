@@ -10,66 +10,39 @@ use App\Models\Path;
 use App\Models\Quest;
 use App\Models\Problem;
 
-class AiAgentController extends Controller
-{
-    protected $fastApiBase;
-    protected $fastApiToken;
+class AiAgentController extends Controller {
+    protected $geminiApiKey;
+    protected $model;
+    protected $endpoint;
 
     public function __construct() {
-        $this->fastApiBase = env("FASTAPI_AGENT_URL");
-        $this->fastApiToken = env("FASTAPI_AGENT_SHARED_SECRET");
+        $this->geminiApiKey = env("GEMINI_API_KEY");
+        $this->model = config('services.gemini.model', env('GEMINI_MODEL', 'gemini-2.5-flash'));
+        $this->endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$this->model}:generateContent";
     }
 
-    /**
-     * @OA\Post(
-     *      path="/api/v0.1/user/ai/accept-path",
-     *      summary="Accept a recommended path",
-     *      tags={"AI Agent"},
-     *      security={{"bearerAuth":{}}},
-     *      @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(
-     *              required={"recommendation_id"},
-     *              @OA\Property(property="recommendation_id", type="integer", example=1, description="ID of the recommendation to accept")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Path accepted and saved successfully",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Path accepted and saved successfully"),
-     *              @OA\Property(property="path_id", type="integer", example=1),
-     *              @OA\Property(property="career_name", type="string", example="Software Engineer")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthorized",
-     *          @OA\JsonContent(@OA\Property(property="error", type="string", example="Unauthorized"))
-     *      ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Validation error",
-     *          @OA\JsonContent(@OA\Property(property="message", type="string", example="The given data was invalid."))
-     *      )
-     * )
-     */
+    public function health() {
+        return response()->json([
+            'status'  => 'ok',
+            'message' => 'AI Agent is running in Laravel',
+            'model'   => $this->model,
+            'time'    => now()->toDateTimeString(),
+        ]);
+    }
+
     public function acceptPath(Request $request) {
         $user = $request->user();
-        if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+        if (!$user) return response()->json(['error' => 'Unauthorized'], 401);
 
         $request->validate([
             'recommendation_id' => 'required|exists:recommendations,id',
         ]);
 
-        $recommendationId = $request->input('recommendation_id');
-        $recommendation = Recommendation::findOrFail($recommendationId);
+        $recommendation = Recommendation::findOrFail($request->input('recommendation_id'));
 
         $path = Path::create([
             'name' => $recommendation->career_name,
-            'tag' => $recommendation->description,
+            'tag'  => $recommendation->description,
         ]);
 
         $exists = UserPath::where('user_id', $user->id)
@@ -78,121 +51,42 @@ class AiAgentController extends Controller
 
         if (!$exists) {
             UserPath::create([
-                'user_id' => $user->id,
-                'path_id' => $path->id,
+                'user_id'             => $user->id,
+                'path_id'             => $path->id,
                 'progress_percentage' => 0,
-                'date_saved' => now(),
+                'date_saved'          => now(),
             ]);
         }
 
         $recommendation->update(['status' => 'accepted']);
 
         return response()->json([
-            'message' => 'Path accepted and saved successfully',
-            'path_id' => $path->id,
+            'message'     => 'Path accepted and saved successfully',
+            'path_id'     => $path->id,
             'career_name' => $recommendation->career_name
         ]);
     }
 
-    /**
-     * @OA\Post(
-     *      path="/api/v0.1/user/ai/dismiss-path",
-     *      summary="Dismiss a recommended path",
-     *      tags={"AI Agent"},
-     *      security={{"bearerAuth":{}}},
-     *      @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(
-     *              required={"recommendation_id"},
-     *              @OA\Property(property="recommendation_id", type="integer", example=1, description="ID of the recommendation to dismiss")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Recommendation dismissed successfully",
-     *          @OA\JsonContent(@OA\Property(property="message", type="string", example="Recommendation dismissed successfully"))
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthorized",
-     *          @OA\JsonContent(@OA\Property(property="error", type="string", example="Unauthorized"))
-     *      ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Validation error",
-     *          @OA\JsonContent(@OA\Property(property="message", type="string", example="The given data was invalid."))
-     *      )
-     * )
-     */
-    public function dismissPath(Request $request)
-    {
+    public function dismissPath(Request $request) {
         $user = $request->user();
-        if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+        if (!$user) return response()->json(['error' => 'Unauthorized'], 401);
 
         $request->validate([
             'recommendation_id' => 'required|exists:recommendations,id',
         ]);
 
-        $recommendationId = $request->input('recommendation_id');
-        $recommendation = Recommendation::findOrFail($recommendationId);
-
+        $recommendation = Recommendation::findOrFail($request->input('recommendation_id'));
         $recommendation->update(['status' => 'dismissed']);
 
-        return response()->json([
-            'message' => 'Recommendation dismissed successfully'
-        ]);
+        return response()->json(['message' => 'Recommendation dismissed successfully']);
     }
 
-    /**
-     * @OA\Post(
-     *      path="/api/v0.1/user/ai/recommend-careers",
-     *      summary="Get career recommendations from AI agent",
-     *      tags={"AI Agent"},
-     *      security={{"bearerAuth":{}}},
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful response with recommended careers",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="career_paths", type="array",
-     *                  @OA\Items(
-     *                      @OA\Property(property="title", type="string", example="Software Engineer"),
-     *                      @OA\Property(property="description", type="string", example="Designs and builds software systems.")
-     *                  )
-     *              )
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthorized",
-     *          @OA\JsonContent(@OA\Property(property="error", type="string", example="Unauthorized"))
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="No preferences found for the user",
-     *          @OA\JsonContent(@OA\Property(property="error", type="string", example="No preferences found"))
-     *      ),
-     *      @OA\Response(
-     *          response=502,
-     *          description="AI agent failed to return recommendations",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="error", type="string", example="AI agent failed"),
-     *              @OA\Property(property="details", type="object", example={})
-     *          )
-     *      )
-     * )
-     */
     public function recommendCareers(Request $request) {
         $user = $request->user();
-        if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+        if (!$user) return response()->json(['error' => 'Unauthorized'], 401);
 
         $prefs = $user->preference;
-        if (!$prefs) {
-            return response()->json(['error' => 'No preferences found'], 404);
-        }
+        if (!$prefs) return response()->json(['error' => 'No preferences found'], 404);
 
         $interests = implode(", ", [
             $prefs->skills,
@@ -201,206 +95,162 @@ class AiAgentController extends Controller
             $prefs->careers
         ]);
 
+        $prompt = "Based on the following interests: {$interests}, 
+                   suggest 3 career paths with a title and a short description for each. Respond in valid JSON like this:
+                   {
+                     \"career_paths\": [
+                        {\"title\": \"string\", \"description\": \"string\"},
+                        {\"title\": \"string\", \"description\": \"string\"},
+                        {\"title\": \"string\", \"description\": \"string\"}
+                     ]
+                   }";
+
         $response = Http::withHeaders([
-            "Authorization" => "Bearer {$this->fastApiToken}"
-        ])->post("{$this->fastApiBase}/recommend-careers", [
-            "interests" => $interests
+            'Content-Type' => 'application/json',
+        ])->post("{$this->endpoint}?key={$this->geminiApiKey}", [
+            'contents' => [[
+                'parts' => [['text' => $prompt]]
+            ]]
         ]);
 
         if ($response->failed()) {
             return response()->json(['error' => 'AI agent failed', 'details' => $response->json()], 502);
         }
 
-        $recommendedCareers = $response->json();
+        $aiResult = $response->json();
+        $careerText = $aiResult['candidates'][0]['content']['parts'][0]['text'] ?? '';
 
-        foreach ($recommendedCareers['career_paths'] as $career) {
+        $careerPaths = $this->extractJson($careerText)['career_paths'] ?? [
+            ['title' => 'Software Engineer', 'description' => 'Designs and builds software systems.'],
+            ['title' => 'Data Scientist', 'description' => 'Analyzes data for insights and predictions.'],
+            ['title' => 'Product Manager', 'description' => 'Coordinates teams to deliver products.'],
+        ];
+
+        foreach ($careerPaths as $career) {
             Recommendation::create([
-                'user_id' => $user->id,
+                'user_id'     => $user->id,
                 'career_name' => $career['title'],
                 'description' => $career['description'] ?? null,
             ]);
         }
 
-        return response()->json($recommendedCareers);
+        return response()->json(['career_paths' => $careerPaths]);
     }
 
-    /**
-     * @OA\Post(
-     *      path="/api/v0.1/user/ai/generate-quests",
-     *      summary="Generate quests for a given career path",
-     *      tags={"AI Agent"},
-     *      security={{"bearerAuth":{}}},
-     *      @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(
-     *              required={"career", "path_id"},
-     *              @OA\Property(property="career", type="string", example="Software Engineer", description="The career path for which to generate quests"),
-     *              @OA\Property(property="path_id", type="integer", example=1, description="The ID of the path to associate the quests with")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful response with generated quests",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="quests", type="array",
-     *                  @OA\Items(
-     *                      @OA\Property(property="title", type="string", example="Learn basic algorithms"),
-     *                      @OA\Property(property="subtitle", type="string", example="Understand data structures and algorithms"),
-     *                      @OA\Property(property="difficulty", type="string", example="easy"),
-     *                      @OA\Property(property="duration", type="string", example="2 weeks")
-     *                  )
-     *              )
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Validation error",
-     *          @OA\JsonContent(@OA\Property(property="message", type="string", example="The given data was invalid."))
-     *      ),
-     *      @OA\Response(
-     *          response=502,
-     *          description="AI agent failed to generate quests",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="error", type="string", example="AI agent failed"),
-     *              @OA\Property(property="details", type="object", example={})
-     *          )
-     *      )
-     * )
-     */
-    public function generateQuests(Request $request)
-    {
+    public function generateQuestsAndProblems(Request $request) {
+        
         $request->validate([
-            'career' => 'required|string',
+            'career'  => 'required|string',
             'path_id' => 'required|exists:paths,id',
         ]);
 
+        $career = $request->input('career');
+        $pathId = $request->input('path_id');
+
+        $prompt = "You are a JSON-only API.
+        Generate exactly 3 beginner-friendly quests for the career '{$career}', each with:
+        - title
+        - subtitle
+        - difficulty (easy|medium|hard)
+        - duration (like '1 week', '2 hours')
+
+        For each quest, generate 2 multiple-choice problems with:
+        - title
+        - subtitle
+        - question
+        - first_answer
+        - second_answer
+        - third_answer
+        - correct_answer (must match one of the above)
+        - points (integer)
+        Respond strictly in JSON like this:
+        {
+        \"quests\": [
+            {\"title\":\"string\", \"subtitle\":\"string\", \"difficulty\":\"string\", \"duration\":\"string\"}
+        ],
+        \"problems\": [
+            {\"title\":\"string\",\"subtitle\":\"string\",\"question\":\"string\",\"first_answer\":\"string\",\"second_answer\":\"string\",\"third_answer\":\"string\",\"correct_answer\":\"string\",\"points\":1}
+        ]
+        }";
+
         $response = Http::withHeaders([
-            "Authorization" => "Bearer {$this->fastApiToken}"
-        ])->post("{$this->fastApiBase}/generate-quests", [
-            "career" => $request->input('career')
+            'Content-Type' => 'application/json',
+        ])->post("{$this->endpoint}?key={$this->geminiApiKey}", [
+            'contents' => [[
+                'parts' => [['text' => $prompt]]
+            ]]
         ]);
 
         if ($response->failed()) {
             return response()->json(['error' => 'AI agent failed', 'details' => $response->json()], 502);
         }
 
-        $generatedQuests = $response->json();
+        $aiResult = $response->json();
+        $rawText = $aiResult['candidates'][0]['content']['parts'][0]['text'] ?? '';
 
-        foreach ($generatedQuests['quests'] as $questData) {
+        $parsed = $this->extractJson($rawText);
+
+        $quests = $parsed['quests'] ?? [
+            ['title' => 'Learn sorting algorithms', 'subtitle' => 'Start with Bubble and Merge sort', 'difficulty' => 'easy', 'duration' => '1 week']
+        ];
+
+        $problems = $parsed['problems'] ?? [
+            [
+                'title'          => 'Implement Bubble Sort',
+                'subtitle'       => 'Sort an array of integers',
+                'question'       => 'Given an array of integers, implement bubble sort.',
+                'first_answer'   => 'Bubble sort',
+                'second_answer'  => 'Merge sort',
+                'third_answer'   => 'Quick sort',
+                'correct_answer' => 'Bubble sort',
+                'points'         => 10
+            ]
+        ];
+
+        foreach ($quests as $questData) {
             Quest::create([
-                'title' => $questData['title'],
-                'subtitle' => $questData['subtitle'] ?? '',
-                'path_id' => $request->input('path_id'),
+                'title'      => $questData['title'],
+                'subtitle'   => $questData['subtitle'] ?? '',
+                'path_id'    => $pathId,
                 'difficulty' => $questData['difficulty'] ?? null,
-                'duration' => $questData['duration'] ?? null,
+                'duration'   => $questData['duration'] ?? null,
             ]);
         }
 
-        return response()->json($generatedQuests);
-    }
+        foreach ($problems as $problemData) {
+            Problem::create([
+                'title'          => $problemData['title'],
+                'subtitle'       => $problemData['subtitle'] ?? '',
+                'path_id'        => $pathId,
+                'question'       => $problemData['question'],
+                'first_answer'   => $problemData['first_answer'],
+                'second_answer'  => $problemData['second_answer'],
+                'third_answer'   => $problemData['third_answer'],
+                'correct_answer' => $problemData['correct_answer'],
+                'points'         => $problemData['points'] ?? 0,
+            ]);
+        }
 
-    /**
-     * @OA\Post(
-     *      path="/api/v0.1/user/ai/generate-quests-and-problems",
-     *      summary="Generate quests and problems for a given career path",
-     *      tags={"AI Agent"},
-     *      security={{"bearerAuth":{}}},
-     *      @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(
-     *              required={"career", "path_id"},
-     *              @OA\Property(property="career", type="string", example="Software Engineer", description="The career path for which to generate quests and problems"),
-     *              @OA\Property(property="path_id", type="integer", example=1, description="The ID of the path to associate the quests and problems with")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful response with generated quests and problems",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="quests", type="array",
-     *                  @OA\Items(
-     *                      @OA\Property(property="title", type="string", example="Learn basic algorithms"),
-     *                      @OA\Property(property="subtitle", type="string", example="Understand data structures and algorithms"),
-     *                      @OA\Property(property="difficulty", type="string", example="easy"),
-     *                      @OA\Property(property="duration", type="string", example="2 weeks")
-     *                  )
-     *              ),
-     *              @OA\Property(property="problems", type="array",
-     *                  @OA\Items(
-     *                      @OA\Property(property="title", type="string", example="Implement a sorting algorithm"),
-     *                      @OA\Property(property="subtitle", type="string", example="Sort an array of integers"),
-     *                      @OA\Property(property="question", type="string", example="Given an array of integers, sort the array in ascending order."),
-     *                      @OA\Property(property="first_answer", type="string", example="Bubble sort"),
-     *                      @OA\Property(property="second_answer", type="string", example="Merge sort"),
-     *                      @OA\Property(property="third_answer", type="string", example="Quick sort"),
-     *                      @OA\Property(property="correct_answer", type="string", example="Merge sort"),
-     *                      @OA\Property(property="points", type="integer", example=10)
-     *                  )
-     *              )
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Validation error",
-     *          @OA\JsonContent(@OA\Property(property="message", type="string", example="The given data was invalid."))
-     *      ),
-     *      @OA\Response(
-     *          response=502,
-     *          description="AI agent failed to generate quests and problems",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="error", type="string", example="AI agent failed"),
-     *              @OA\Property(property="details", type="object", example={})
-     *          )
-     *      )
-     * )
-     */
-    public function generateQuestsAndProblems(Request $request)
-{
-    $request->validate([
-        'career' => 'required|string',
-        'path_id' => 'required|exists:paths,id',
-    ]);
-
-    $response = Http::withHeaders([
-        "Authorization" => "Bearer {$this->fastApiToken}"
-    ])->post("{$this->fastApiBase}/generate-quests-and-problems", [
-        "career" => $request->input('career')
-    ]);
-
-    if ($response->failed()) {
-        return response()->json(['error' => 'AI agent failed', 'details' => $response->json()], 502);
-    }
-
-    $generatedData = $response->json();
-
-    // Save quests
-    foreach ($generatedData['quests'] as $questData) {
-        Quest::create([
-            'title' => $questData['title'],
-            'subtitle' => $questData['subtitle'] ?? '',
-            'path_id' => $request->input('path_id'),
-            'difficulty' => $questData['difficulty'] ?? null,
-            'duration' => $questData['duration'] ?? null,
+        return response()->json([
+            'quests'   => $quests,
+            'problems' => $problems,
         ]);
     }
 
-    // Save problems
-    foreach ($generatedData['problems'] as $problemData) {
-        Problem::create([
-            'title'          => $problemData['title'],
-            'subtitle'       => $problemData['subtitle'] ?? '',
-            'path_id'        => $request->input('path_id'),
-            'question'       => $problemData['question'],
-            'first_answer'   => $problemData['first_answer'],
-            'second_answer'  => $problemData['second_answer'],
-            'third_answer'   => $problemData['third_answer'],
-            'correct_answer' => $problemData['correct_answer'],
-            'points'         => $problemData['points'] ?? 0,
-        ]);
+    private function extractJson(string $text) {
+        $data = json_decode($text, true);
+        if (json_last_error() === JSON_ERROR_NONE) return $data;
+
+        if (preg_match('/```json(.*?)```/s', $text, $matches)) {
+            $data = json_decode(trim($matches[1]), true);
+            if (json_last_error() === JSON_ERROR_NONE) return $data;
+        }
+
+        if (preg_match('/(\{.*\})/s', $text, $matches)) {
+            $data = json_decode($matches[1], true);
+            if (json_last_error() === JSON_ERROR_NONE) return $data;
+        }
+
+        return null;
     }
-
-    return response()->json($generatedData);
-}
-
-
 }
