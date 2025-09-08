@@ -40,9 +40,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('backend/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
+          key: composer-cache
+          restore-keys: composer-cache
 
       - name: Install Composer Dependencies
         run: composer install --no-ansi --no-interaction --no-progress --prefer-dist
@@ -64,6 +63,10 @@ jobs:
           DB_PASSWORD: root
           APP_ENV: testing
           CACHE_DRIVER: file
+
+      - name: Generate Swagger Docs
+        run: php artisan l5-swagger:generate
+        working-directory: ./backend
 
       - name: Run Backend Tests
         run: php artisan test

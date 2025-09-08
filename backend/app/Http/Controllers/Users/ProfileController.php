@@ -11,12 +11,36 @@ use App\Models\UserPath;
 use App\Models\Path;
 
 class ProfileController extends Controller {
+    /**
+     * @OA\Get(
+     *     path="/api/user/{id}",
+     *     summary="Get user info by ID",
+     *     tags={"Profile"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="User ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Successful response", @OA\JsonContent(type="object"))
+     * )
+     */
     public function getUserInfo($id) {
         $user = User::find($id);
 
         return $this->responseJSON($user);  
     }
 
+    /**
+     * @OA\Put(
+     *     path="/api/user/{id}",
+     *     summary="Update user info",
+     *     tags={"Profile"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, description="User ID", @OA\Schema(type="integer")),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(type="object")
+     *     ),
+     *     @OA\Response(response=200, description="Successful response", @OA\JsonContent(type="object"))
+     * )
+     */
     public function updateUserInfo(Request $request, $id) {
         $data = $request->all();
         $updatedUser = UserService::update($data, $id);    
@@ -24,6 +48,28 @@ class ProfileController extends Controller {
         return $this->responseJSON($updatedUser);  
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/user/paths",
+     *     summary="Get authenticated user's saved paths",
+     *     tags={"Profile"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent(type="array", @OA\Items(
+     *              @OA\Property(property="id", type="integer", example=1),
+     *              @OA\Property(property="title", type="string", example="Frontend Developer"),
+     *              @OA\Property(property="tag", type="string", example="Web"),
+     *              @OA\Property(property="progress_percentage", type="number", example=40),
+     *              @OA\Property(property="date_saved", type="string", format="date-time")
+     *         ))
+     *     ),
+     *     @OA\Response(response=401, description="Unauthenticated",
+     *         @OA\JsonContent(@OA\Property(property="message", type="string", example="Unauthenticated"))
+     *     )
+     * )
+     */
     public function getUserPaths(Request $request)
     {
         $user = Auth::user();
