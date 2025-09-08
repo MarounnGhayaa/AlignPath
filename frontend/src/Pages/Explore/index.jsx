@@ -12,8 +12,8 @@ const Explore = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { title, description, recommendationId } = location.state || {};
-  const auth = useSelector((state) => state.auth) || {};
-  const token = auth.token || localStorage.getItem("token");
+  const registerState = useSelector((state) => state.register) || {};
+  const token = registerState.token || localStorage.getItem("token");
 
   useEffect(() => {
     console.log("Explore page rendered.");

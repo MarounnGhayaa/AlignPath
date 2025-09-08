@@ -17,9 +17,9 @@ export const usePreferencesLogic = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const auth = useSelector((state) => state.auth) || {};
-  const user = auth.user || JSON.parse(localStorage.getItem("user"));
-  const token = auth.token || localStorage.getItem("token");
+  const registerState = useSelector((state) => state.register) || {};
+  const user = registerState.user || JSON.parse(localStorage.getItem("user") || "null");
+  const token = registerState.token || localStorage.getItem("token");
 
   const handleFieldChange = (field, value) => {
     dispatch(setField({ field, value }));
@@ -51,6 +51,8 @@ export const usePreferencesLogic = () => {
 
       dispatch(setErrorMessage(""));
       dispatch(clearFields());
+
+      await recommendCareers();
 
       navigate("/home");
     } catch (error) {

@@ -12,7 +12,7 @@ return new class extends Migration {
         Schema::create('paths', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('tag');
+            $table->text('tag');
             $table->timestamps();
         });
     }

@@ -96,12 +96,10 @@ class AiAgentController extends Controller {
         ]);
 
         $prompt = "Based on the following interests: {$interests}, 
-                   suggest 3 career paths with a title and a short description for each. Respond in valid JSON like this:
+                   suggest exactly 3 career paths with a title and a short description for each. Respond in valid JSON like this:
                    {
                      \"career_paths\": [
                         {\"title\": \"string\", \"description\": \"string\"},
-                        {\"title\": \"string\", \"description\": \"string\"},
-                        {\"title\": \"string\", \"description\": \"string\"}
                      ]
                    }";
 
@@ -138,7 +136,7 @@ class AiAgentController extends Controller {
     }
 
     public function generateQuestsAndProblems(Request $request) {
-        
+
         $request->validate([
             'career'  => 'required|string',
             'path_id' => 'required|exists:paths,id',
@@ -148,13 +146,13 @@ class AiAgentController extends Controller {
         $pathId = $request->input('path_id');
 
         $prompt = "You are a JSON-only API.
-        Generate exactly 3 beginner-friendly quests for the career '{$career}', each with:
+        Generate exactly 10 beginner-friendly quests for the career '{$career}', each with:
         - title
         - subtitle
         - difficulty (easy|medium|hard)
         - duration (like '1 week', '2 hours')
 
-        For each quest, generate 2 multiple-choice problems with:
+        For each quest, generate 1 multiple-choice problems with:
         - title
         - subtitle
         - question
@@ -173,22 +171,33 @@ class AiAgentController extends Controller {
         ]
         }";
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-        ])->post("{$this->endpoint}?key={$this->geminiApiKey}", [
-            'contents' => [[
-                'parts' => [['text' => $prompt]]
-            ]]
-        ]);
+        try {
+            $response = Http::timeout(120)
+                ->withHeaders([
+                    'Content-Type' => 'application/json',
+                ])
+                ->post("{$this->endpoint}?key={$this->geminiApiKey}", [
+                    'contents' => [[
+                        'parts' => [['text' => $prompt]]
+                    ]]
+                ]);
+        } catch (\Illuminate\Http\Client\ConnectionException $e) {
+            return response()->json([
+                'error'   => 'AI agent connection failed',
+                'message' => $e->getMessage()
+            ], 504);
+        }
 
         if ($response->failed()) {
-            return response()->json(['error' => 'AI agent failed', 'details' => $response->json()], 502);
+            return response()->json([
+                'error'   => 'AI agent failed',
+                'details' => $response->json()
+            ], 502);
         }
 
         $aiResult = $response->json();
         $rawText = $aiResult['candidates'][0]['content']['parts'][0]['text'] ?? '';
-
-        $parsed = $this->extractJson($rawText);
+        $parsed  = $this->extractJson($rawText);
 
         $quests = $parsed['quests'] ?? [
             ['title' => 'Learn sorting algorithms', 'subtitle' => 'Start with Bubble and Merge sort', 'difficulty' => 'easy', 'duration' => '1 week']
@@ -236,6 +245,7 @@ class AiAgentController extends Controller {
             'problems' => $problems,
         ]);
     }
+
 
     private function extractJson(string $text) {
         $data = json_decode($text, true);

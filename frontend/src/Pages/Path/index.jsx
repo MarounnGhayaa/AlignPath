@@ -9,8 +9,8 @@ const Path = () => {
   const [savedPaths, setSavedPaths] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const auth = useSelector((state) => state.auth) || {};
-  const token = auth.token || localStorage.getItem("token");
+  const registerState = useSelector((state) => state.register) || {};
+  const token = registerState.token || localStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {

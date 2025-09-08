@@ -12,7 +12,6 @@ const Preferences = () => {
     loading,
     handleFieldChange,
     handleSavePreferences,
-    recommendCareers,
   } = usePreferencesLogic();
 
   const handleSubmit = (e) => {
@@ -148,7 +147,7 @@ const Preferences = () => {
             text={loading ? "Saving..." : "Begin Journey"}
             className="primary-button pref-button"
             disabled={loading}
-            onClickListener={recommendCareers}
+            onClickListener={handleSavePreferences}
           />
         </form>
       </div>

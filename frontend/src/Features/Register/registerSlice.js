@@ -5,7 +5,9 @@ const initialState = {
     email: "",
     password: "",
     role: "",
-    errorMessage: ""
+    errorMessage: "",
+    user: null,
+    token: null
 };
 
 const RegisterSlice = createSlice({
@@ -37,6 +39,16 @@ const RegisterSlice = createSlice({
             state.password = "";
             state.role = "";
             state.errorMessage = "";
+        },
+        setUser: (state, action) => {
+            state.user = action.payload;
+        },
+        setToken: (state, action) => {
+            state.token = action.payload;
+        },
+        clearAuth: (state) => {
+            state.user = null;
+            state.token = null;
         }
     }
 });
@@ -48,7 +60,10 @@ export const {
     setPassword,
     setRole,
     setErrorMessage,
-    clearFields
+    clearFields,
+    setUser,
+    setToken,
+    clearAuth
 } = RegisterSlice.actions;
 
 export const registerReducer = RegisterSlice.reducer;
