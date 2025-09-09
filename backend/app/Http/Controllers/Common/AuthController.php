@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Common;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
 use  App\Services\Common\AuthService;
 
 class AuthController extends Controller {
-    public function login(Request $request){
+    public function login(LoginRequest $request){
         $user = AuthService::login($request);
         
         if($user)
@@ -15,7 +16,7 @@ class AuthController extends Controller {
             return $this->responseJSON(null, "error", 401);
     }
 
-    public function register(Request $request){
+    public function register(RegisterRequest $request){
         $user = AuthService::register($request);
         return $this->responseJSON($user);
     }
