@@ -13,16 +13,9 @@ class RegisterRequest extends FormRequest {
     public function rules(): array {
         return [
             'username' => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'email:rfc,dns', 'max:255', Rule::unique('users', 'email')],
+            'email'    => ['required', 'string', 'email:rfc', 'max:255', Rule::unique('users', 'email')],
             'password' => ['required', 'string', 'min:8'],
             'role'     => ['required', 'string', Rule::in(['student', 'mentor'])],
-        ];
-    }
-
-    public function messages(): array {
-        return [
-            'email.unique' => 'This email is already registered.',
-            'role.in'      => 'Role must be either student or mentor.',
         ];
     }
 
@@ -32,5 +25,12 @@ class RegisterRequest extends FormRequest {
             'email'    => $this->email ? strtolower(trim($this->email)) : null,
             'role'     => $this->role ? strtolower(trim($this->role)) : null,
         ]);
+    }
+
+    public function messages(): array {
+        return [
+            'email.unique' => 'This email is already registered.',
+            'role.in'      => 'Role must be either student or mentor.',
+        ];
     }
 }
