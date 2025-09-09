@@ -145,553 +145,13 @@
                 }
             }
         },
-        "/api/v0.1/user/ai/accept-path": {
-            "post": {
-                "tags": [
-                    "AI Agent"
-                ],
-                "summary": "Accept a recommended path",
-                "operationId": "bf6a65e083135402bbdaccaeaecfc4ba",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "recommendation_id"
-                                ],
-                                "properties": {
-                                    "recommendation_id": {
-                                        "description": "ID of the recommendation to accept",
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Path accepted and saved successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Path accepted and saved successfully"
-                                        },
-                                        "path_id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "career_name": {
-                                            "type": "string",
-                                            "example": "Software Engineer"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The given data was invalid."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/v0.1/user/ai/dismiss-path": {
-            "post": {
-                "tags": [
-                    "AI Agent"
-                ],
-                "summary": "Dismiss a recommended path",
-                "operationId": "06c82a01af1acec8c1df5e74bbf2888a",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "recommendation_id"
-                                ],
-                                "properties": {
-                                    "recommendation_id": {
-                                        "description": "ID of the recommendation to dismiss",
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Recommendation dismissed successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Recommendation dismissed successfully"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The given data was invalid."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/v0.1/user/ai/recommend-careers": {
-            "post": {
-                "tags": [
-                    "AI Agent"
-                ],
-                "summary": "Get career recommendations from AI agent",
-                "operationId": "1149588f58b8fe70daaafef9cec81dd3",
-                "responses": {
-                    "200": {
-                        "description": "Successful response with recommended careers",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "career_paths": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "title": {
-                                                        "type": "string",
-                                                        "example": "Software Engineer"
-                                                    },
-                                                    "description": {
-                                                        "type": "string",
-                                                        "example": "Designs and builds software systems."
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "No preferences found for the user",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "No preferences found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "502": {
-                        "description": "AI agent failed to return recommendations",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "AI agent failed"
-                                        },
-                                        "details": {
-                                            "type": "object",
-                                            "example": []
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/v0.1/user/ai/generate-quests": {
-            "post": {
-                "tags": [
-                    "AI Agent"
-                ],
-                "summary": "Generate quests for a given career path",
-                "operationId": "0eda70975f6e139c3cc291def9d6bf89",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "career",
-                                    "path_id"
-                                ],
-                                "properties": {
-                                    "career": {
-                                        "description": "The career path for which to generate quests",
-                                        "type": "string",
-                                        "example": "Software Engineer"
-                                    },
-                                    "path_id": {
-                                        "description": "The ID of the path to associate the quests with",
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful response with generated quests",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "quests": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "title": {
-                                                        "type": "string",
-                                                        "example": "Learn basic algorithms"
-                                                    },
-                                                    "subtitle": {
-                                                        "type": "string",
-                                                        "example": "Understand data structures and algorithms"
-                                                    },
-                                                    "difficulty": {
-                                                        "type": "string",
-                                                        "example": "easy"
-                                                    },
-                                                    "duration": {
-                                                        "type": "string",
-                                                        "example": "2 weeks"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The given data was invalid."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "502": {
-                        "description": "AI agent failed to generate quests",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "AI agent failed"
-                                        },
-                                        "details": {
-                                            "type": "object",
-                                            "example": []
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/v0.1/user/ai/generate-quests-and-problems": {
-            "post": {
-                "tags": [
-                    "AI Agent"
-                ],
-                "summary": "Generate quests and problems for a given career path",
-                "operationId": "dddd92a8b11212eba7077576d796e21a",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "career",
-                                    "path_id"
-                                ],
-                                "properties": {
-                                    "career": {
-                                        "description": "The career path for which to generate quests and problems",
-                                        "type": "string",
-                                        "example": "Software Engineer"
-                                    },
-                                    "path_id": {
-                                        "description": "The ID of the path to associate the quests and problems with",
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful response with generated quests and problems",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "quests": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "title": {
-                                                        "type": "string",
-                                                        "example": "Learn basic algorithms"
-                                                    },
-                                                    "subtitle": {
-                                                        "type": "string",
-                                                        "example": "Understand data structures and algorithms"
-                                                    },
-                                                    "difficulty": {
-                                                        "type": "string",
-                                                        "example": "easy"
-                                                    },
-                                                    "duration": {
-                                                        "type": "string",
-                                                        "example": "2 weeks"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "problems": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "title": {
-                                                        "type": "string",
-                                                        "example": "Implement a sorting algorithm"
-                                                    },
-                                                    "subtitle": {
-                                                        "type": "string",
-                                                        "example": "Sort an array of integers"
-                                                    },
-                                                    "question": {
-                                                        "type": "string",
-                                                        "example": "Given an array of integers, sort the array in ascending order."
-                                                    },
-                                                    "first_answer": {
-                                                        "type": "string",
-                                                        "example": "Bubble sort"
-                                                    },
-                                                    "second_answer": {
-                                                        "type": "string",
-                                                        "example": "Merge sort"
-                                                    },
-                                                    "third_answer": {
-                                                        "type": "string",
-                                                        "example": "Quick sort"
-                                                    },
-                                                    "correct_answer": {
-                                                        "type": "string",
-                                                        "example": "Merge sort"
-                                                    },
-                                                    "points": {
-                                                        "type": "integer",
-                                                        "example": 10
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The given data was invalid."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "502": {
-                        "description": "AI agent failed to generate quests and problems",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "AI agent failed"
-                                        },
-                                        "details": {
-                                            "type": "object",
-                                            "example": []
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/v0.1/user/chat": {
             "post": {
                 "tags": [
                     "Gemini"
                 ],
                 "summary": "Send messages to the Gemini AI model for chat completion",
-                "operationId": "6062baf16680ead1f82d9ae9836c2151",
+                "operationId": "3fd731b6afb89198bef311a594f8240d",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -811,7 +271,7 @@
                     "Problems"
                 ],
                 "summary": "List problems by path",
-                "operationId": "fb63cdb0c8320009802fa4846b0096f2",
+                "operationId": "bc6e72d39c4f66a52e2a797f9b02af69",
                 "parameters": [
                     {
                         "name": "pathId",
@@ -867,7 +327,7 @@
                     "Problems"
                 ],
                 "summary": "Get problem by ID",
-                "operationId": "b6a8f69459e47639eb254debc86f7ee7",
+                "operationId": "db9a2c082a64cfbbf52be06a51f6fa2d",
                 "parameters": [
                     {
                         "name": "problemId",
@@ -917,6 +377,250 @@
                                             "example": "Problem not found"
                                         }
                                     },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v0.1/user/{id}": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get user info by ID",
+                "operationId": "4f0453d21df3f61537eb3f41ef45d474",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Update user info",
+                "operationId": "761358b1caa0406c480217cafd402bfa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v0.1/user/paths": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get authenticated user's saved paths",
+                "operationId": "22a2248004b6790589ee7108e4ac19f2",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Frontend Developer"
+                                            },
+                                            "tag": {
+                                                "type": "string",
+                                                "example": "Web"
+                                            },
+                                            "progress_percentage": {
+                                                "type": "number",
+                                                "example": 40
+                                            },
+                                            "date_saved": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v0.1/user/recommendations": {
+            "get": {
+                "tags": [
+                    "Recommendations"
+                ],
+                "summary": "Get user recommendations",
+                "operationId": "9c19eccac6f654a00b0bdb2cd7f0f860",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "career_name": {
+                                                "type": "string",
+                                                "example": "Software Engineer"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Designs and builds software systems."
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v0.1/user/preferences": {
+            "post": {
+                "tags": [
+                    "User Preferences"
+                ],
+                "summary": "Store or update authenticated user's preferences",
+                "operationId": "ab2b71ca6558f5309f3d82c83e72933b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
                                     "type": "object"
                                 }
                             }
@@ -985,250 +689,6 @@
                     }
                 ]
             }
-        },
-        "/api/v0.1/user/{id}": {
-            "get": {
-                "tags": [
-                    "Profile"
-                ],
-                "summary": "Get user info by ID",
-                "operationId": "cb2e73a502f02280d57d886d0086f58f",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "User ID",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "Profile"
-                ],
-                "summary": "Update user info",
-                "operationId": "a1c678a6aa7267754fc5eafcf49f58a4",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "User ID",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/v0.1/user/paths": {
-            "get": {
-                "tags": [
-                    "Profile"
-                ],
-                "summary": "Get authenticated user's saved paths",
-                "operationId": "fced1f1b7996ef078bb2b0a11eecac27",
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "title": {
-                                                "type": "string",
-                                                "example": "Frontend Developer"
-                                            },
-                                            "tag": {
-                                                "type": "string",
-                                                "example": "Web"
-                                            },
-                                            "progress_percentage": {
-                                                "type": "number",
-                                                "example": 40
-                                            },
-                                            "date_saved": {
-                                                "type": "string",
-                                                "format": "date-time"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/v0.1/user/recommendations": {
-            "get": {
-                "tags": [
-                    "Recommendations"
-                ],
-                "summary": "Get user recommendations",
-                "operationId": "7cd8173b04e4549bc75c9396db369314",
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "career_name": {
-                                                "type": "string",
-                                                "example": "Software Engineer"
-                                            },
-                                            "description": {
-                                                "type": "string",
-                                                "example": "Designs and builds software systems."
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/v0.1/user/preferences": {
-            "post": {
-                "tags": [
-                    "User Preferences"
-                ],
-                "summary": "Store or update authenticated user's preferences",
-                "operationId": "b19848b1dde2d5ca39c3b079f1793ee7",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
         }
     },
     "tags": [
@@ -1237,20 +697,12 @@
             "description": "Auth"
         },
         {
-            "name": "AI Agent",
-            "description": "AI Agent"
-        },
-        {
             "name": "Gemini",
             "description": "Gemini"
         },
         {
             "name": "Problems",
             "description": "Problems"
-        },
-        {
-            "name": "Quests",
-            "description": "Quests"
         },
         {
             "name": "Profile",
@@ -1263,6 +715,10 @@
         {
             "name": "User Preferences",
             "description": "User Preferences"
+        },
+        {
+            "name": "Quests",
+            "description": "Quests"
         }
     ]
 }
