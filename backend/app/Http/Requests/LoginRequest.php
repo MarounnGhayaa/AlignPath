@@ -10,8 +10,14 @@ class LoginRequest extends FormRequest {
     }
 
     public function rules(): array {
+        $emailRule = 'email:rfc';
+
+        if (app()->environment('production')) {
+            $emailRule = 'email:rfc,dns';
+        }
+
         return [
-            'email'    => ['required', 'string', 'email:rfc,dns', 'max:255'],
+            'email'    => ['required', 'string', 'max:255', $emailRule],
             'password' => ['required', 'string', 'min:8', 'max:128'],
         ];
     }
