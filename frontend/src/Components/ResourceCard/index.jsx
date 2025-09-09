@@ -1,29 +1,25 @@
 import "./style.css";
 import Button from "../Button";
 
-const ResourceCard = ({ title, type }) => {
-  let cardDescription = " ";
-  let buttonText = " ";
+const ResourceCard = ({ title, description, type, url }) => {
+  let buttonText = "Open";
+  if (type === "documentation") buttonText = "Browse Documentation";
+  else if (type === "video") buttonText = "Watch Video";
+  else if (type === "community") buttonText = "Join Community";
 
-  if (type === "documentation") {
-    cardDescription =
-      "Official documentation and guides for the technologies you're learning.";
-    buttonText = "Browse Documentation";
-  } else if (type === "video") {
-    cardDescription =
-      "Step-by-step video tutorials covering key concepts and implementations.";
-    buttonText = "Watch Videos";
-  } else if (type === "community") {
-    cardDescription =
-      "Connect with other learners and experienced developers in your field.";
-    buttonText = "Join Community";
-  }
   return (
     <div className="resource-card">
       <h3>{title}</h3>
-      <h4>{cardDescription}</h4>
+      {description && <h4>{description}</h4>}
+
       <div className="resource-card-btn">
-        <Button className={"primary-button"} text={buttonText} />
+        {url ? (
+          <a href={url} target="_blank" rel="noreferrer">
+            <Button className={"primary-button"} text={buttonText} />
+          </a>
+        ) : (
+          <Button className={"primary-button"} text={buttonText} />
+        )}
       </div>
     </div>
   );

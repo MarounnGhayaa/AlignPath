@@ -11,6 +11,8 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('skills', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger("path_id");
+            $table->foreign("path_id")->references("id")->on("paths")->onDelete("cascade");
             $table->string('name')->unique();
             $table->integer('value');
             $table->timestamps();

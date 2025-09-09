@@ -9,6 +9,8 @@ use App\Http\Controllers\AiAgentController;
 use App\Http\Controllers\Users\RecommendationController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\ProblemController;
+use App\Http\Controllers\SkillController;
+use App\Http\Controllers\LearningResourceController;
 
 Route::group(["prefix" => "v0.1"], function () {
     Route::group(["middleware" => "auth:api"], function () {
@@ -30,6 +32,10 @@ Route::group(["prefix" => "v0.1"], function () {
 
             Route::get('/problems/{pathId}', [ProblemController::class, 'getProblemsByPath']);
             Route::get('/problem/{problemId}', [ProblemController::class, 'getProblemById']);
+
+            Route::get('/skills/{pathId}', [SkillController::class, 'getSkillsByPath']);
+
+            Route::get('/resources/{pathId}', [LearningResourceController::class, 'getResourcesByPath']);
 
             Route::get('/recommendations', [RecommendationController::class, 'getUserRecommendations']);
         });
