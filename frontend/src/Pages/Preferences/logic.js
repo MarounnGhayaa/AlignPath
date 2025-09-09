@@ -11,21 +11,24 @@ import {
 export const usePreferencesLogic = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { skills, interests, values, careers, errorMessage } = useSelector(
     (state) => state.preferences
   );
 
-  const [loading, setLoading] = useState(false);
-
   const registerState = useSelector((state) => state.register) || {};
-  const user = registerState.user || JSON.parse(localStorage.getItem("user") || "null");
+  const user =
+    registerState.user || JSON.parse(localStorage.getItem("user") || "null");
   const token = registerState.token || localStorage.getItem("token");
+
+  const [loading, setLoading] = useState(false);
 
   const handleFieldChange = (field, value) => {
     dispatch(setField({ field, value }));
   };
 
   const handleSavePreferences = async () => {
+    if (loading) return;
     try {
       if (!user?.id || !token) {
         dispatch(setErrorMessage("Unauthorized. Please log in again."));
@@ -36,18 +39,18 @@ export const usePreferencesLogic = () => {
 
       await API.post(
         `/user/preferences`,
-            {
-                skills: skills.join(","),
-                interests: interests.join(","),
-                values: values.join(","),
-                careers: careers.join(","),
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+        {
+          skills: (skills || []).join(","),
+          interests: (interests || []).join(","),
+          values: (values || []).join(","),
+          careers: (careers || []).join(","),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       dispatch(setErrorMessage(""));
       dispatch(clearFields());
@@ -63,22 +66,23 @@ export const usePreferencesLogic = () => {
     }
   };
 
-  const handleClear = () => {
-    dispatch(clearFields());
-  };
-
   const recommendCareers = async () => {
+    if (!token) return;
     try {
-       await API.post(
+      await API.post(
         `/user/recommend-careers`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      } catch (error) {
-        console.error("Error fetching recommendations:", error);
-      }
+    } catch (error) {
+      console.error("Error fetching recommendations:", error);
+    }
+  };
+
+  const handleClear = () => {
+    dispatch(clearFields());
   };
 
   return {
@@ -91,6 +95,6 @@ export const usePreferencesLogic = () => {
     handleFieldChange,
     handleSavePreferences,
     handleClear,
-    recommendCareers
+    recommendCareers,
   };
 };
