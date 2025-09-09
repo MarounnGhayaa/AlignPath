@@ -24,7 +24,6 @@ Route::group(["prefix" => "v0.1"], function () {
             Route::post('/chat', [GeminiController::class, 'chat']);
 
             Route::post('/accept-path', [AiAgentController::class, 'acceptPath']);
-            Route::post('/dismiss-path', [AiAgentController::class, 'dismissPath']);
             Route::post('/recommend-careers', [AiAgentController::class, 'recommendCareers']);
             Route::post('/generate-quests-and-problems', [AiAgentController::class, 'generateQuestsAndProblems']);
 
