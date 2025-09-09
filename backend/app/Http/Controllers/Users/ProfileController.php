@@ -3,25 +3,28 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateUserInfoRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Users\UserService;
 use App\Models\User;
 use App\Models\UserPath;
-use App\Models\Path;
 
-class ProfileController extends Controller {
-    public function getUserInfo($id) {
+class ProfileController extends Controller
+{
+    public function getUserInfo($id)
+    {
         $user = User::find($id);
 
-        return $this->responseJSON($user);  
+        return $this->responseJSON($user);
     }
 
-    public function updateUserInfo(Request $request, $id) {
-        $data = $request->all();
-        $updatedUser = UserService::update($data, $id);    
+    public function updateUserInfo(UpdateUserInfoRequest $request, $id)
+    {
+        $data = $request->validated();
+        $updatedUser = UserService::update($data, (int) $id);
 
-        return $this->responseJSON($updatedUser);  
+        return $this->responseJSON($updatedUser);
     }
 
     public function getUserPaths(Request $request)
