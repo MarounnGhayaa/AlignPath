@@ -3,14 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Common\AuthController;
 use App\Http\Controllers\Users\ProfileController;
-use App\Http\Controllers\GeminiController;
+use App\Http\Controllers\Users\GeminiController;
 use App\Http\Controllers\Users\UserPreferenceController;
-use App\Http\Controllers\AiAgentController;
+use App\Http\Controllers\Users\AiAgentController;
 use App\Http\Controllers\Users\RecommendationController;
-use App\Http\Controllers\QuestController;
-use App\Http\Controllers\ProblemController;
-use App\Http\Controllers\SkillController;
-use App\Http\Controllers\LearningResourceController;
+use App\Http\Controllers\Users\QuestController;
+use App\Http\Controllers\Users\ProblemController;
+use App\Http\Controllers\Users\SkillController;
+use App\Http\Controllers\Users\LearningResourceController;
 
 Route::group(["prefix" => "v0.1"], function () {
     Route::group(["middleware" => "auth:api"], function () {
