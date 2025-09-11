@@ -24,12 +24,8 @@ Route::group(["prefix" => "v0.1"], function () {
 
             Route::post('/chat', [GeminiController::class, 'chat']);
 
-            Route::get('/chat/threads', [GeminiThreadController::class, 'index']); // list
-            Route::get('/chat/threads/{thread}', [GeminiThreadController::class, 'show']) // open
-                ->whereNumber('thread');
-            Route::patch('/chat/threads/{thread}', [GeminiThreadController::class, 'update']) // rename (optional)
-                ->whereNumber('thread');
-            Route::delete('/chat/threads/{thread}', [GeminiThreadController::class, 'destroy']) // delete (optional)
+            Route::get('/chat/threads', [GeminiThreadController::class, 'index']);
+            Route::get('/chat/threads/{thread}', [GeminiThreadController::class, 'show'])
                 ->whereNumber('thread');
 
             Route::post('/accept-path', [AiAgentController::class, 'acceptPath']);

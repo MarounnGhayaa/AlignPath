@@ -4,7 +4,7 @@ namespace App\Docs;
 
 /**
  * @OA\Post(
- *     path="/api/v0.1/guest/login",
+ *     path="/guest/login",
  *     summary="Login",
  *     description="Authenticate user and return a JWT token.",
  *     tags={"Auth"},
@@ -23,14 +23,11 @@ namespace App\Docs;
  *             @OA\Property(property="access_token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...")
  *         )
  *     ),
- *     @OA\Response(
- *         response=401,
- *         description="Invalid credentials"
- *     )
+ *     @OA\Response(response=401, description="Invalid credentials")
  * )
- *
+ * 
  * @OA\Post(
- *      path="/api/v0.1/guest/register",
+ *      path="/guest/register",
  *      summary="User registration",
  *      description="Register a new user and return a JWT token.",
  *      tags={"Auth"},
