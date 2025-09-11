@@ -18,6 +18,7 @@
   display: flex;
   justify-content: center;
   width: 300px;
+  text-align: center;
 }
 
 .recommendation-card h6 {
