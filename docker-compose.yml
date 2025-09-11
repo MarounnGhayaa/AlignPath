@@ -58,7 +58,7 @@ services:
       MYSQL_DATABASE: alignpath_db
       MYSQL_USER: alignpath
       MYSQL_PASSWORD: alignpass
-      MYSQL_ROOT_HOST: "%" # allow root from other containers (dev only)
+      MYSQL_ROOT_HOST: "%"
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
@@ -68,9 +68,6 @@ services:
       timeout: 5s
       retries: 10
     restart: unless-stopped
-    # expose only inside the compose network; uncomment if you need host access:
-    # ports:
-    #   - "3306:3306"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -94,6 +91,34 @@ services:
       - "5680:5678"
     volumes:
       - ./n8n_data:/home/node/.n8n
+    restart: unless-stopped
+
+  chat:
+    build:
+      context: ./chat-feature
+      dockerfile: Dockerfile
+    container_name: alignpath-chat
+    ports:
+      - "4100:4000"
+    working_dir: /usr/src/app
+    volumes:
+      - ./chat-feature:/usr/src/app:delegated
+      - /usr/src/app/node_modules
+    environment:
+      NODE_ENV: development
+      HOST: 0.0.0.0
+      PORT: 4000
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: alignpath_db
+      DB_USERNAME: alignpath
+      DB_PASSWORD: alignpass
+      CORS_ORIGIN: "http://localhost:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -lc "npm install && (npm run dev || npm start)"
     restart: unless-stopped
 
 volumes:
