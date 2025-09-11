@@ -11,6 +11,7 @@ use App\Http\Controllers\Users\QuestController;
 use App\Http\Controllers\Users\ProblemController;
 use App\Http\Controllers\Users\SkillController;
 use App\Http\Controllers\Users\LearningResourceController;
+use App\Http\Controllers\Users\GeminiThreadController;
 
 Route::group(["prefix" => "v0.1"], function () {
     Route::group(["middleware" => "auth:api"], function () {
@@ -22,6 +23,14 @@ Route::group(["prefix" => "v0.1"], function () {
             Route::post('/preferences', [UserPreferenceController::class, 'storeUserPreferences']);
 
             Route::post('/chat', [GeminiController::class, 'chat']);
+
+            Route::get('/chat/threads', [GeminiThreadController::class, 'index']); // list
+            Route::get('/chat/threads/{thread}', [GeminiThreadController::class, 'show']) // open
+                ->whereNumber('thread');
+            Route::patch('/chat/threads/{thread}', [GeminiThreadController::class, 'update']) // rename (optional)
+                ->whereNumber('thread');
+            Route::delete('/chat/threads/{thread}', [GeminiThreadController::class, 'destroy']) // delete (optional)
+                ->whereNumber('thread');
 
             Route::post('/accept-path', [AiAgentController::class, 'acceptPath']);
             Route::post('/recommend-careers', [AiAgentController::class, 'recommendCareers']);
