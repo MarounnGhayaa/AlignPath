@@ -39,4 +39,9 @@ return [
         'model' => env('GEMINI_MODEL', 'gemini-2.5-flash'),
     ],
 
+    'socket' => [
+        'url'    => env('SOCKET_SERVER_URL', 'http://localhost:4000'),
+        'secret' => env('SOCKET_WEBHOOK_SECRET', 'dev_secret'),
+    ],
+
 ];

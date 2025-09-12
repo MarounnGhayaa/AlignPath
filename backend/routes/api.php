@@ -12,6 +12,9 @@ use App\Http\Controllers\Users\ProblemController;
 use App\Http\Controllers\Users\SkillController;
 use App\Http\Controllers\Users\LearningResourceController;
 use App\Http\Controllers\Users\GeminiThreadController;
+use App\Http\Controllers\Users\MentorController;
+use App\Http\Controllers\Users\ChatController;
+use App\Http\Controllers\Users\UserDirectoryController;
 
 Route::group(["prefix" => "v0.1"], function () {
     Route::group(["middleware" => "auth:api"], function () {
@@ -42,6 +45,17 @@ Route::group(["prefix" => "v0.1"], function () {
             Route::get('/resources/{pathId}', [LearningResourceController::class, 'getResourcesByPath']);
 
             Route::get('/recommendations', [RecommendationController::class, 'getUserRecommendations']);
+
+            Route::get('/mentors', [MentorController::class, 'index']);
+            Route::get('/users', [UserDirectoryController::class, 'index']);
+
+            Route::get('/mentors/{person}/chats',   [ChatController::class, 'show']);
+            Route::post('/mentors/{person}/messages', [ChatController::class, 'store']);
+
+            Route::get('/users/{person}/chats',     [ChatController::class, 'show']);
+            Route::post('/users/{person}/messages',   [ChatController::class, 'store']);
+
+
         });
     });
 
