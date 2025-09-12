@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class ChatController extends Controller {
     public function show(Request $request, User $person) {
@@ -37,10 +39,10 @@ class ChatController extends Controller {
             ];
         });
 
-        return response()->json($payload);
+        return response()->json($payload->values());
     }
 
-    public function store(Request $request, User $person) {
+    public function store(Request $request, User $person){
         $me = Auth::user();
         abort_unless($me !== null, 401);
 
@@ -58,13 +60,47 @@ class ChatController extends Controller {
         $msg->body = $data['message'];
         $msg->save();
 
-        return response()->json([
-            'id'           => $msg->id,
-            'message'      => $msg->body,
-            'sender_id'    => $msg->sender_id,
-            'isFromMentor' => strtolower((string)$me->role) === 'mentor',
-            'timestamp'    => optional($msg->created_at)?->toISOString(),
-        ], 201);
+        $ui = [
+            'id'               => $msg->id,
+            'message'          => $msg->body,
+            'sender_id'        => $msg->sender_id,
+            'sender_role'      => strtolower((string)$me->role),
+            'isFromMentor'     => strtolower((string)$me->role) === 'mentor',
+            'timestamp'        => optional($msg->created_at)?->toISOString(),
+            'conversation_id'  => $conversation->id,
+            'peer_id'          => $me->id,
+        ];
+
+        $recipientIds = DB::table('conversation_participants')
+            ->where('conversation_id', $conversation->id)
+            ->where('user_id', '!=', $me->id)
+            ->pluck('user_id')
+            ->unique()
+            ->values()
+            ->all();
+
+        $this->notifySocket($recipientIds, $ui);
+
+        return response()->json($ui, 201);
+    }
+
+    protected function notifySocket(array $recipientIds, array $payload): void {
+        if (empty($recipientIds)) {
+            return;
+        }
+
+        $endpoint = rtrim(config('services.socket.endpoint', env('SOCKET_ENDPOINT', 'http://localhost:4000/hooks/message-created')), '/');
+        $secret   = config('services.socket.secret',   env('SOCKET_SECRET',   'dev_secret'));
+
+        try {
+            Http::withHeaders(['X-Webhook-Secret' => $secret])
+                ->post($endpoint, [
+                    'recipientIds' => $recipientIds,
+                    'payload'      => $payload,
+                ]);
+        } catch (\Throwable $e) {
+            Log::warning('Socket webhook failed: '.$e->getMessage());
+        }
     }
 
     protected function getOrCreateConversation(int $userA, int $userB): Conversation {

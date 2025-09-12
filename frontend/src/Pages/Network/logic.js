@@ -1,5 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import API from "../../Services/axios";
+import { io } from "socket.io-client";
+
+const SOCKET_URL =
+  (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.VITE_SOCKET_URL) ||
+  process.env.REACT_APP_SOCKET_URL ||
+  "http://127.0.0.1:4000";
 
 const parseDate = (v) => {
   if (!v) return null;
@@ -35,6 +41,68 @@ export default function useNetwork() {
   const [me] = useState(readMe());
   const iAmMentor = (me?.role || "").toLowerCase() === "mentor";
   const myId = me?.id ?? null;
+
+
+  const socketRef = useRef(null);
+
+  useEffect(() => {
+    if (!myId) {
+      console.warn("No myId found in localStorage; not joining any room");
+      return;
+    }
+
+    const socket = io(SOCKET_URL, { transports: ["websocket"], autoConnect: true });
+    socketRef.current = socket;
+
+    const joinMyRoom = () => {
+      console.log("socket connected", socket.id, "→ joining user:", myId);
+      socket.emit("join", { userId: myId });
+    };
+
+    socket.on("connect", joinMyRoom);
+
+    socket.io.on("reconnect", joinMyRoom);
+
+    socket.on("joined", ({ room }) => console.log("joined ack:", room));
+
+    socket.on("message.created", (data) => {
+
+      const msg = {
+        id: data?.id,
+        message: data?.message ?? data?.body ?? "",
+        sender_id: data?.sender_id ?? null,
+        isFromMentor:
+          typeof data?.isFromMentor === "boolean"
+            ? data.isFromMentor
+            : (data?.sender_role || "").toLowerCase() === "mentor",
+        timestamp: parseDate(data?.timestamp) || new Date(),
+      };
+
+      const peerId =
+        data?.peer_id ??
+        (msg.sender_id === myId ? undefined : msg.sender_id);
+
+      if (!peerId) return;
+
+      setChatHistory((prev) => ({
+        ...prev,
+        [peerId]: [...(prev[peerId] || []), msg],
+      }));
+    });
+
+    socket.on("connect_error", (e) => console.warn("socket connect error", e?.message || e));
+
+    return () => {
+      try {
+        socket.off("message.created");
+        socket.off("joined");
+        socket.off("connect", joinMyRoom);
+        socket.io?.off?.("reconnect", joinMyRoom);
+        socket.disconnect();
+      } catch {}
+      socketRef.current = null;
+    };
+  }, [myId]); 
 
   useEffect(() => {
     let cancelled = false;

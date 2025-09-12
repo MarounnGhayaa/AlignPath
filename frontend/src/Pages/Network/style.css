@@ -326,10 +326,10 @@
 }
 
 .user-message .message-content {
-  background: linear-gradient(135deg, #f66d0b 0%, #ffb295 100%);
+  background: linear-gradient(135deg, #d2621d 0%, #ea580c 100%);
   color: white;
   border-bottom-right-radius: 8px;
-  box-shadow: 0 2px 8px rgba(244, 101, 48, 0.2);
+  box-shadow: 0 2px 8px rgba(210, 98, 29, 0.3);
 }
 
 .mentor-message .message-content {
