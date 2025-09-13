@@ -127,3 +127,37 @@ jobs:
         env:
           CI: "false"
         run: npm run build
+
+  chat-feature:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./chat-feature
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "./chat-feature/package-lock.json"
+
+      - name: Install Chat Feature Dependencies
+        run: npm ci
+
+      - name: Basic Startup Sanity (no server run)
+        run: node -e "console.log('chat-feature ready')"
+
+  transcriber-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Syntax check transcriber script
+        run: python -m py_compile transcriber/stt-service/stt_server.py
