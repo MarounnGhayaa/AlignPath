@@ -1,56 +1,31 @@
 import "./style.css";
 import SkillCard from "../../Components/SkillCard";
-import { useEffect, useState } from "react";
-import API from "../../Services/axios";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSkills } from "../../Features/Skill/skillsSlice";
 
 const Skill = ({ pathId }) => {
-  const [skills, setSkills] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const registerState = useSelector((state) => state.register) || {};
-  const token = registerState.token || localStorage.getItem("token");
+  const dispatch = useDispatch();
+  const entry = useSelector((state) => state.skills?.byPathId?.[pathId]) || {
+    items: [],
+    loading: true,
+    error: null,
+  };
+  const { items: skills, loading, error } = entry;
 
   useEffect(() => {
-    const fetchSkills = async () => {
-      try {
-        if (!token) {
-          setError("Unauthorized. Please log in again.");
-          setLoading(false);
-          return;
-        }
-
-        if (!pathId) {
-          setError("Path ID is missing.");
-          setLoading(false);
-          return;
-        }
-
-        const response = await API.get(`/user/skills/${pathId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setSkills(response.data);
-      } catch (err) {
-        console.error("Error fetching skills:", err);
-        setError("Failed to load skills.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSkills();
-  }, [token, pathId]);
+    if (pathId) {
+      dispatch(fetchSkills(pathId));
+    }
+  }, [dispatch, pathId]);
 
   if (loading) {
     return <div className="skill-body">Loading skills...</div>;
   }
 
   if (error) {
-    return <div className="skill-body">Error: {error}</div>;
+    const msg = typeof error === "string" ? error : error?.message || "Unknown error";
+    return <div className="skill-body">Error: {msg}</div>;
   }
 
   return (

@@ -1,5 +1,5 @@
 import "./style.css";
-import React from "react";
+import React, { useState } from "react";
 import Button from "../../Components/Button";
 import OrangeLogo from "../../Assets/LogoOrangeNoBg.png";
 import WhiteLogo from "../../Assets/LogoWhiteNoBg.png";
@@ -13,8 +13,13 @@ const Explore = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { title, description, recommendationId } = location.state || {};
+  const descriptionText =
+    typeof description === "string"
+      ? description
+      : description?.message || "Description";
   const registerState = useSelector((state) => state.register) || {};
   const token = registerState.token || localStorage.getItem("token");
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     console.log("Explore page rendered.");
@@ -26,13 +31,16 @@ const Explore = () => {
     console.log("handleSavePath called.");
     console.log("recommendationId in handleSavePath:", recommendationId);
     try {
+      setIsSaving(true);
       if (!token) {
         console.error("Unauthorized. Please log in again.");
+        setIsSaving(false);
         return;
       }
 
       if (!recommendationId) {
         console.error("Recommendation ID is missing.");
+        setIsSaving(false);
         return;
       }
 
@@ -66,6 +74,8 @@ const Explore = () => {
       navigate("/path");
     } catch (error) {
       console.error("Error saving path or generating quests:", error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -82,7 +92,7 @@ const Explore = () => {
         />
       </div>
       <div className="explore-description">
-        <p>{description || "Description"}</p>
+        <p>{descriptionText}</p>
       </div>
       <div className="explore-row-btns">
         <Button
@@ -94,7 +104,8 @@ const Explore = () => {
         />
         <Button
           className={"primary-button"}
-          text={"Save Path"}
+          text={isSaving ? "Saving..." : "Save Path"}
+          disabled={isSaving}
           onClickListener={handleSavePath}
         />
       </div>

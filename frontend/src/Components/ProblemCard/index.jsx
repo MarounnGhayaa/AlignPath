@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 
 const ProblemCard = ({ id, title, subtitle, difficulty, points }) => {
   const navigate = useNavigate();
+  const subText = typeof subtitle === "string" ? subtitle : subtitle?.message || "";
 
   return (
     <div className="problem-card">
       <h3>{title}</h3>
-      <h4>{subtitle}</h4>
+      <h4>{subText}</h4>
       <div className="problem-card-tags">
         <span>{points} points</span>
       </div>

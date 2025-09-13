@@ -3,8 +3,9 @@ import Button from "../../Components/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../../Services/axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FloatingChatbot from "../../Components/FloatingChatbot";
+import { incrementAndPersist } from "../../Features/Skill/skillsSlice";
 
 const SolveProblem = () => {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ const SolveProblem = () => {
   const [error, setError] = useState(null);
   const registerState = useSelector((state) => state.register) || {};
   const token = registerState.token || localStorage.getItem("token");
+  const [selected, setSelected] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProblem = async () => {
@@ -59,7 +62,8 @@ const SolveProblem = () => {
   }
 
   if (error) {
-    return <div className="solve-problem-body">Error: {error}</div>;
+    const msg = typeof error === "string" ? error : error?.message || "Unknown error";
+    return <div className="solve-problem-body">Error: {msg}</div>;
   }
 
   if (!problem) {
@@ -67,6 +71,28 @@ const SolveProblem = () => {
   }
 
   const { title = "", question = "", options = [], points = 0 } = problem;
+
+  const pointsToPercent = (p) => {
+    const val = Number(p) || 0;
+    // 1% per 20 points, at least 1%
+    return Math.max(1, Math.round(val / 20));
+  };
+
+  const onSubmit = async () => {
+    try {
+      if (!selected) return navigate(-1);
+      if (selected === problem.correct_answer) {
+        const pathId = problem.path_id;
+        if (pathId) {
+          await dispatch(
+            incrementAndPersist({ pathId, percent: pointsToPercent(points) })
+          );
+        }
+      }
+    } finally {
+      navigate(-1);
+    }
+  };
 
   return (
     <div className="solve-problem-body">
@@ -82,7 +108,13 @@ const SolveProblem = () => {
           <section className="solve-problem-options">
             {options.map((option, index) => (
               <label key={index} className="solve-problem-radio">
-                <input type="radio" name="option" value={option} />
+                <input
+                  type="radio"
+                  name="option"
+                  value={option}
+                  checked={selected === option}
+                  onChange={(e) => setSelected(e.target.value)}
+                />
                 <strong>{option}</strong>
               </label>
             ))}
@@ -90,7 +122,7 @@ const SolveProblem = () => {
           <Button
             text={"Submit Answer"}
             className={"primary-button"}
-            onClickListener={() => navigate(-1)}
+            onClickListener={onSubmit}
           />
         </div>
       </div>

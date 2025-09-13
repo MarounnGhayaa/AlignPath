@@ -48,7 +48,8 @@ const Quest = ({ pathId }) => {
   }
 
   if (error) {
-    return <div className="quest-body">Error: {error}</div>;
+    const msg = typeof error === "string" ? error : error?.message || "Unknown error";
+    return <div className="quest-body">Error: {msg}</div>;
   }
 
   return (
@@ -60,6 +61,8 @@ const Quest = ({ pathId }) => {
           quests.map((quest) => (
             <QuestCard
               key={quest.id}
+              id={quest.id}
+              pathId={pathId}
               title={quest.title}
               subtitle={quest.subtitle}
               difficulty={quest.difficulty}

@@ -4,6 +4,7 @@ import { registerReducer } from "../Features/Register/registerSlice.js";
 import { profileReducer } from "../Features/Profile/profileSlice.js";
 import { aiChatReducer } from "../Features/AiChat/AiChatSlice.js";
 import { preferencesReducer } from "../Features/Preferences/preferencesSlice.js";
+import { skillsReducer } from "../Features/Skill/skillsSlice.js";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     profile: profileReducer,
     aiChat: aiChatReducer,
     preferences: preferencesReducer,
+    skills: skillsReducer,
   }
 });

@@ -41,6 +41,8 @@ Route::group(["prefix" => "v0.1"], function () {
             Route::get('/problem/{problemId}', [ProblemController::class, 'getProblemById']);
 
             Route::get('/skills/{pathId}', [SkillController::class, 'getSkillsByPath']);
+            Route::put('/skills/{skill}', [SkillController::class, 'update'])
+                ->whereNumber('skill');
 
             Route::get('/resources/{pathId}', [LearningResourceController::class, 'getResourcesByPath']);
 

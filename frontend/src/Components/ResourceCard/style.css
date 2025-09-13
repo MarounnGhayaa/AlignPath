@@ -6,6 +6,11 @@
   border-color: #d9d9d9;
   width: 400px;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .resource-card h3,
@@ -13,6 +18,10 @@ h4 {
   text-align: left;
   max-width: 350px;
   margin-bottom: 20px;
+}
+
+.resource-card h3 {
+  text-align: center;
 }
 
 .resource-card h4 {

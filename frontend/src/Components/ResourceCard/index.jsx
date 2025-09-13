@@ -7,10 +7,15 @@ const ResourceCard = ({ title, description, type, url }) => {
   else if (type === "video") buttonText = "Watch Video";
   else if (type === "community") buttonText = "Join Community";
 
+  const descText =
+    typeof description === "string"
+      ? description
+      : description?.message || "";
+
   return (
     <div className="resource-card">
       <h3>{title}</h3>
-      {description && <h4>{description}</h4>}
+      {descText && <h4>{descText}</h4>}
 
       <div className="resource-card-btn">
         {url ? (

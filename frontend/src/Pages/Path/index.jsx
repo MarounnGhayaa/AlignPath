@@ -45,7 +45,8 @@ const Path = () => {
   }
 
   if (error) {
-    return <div className="path-body">Error: {error}</div>;
+    const msg = typeof error === "string" ? error : error?.message || "Unknown error";
+    return <div className="path-body">Error: {msg}</div>;
   }
 
   return (

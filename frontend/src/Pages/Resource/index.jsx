@@ -50,7 +50,8 @@ const Resource = ({ pathId }) => {
   }
 
   if (error) {
-    return <div className="resource-body">Error: {error}</div>;
+    const msg = typeof error === "string" ? error : error?.message || "Unknown error";
+    return <div className="resource-body">Error: {msg}</div>;
   }
 
   return (
