@@ -12,27 +12,8 @@ class DatabaseSeeder extends Seeder {
      */
     public function run(): void {
         $this->call([
-            UserSeeder::class
-        ]);
-
-        $this->call([
-            PathSeeder::class
-        ]);
-
-        $this->call([
-            SkillSeeder::class
-        ]);
-
-        $this->call([
-            ResourceSeeder::class
-        ]);
-
-        $this->call([
-            QuestSeeder::class
-        ]);
-
-        $this->call([
-            ProblemSeeder::class
+            ExpertiseSeeder::class,
+            MentorSeeder::class,
         ]);
     }
 }

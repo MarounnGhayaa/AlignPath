@@ -42,6 +42,7 @@ const Preferences = () => {
                 "Analytical Skills",
                 "Creative Skills",
                 "Communication Skills",
+                "Managing Skills",
               ].map((item) => (
                 <label key={item} className="checkbox-label">
                   <input
@@ -66,6 +67,7 @@ const Preferences = () => {
                 "Science & Research",
                 "Business & Entrepreneurship",
                 "Health & Wellness",
+                "Product owner & Freelancing",
               ].map((item) => (
                 <label key={item} className="checkbox-label">
                   <input
@@ -145,7 +147,7 @@ const Preferences = () => {
 
           <Button
             text={loading ? "Saving..." : "Begin Journey"}
-            className="primary-button pref-button"
+            className=" pref-button"
             disabled={loading}
             onClickListener={handleSavePreferences}
           />

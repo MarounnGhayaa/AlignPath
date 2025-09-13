@@ -13,14 +13,11 @@ return new class extends Migration {
             $table->id();
             $table->string('username')->unique();
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('location')->nullable();
-            $table->string('profile_picture_url')->nullable();
             $table->enum('role', ['student', 'mentor'])->default('student');
             $table->string('position')->nullable();
             $table->string('company')->nullable();
-            $table->rememberToken();
             $table->timestamps();
         });
     }
