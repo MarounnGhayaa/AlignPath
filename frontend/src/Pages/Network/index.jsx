@@ -1,5 +1,5 @@
 import "./style.css";
-import { User, Send, Search } from "lucide-react";
+import { User, Send, Search, Mic, Square } from "lucide-react";
 import useNetwork from "./logic";
 
 const Network = () => {
@@ -13,6 +13,10 @@ const Network = () => {
     error,
     iAmMentor,
     myId,
+    recording,
+    transcribing,
+    micError,
+    toggleRecording,
     setSearchTerm,
     setCurrentMessage,
     handlePersonSelect,
@@ -118,19 +122,40 @@ const Network = () => {
             <div className="chat-input">
               <input
                 type="text"
-                placeholder="Type your message..."
+                placeholder={
+                  transcribing
+                    ? "Transcribing…"
+                    : "Type your message or use the mic…"
+                }
                 value={currentMessage}
                 onChange={(e) => setCurrentMessage(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                disabled={transcribing}
               />
+
+              {/* Mic toggle */}
+              <button
+                onClick={toggleRecording}
+                title={recording ? "Stop recording" : "Start voice input"}
+                aria-pressed={recording}
+                className={recording ? "mic-btn recording" : "mic-btn"}
+                disabled={transcribing}
+              >
+                {recording ? <Square size={18} /> : <Mic size={18} />}
+              </button>
+
+              {/* Send */}
               <button
                 onClick={handleSendMessage}
-                disabled={!currentMessage.trim()}
+                disabled={!currentMessage.trim() || transcribing}
                 title="Send"
               >
                 <Send size={20} />
               </button>
             </div>
+
+            {/* optional tiny error line */}
+            {micError && <div className="error-banner">{micError}</div>}
           </>
         ) : (
           <div className="no-chat-selected">

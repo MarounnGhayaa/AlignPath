@@ -47,15 +47,15 @@ Route::group(["prefix" => "v0.1"], function () {
             Route::get('/recommendations', [RecommendationController::class, 'getUserRecommendations']);
 
             Route::get('/mentors', [MentorController::class, 'index']);
+
             Route::get('/users', [UserDirectoryController::class, 'index']);
 
             Route::get('/mentors/{person}/chats',   [ChatController::class, 'show']);
             Route::post('/mentors/{person}/messages', [ChatController::class, 'store']);
-
             Route::get('/users/{person}/chats',     [ChatController::class, 'show']);
             Route::post('/users/{person}/messages',   [ChatController::class, 'store']);
-
-
+            Route::post('/transcribe', [ChatController::class, 'transcribe'])
+                ->withoutMiddleware('throttle:api');
         });
     });
 

@@ -128,4 +128,63 @@ class ChatController extends Controller {
 
         return $conv;
     }
+
+
+public function transcribe(Request $request)
+{
+    $request->validate([
+        'audio'    => ['required','file','mimetypes:audio/mpeg,audio/mp3,audio/webm,audio/ogg,audio/wav,video/mp4,video/webm','max:30000'],
+        'language' => ['sometimes','string'],
+        'prompt'   => ['sometimes','string'],
+    ]);
+
+    $apiKey   = config('services.openai.key', env('OPENAI_API_KEY'));
+    $fallback = rtrim(env('STT_FALLBACK_URL', ''), '/');
+    $file     = $request->file('audio');
+    $language = $request->input('language'); // e.g., "en" or "ar"
+
+    // 1) Try OpenAI (if key configured)
+    if ($apiKey) {
+        $resp = Http::withToken($apiKey)
+            ->attach('file', fopen($file->getRealPath(), 'r'), $file->getClientOriginalName())
+            ->asMultipart()
+            ->post('https://api.openai.com/v1/audio/transcriptions', [
+                'model'           => 'whisper-1',
+                'response_format' => 'json',
+                'temperature'     => 0,
+                'language'        => $language,            // pass hint
+                'prompt'          => $request->input('prompt'),
+            ]);
+
+        if ($resp->successful()) {
+            return response()->json(['text' => $resp->json('text') ?? '']);
+        }
+
+        // If quota/rate, bubble up so the client can decide, or try local fallback
+        if ($resp->status() === 429) {
+            // If you prefer immediate local fallback instead of surfacing the 429, comment out return below
+            // and let it try the fallback section.
+            // return response()->json(['source' => 'openai', 'error' => $resp->json() ?: $resp->body()], 429);
+        } else {
+            // For other OpenAI errors, you can still try local fallback
+            // or return error; here we continue to fallback if configured.
+        }
+    }
+
+    // 2) Try local Faster-Whisper fallback (if configured)
+    if ($fallback) {
+        $res2 = Http::asMultipart()
+            ->attach('audio', fopen($file->getRealPath(), 'r'), $file->getClientOriginalName())
+            ->attach('language', $language)
+            ->post($fallback);
+
+        if ($res2->successful()) {
+            return response()->json(['text' => $res2->json('text') ?? '']);
+        }
+        return response()->json(['source' => 'local', 'error' => $res2->json() ?: $res2->body()], $res2->status());
+    }
+
+    return response()->json(['error' => 'No transcription backend available.'], 503);
+}
+
 }
