@@ -9,7 +9,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
 class ChatController extends Controller {
@@ -27,8 +26,8 @@ class ChatController extends Controller {
 
         $payload = $messages->map(function (Message $m) use ($me, $person) {
             $senderIsMentor = $m->sender_id === $me->id
-                ? (strtolower((string)$me->role) === 'mentor')
-                : (strtolower((string)$person->role) === 'mentor');
+                ? (strtolower((string) $me->role) === 'mentor')
+                : (strtolower((string) $person->role) === 'mentor');
 
             return [
                 'id'           => $m->id,
@@ -39,7 +38,7 @@ class ChatController extends Controller {
             ];
         });
 
-        return response()->json($payload->values());
+        return response()->json($payload);
     }
 
     public function store(Request $request, User $person){
@@ -60,49 +59,49 @@ class ChatController extends Controller {
         $msg->body = $data['message'];
         $msg->save();
 
-        $ui = [
-            'id'               => $msg->id,
-            'message'          => $msg->body,
-            'sender_id'        => $msg->sender_id,
-            'sender_role'      => strtolower((string)$me->role),
-            'isFromMentor'     => strtolower((string)$me->role) === 'mentor',
-            'timestamp'        => optional($msg->created_at)?->toISOString(),
-            'conversation_id'  => $conversation->id,
-            'peer_id'          => $me->id,
-        ];
-
-        $recipientIds = DB::table('conversation_participants')
-            ->where('conversation_id', $conversation->id)
-            ->where('user_id', '!=', $me->id)
-            ->pluck('user_id')
-            ->unique()
-            ->values()
-            ->all();
-
-        $this->notifySocket($recipientIds, $ui);
-
-        return response()->json($ui, 201);
+        return response()->json([
+            'id'           => $msg->id,
+            'message'      => $msg->body,
+            'sender_id'    => $msg->sender_id,
+            'isFromMentor' => strtolower((string) $me->role) === 'mentor',
+            'timestamp'    => optional($msg->created_at)?->toISOString(),
+        ], 201);
     }
 
-    protected function notifySocket(array $recipientIds, array $payload): void {
-        if (empty($recipientIds)) {
-            return;
+    public function transcribe(Request $request) {
+        $request->validate([
+            'audio'    => [
+                'required',
+                'file',
+                'mimetypes:audio/mpeg,audio/mp3,audio/webm,audio/ogg,audio/wav,video/mp4,video/webm',
+                'max:30000',
+            ],
+            'language' => ['sometimes', 'string'],
+        ]);
+
+        $sttUrl = rtrim((string) env('STT_FALLBACK_URL', ''), '/');
+        if ($sttUrl === '') {
+            return response()->json(['error' => 'STT_FALLBACK_URL is not set'], 500);
         }
 
-        $endpoint = rtrim(config('services.socket.endpoint', env('SOCKET_ENDPOINT', 'http://localhost:4000/hooks/message-created')), '/');
-        $secret   = config('services.socket.secret',   env('SOCKET_SECRET',   'dev_secret'));
+        $file     = $request->file('audio');
+        $language = $request->input('language');
+        $res = Http::asMultipart()
+            ->attach('audio', fopen($file->getRealPath(), 'r'), $file->getClientOriginalName())
+            ->attach('language', $language)
+            ->post($sttUrl);
 
-        try {
-            Http::withHeaders(['X-Webhook-Secret' => $secret])
-                ->post($endpoint, [
-                    'recipientIds' => $recipientIds,
-                    'payload'      => $payload,
-                ]);
-        } catch (\Throwable $e) {
-            Log::warning('Socket webhook failed: '.$e->getMessage());
+        if (!$res->successful()) {
+            return response()->json([
+                'source' => 'local-stt',
+                'error'  => $res->json() ?: $res->body(),
+            ], $res->status());
         }
+
+        return response()->json([
+            'text' => (string) ($res->json('text') ?? ''),
+        ]);
     }
-
     protected function getOrCreateConversation(int $userA, int $userB): Conversation {
         $ids = [$userA, $userB];
         sort($ids);
@@ -128,63 +127,4 @@ class ChatController extends Controller {
 
         return $conv;
     }
-
-
-public function transcribe(Request $request)
-{
-    $request->validate([
-        'audio'    => ['required','file','mimetypes:audio/mpeg,audio/mp3,audio/webm,audio/ogg,audio/wav,video/mp4,video/webm','max:30000'],
-        'language' => ['sometimes','string'],
-        'prompt'   => ['sometimes','string'],
-    ]);
-
-    $apiKey   = config('services.openai.key', env('OPENAI_API_KEY'));
-    $fallback = rtrim(env('STT_FALLBACK_URL', ''), '/');
-    $file     = $request->file('audio');
-    $language = $request->input('language'); // e.g., "en" or "ar"
-
-    // 1) Try OpenAI (if key configured)
-    if ($apiKey) {
-        $resp = Http::withToken($apiKey)
-            ->attach('file', fopen($file->getRealPath(), 'r'), $file->getClientOriginalName())
-            ->asMultipart()
-            ->post('https://api.openai.com/v1/audio/transcriptions', [
-                'model'           => 'whisper-1',
-                'response_format' => 'json',
-                'temperature'     => 0,
-                'language'        => $language,            // pass hint
-                'prompt'          => $request->input('prompt'),
-            ]);
-
-        if ($resp->successful()) {
-            return response()->json(['text' => $resp->json('text') ?? '']);
-        }
-
-        // If quota/rate, bubble up so the client can decide, or try local fallback
-        if ($resp->status() === 429) {
-            // If you prefer immediate local fallback instead of surfacing the 429, comment out return below
-            // and let it try the fallback section.
-            // return response()->json(['source' => 'openai', 'error' => $resp->json() ?: $resp->body()], 429);
-        } else {
-            // For other OpenAI errors, you can still try local fallback
-            // or return error; here we continue to fallback if configured.
-        }
-    }
-
-    // 2) Try local Faster-Whisper fallback (if configured)
-    if ($fallback) {
-        $res2 = Http::asMultipart()
-            ->attach('audio', fopen($file->getRealPath(), 'r'), $file->getClientOriginalName())
-            ->attach('language', $language)
-            ->post($fallback);
-
-        if ($res2->successful()) {
-            return response()->json(['text' => $res2->json('text') ?? '']);
-        }
-        return response()->json(['source' => 'local', 'error' => $res2->json() ?: $res2->body()], $res2->status());
-    }
-
-    return response()->json(['error' => 'No transcription backend available.'], 503);
-}
-
 }

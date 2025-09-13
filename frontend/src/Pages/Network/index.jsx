@@ -133,7 +133,6 @@ const Network = () => {
                 disabled={transcribing}
               />
 
-              {/* Mic toggle */}
               <button
                 onClick={toggleRecording}
                 title={recording ? "Stop recording" : "Start voice input"}
@@ -144,7 +143,6 @@ const Network = () => {
                 {recording ? <Square size={18} /> : <Mic size={18} />}
               </button>
 
-              {/* Send */}
               <button
                 onClick={handleSendMessage}
                 disabled={!currentMessage.trim() || transcribing}
@@ -153,8 +151,6 @@ const Network = () => {
                 <Send size={20} />
               </button>
             </div>
-
-            {/* optional tiny error line */}
             {micError && <div className="error-banner">{micError}</div>}
           </>
         ) : (
