@@ -48,7 +48,7 @@
 .sidebar-header h2 {
   font-size: 26px;
   font-weight: 700;
-  background: linear-gradient(135deg, #f46530 0%, #ea580c 100%);
+  background: black;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -252,7 +252,7 @@
 .chat-mentor-info h3 {
   font-size: 20px;
   font-weight: 700;
-  background: linear-gradient(135deg, #f46530 0%, #ea580c 100%);
+  background: black;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
