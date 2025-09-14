@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import API from "../../../../Services/axios";
 import { useSelector, useDispatch } from "react-redux";
-import { setField, setEmail, setPassword, setErrorMessage, clearFields } from "../../../../Features/Login/loginSlice";
+import { setField, setErrorMessage, clearFields } from "../../../../Features/Login/loginSlice";
 
 export const useLoginForm = () => {
   const navigate = useNavigate();
@@ -13,26 +13,28 @@ export const useLoginForm = () => {
     dispatch(setErrorMessage(""));
 
     try {
-      const response = await API.post("/guest/login", {
-        email,
-        password,
-      });
+      const res = await API.post("/guest/login", { email, password });
 
-      const token = response.data.payload.token;
-      const user = response.data.payload;
+      const payload = res?.data?.payload || {};
+      const token   = payload.token;
+      const user    = payload.user ?? payload;
+
+      if (!token || !user) throw new Error("Malformed login response");
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
       dispatch(clearFields());
 
-      navigate("/home");
-    } catch (error) {
-      if (error.response) {
-        dispatch(setErrorMessage(error.response.data.message || "Incorrect Email or Password"));
+      const role = String(user?.role || "").toLowerCase();
+      if (role === "admin") {
+        navigate("/adminDashboard");
       } else {
-        dispatch(setErrorMessage("Something went wrong. Please try again."));
+        navigate("/home");
       }
+    } catch (err) {
+      const msg = err?.response?.data?.message || "Incorrect Email or Password";
+      dispatch(setErrorMessage(msg));
     }
   };
 
@@ -40,13 +42,5 @@ export const useLoginForm = () => {
     dispatch(setField({ field, value }));
   };
 
-  return {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    errorMessage,
-    handleFieldChange,
-    loginUser,
-  };
+  return { email, password, errorMessage, handleFieldChange, loginUser };
 };

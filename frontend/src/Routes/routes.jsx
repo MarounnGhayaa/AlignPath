@@ -16,6 +16,7 @@ import Chat from "../Pages/Chat";
 import SolveQuest from "../Pages/SolveQuest";
 import SolveProblem from "../Pages/SolveProblem";
 import Preferences from "../Pages/Preferences";
+import AdminDashboard from "../Pages/Admin";
 
 const MyRoutes = () => {
   return (
@@ -25,7 +26,7 @@ const MyRoutes = () => {
       <Route
         path="/preferences"
         element={
-          <ProtectedRoute allowedRoles={["student", "mentor"]}>
+          <ProtectedRoute allowedRoles={["student", "mentor", "admin"]}>
             <Preferences />
           </ProtectedRoute>
         }
@@ -34,7 +35,7 @@ const MyRoutes = () => {
         <Route
           path="/home"
           element={
-            <ProtectedRoute allowedRoles={["student", "mentor"]}>
+            <ProtectedRoute allowedRoles={["student", "mentor", "admin"]}>
               <Home />
             </ProtectedRoute>
           }
@@ -42,7 +43,7 @@ const MyRoutes = () => {
         <Route
           path="/explore"
           element={
-            <ProtectedRoute allowedRoles={["student", "mentor"]}>
+            <ProtectedRoute allowedRoles={["student", "mentor", "admin"]}>
               <Explore />
             </ProtectedRoute>
           }
@@ -50,7 +51,7 @@ const MyRoutes = () => {
         <Route
           path="/network"
           element={
-            <ProtectedRoute allowedRoles={["student", "mentor"]}>
+            <ProtectedRoute allowedRoles={["student", "mentor", "admin"]}>
               <Network />
             </ProtectedRoute>
           }
@@ -58,7 +59,7 @@ const MyRoutes = () => {
         <Route
           path="/path"
           element={
-            <ProtectedRoute allowedRoles={["student", "mentor"]}>
+            <ProtectedRoute allowedRoles={["student", "mentor", "admin"]}>
               <Path />
             </ProtectedRoute>
           }
@@ -66,7 +67,7 @@ const MyRoutes = () => {
         <Route
           path="/profile"
           element={
-            <ProtectedRoute allowedRoles={["student", "mentor"]}>
+            <ProtectedRoute allowedRoles={["student", "mentor", "admin"]}>
               <Profile />
             </ProtectedRoute>
           }
@@ -74,7 +75,7 @@ const MyRoutes = () => {
         <Route
           path="/pathNested"
           element={
-            <ProtectedRoute allowedRoles={["student", "mentor"]}>
+            <ProtectedRoute allowedRoles={["student", "mentor", "admin"]}>
               <PathNested />
             </ProtectedRoute>
           }
@@ -82,7 +83,7 @@ const MyRoutes = () => {
         <Route
           path="/chat"
           element={
-            <ProtectedRoute allowedRoles={["student", "mentor"]}>
+            <ProtectedRoute allowedRoles={["student", "mentor", "admin"]}>
               <Chat />
             </ProtectedRoute>
           }
@@ -90,7 +91,7 @@ const MyRoutes = () => {
         <Route
           path="/solveQuest"
           element={
-            <ProtectedRoute allowedRoles={["student", "mentor"]}>
+            <ProtectedRoute allowedRoles={["student", "mentor", "admin"]}>
               <SolveQuest />
             </ProtectedRoute>
           }
@@ -98,12 +99,20 @@ const MyRoutes = () => {
         <Route
           path="/solveProblem/:problemId"
           element={
-            <ProtectedRoute allowedRoles={["student", "mentor"]}>
+            <ProtectedRoute allowedRoles={["student", "mentor", "admin"]}>
               <SolveProblem />
             </ProtectedRoute>
           }
         />
       </Route>
+      <Route
+        path="/adminDashboard"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };

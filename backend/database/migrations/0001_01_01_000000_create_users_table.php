@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->string('password');
             $table->string('location')->nullable();
-            $table->enum('role', ['student', 'mentor'])->default('student');
+            $table->enum('role', ['student', 'mentor', 'admin'])->default('student');
             $table->string('position')->nullable();
             $table->string('company')->nullable();
             $table->timestamps();
