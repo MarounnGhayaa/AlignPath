@@ -20,7 +20,7 @@ use Illuminate\Validation\Rule;
 class GeminiController extends Controller {
     public function chat(Request $request){
         $data = $request->validate([
-            'thread_id'            => ['nullable','integer','exists:chat_threads,id'],
+            'thread_id'            => ['nullable','integer'],
             'messages'             => 'required|array|min:1',
             'messages.*.role'      => ['required','string', Rule::in(['user','model'])],
             'messages.*.content'   => 'required|string',
@@ -31,7 +31,6 @@ class GeminiController extends Controller {
 
         $user = Auth::user();
 
-        // ----- UserContext snapshot (for reproducibility in analytics) -----
         $context = [
             'user' => $user ? [
                 'id'   => $user->id,
@@ -95,13 +94,14 @@ class GeminiController extends Controller {
             $systemText .= "\n\nAdditional System Notes:\n" . $data['system'];
         }
 
-        // ----- Ensure a thread exists & belongs to the user -----
         $thread = null;
+
         if (!empty($data['thread_id'])) {
             $thread = ChatThread::where('id', $data['thread_id'])
                 ->when($user, fn($q) => $q->where('user_id', $user->id))
                 ->first();
         }
+
         if (!$thread) {
             $firstUserMsg = collect($data['messages'])->firstWhere('role', 'user');
             $thread = ChatThread::create([
@@ -118,8 +118,6 @@ class GeminiController extends Controller {
             ]);
         }
 
-        // ----- Persist the latest user message (only the new turn) -----
-        // Frontend always appends; we capture the last user message in this request.
         $lastUserMessage = collect($data['messages'])->reverse()->firstWhere('role','user');
         $userMessage = null;
         if ($lastUserMessage) {
@@ -133,14 +131,12 @@ class GeminiController extends Controller {
                 ],
             ]);
         }
-
-        // ----- Call Gemini -----
         $model    = config('services.gemini.model', env('GEMINI_MODEL', 'gemini-2.5-flash'));
         $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent";
 
         $contents = array_map(function ($m) {
             return [
-                'role'  => $m['role'],          // 'user' or 'model'
+                'role'  => $m['role'],
                 'parts' => [['text' => $m['content']]]
             ];
         }, $data['messages']);
@@ -153,7 +149,6 @@ class GeminiController extends Controller {
             'generationConfig' => array_filter([
                 'temperature'     => $data['temperature']     ?? 0.7,
                 'maxOutputTokens' => $data['maxOutputTokens'] ?? 1024,
-                // You may add 'response_mime_type' => 'text/markdown' for consistency
             ]),
         ];
 
@@ -176,7 +171,6 @@ class GeminiController extends Controller {
         $blocked   = $json['promptFeedback']['blockReason'] ?? null;
         $usage     = $json['usageMetadata'] ?? null;
 
-        // ----- Persist assistant reply -----
         $assistantMessage = ChatMessage::create([
             'thread_id' => $thread->id,
             'user_id'   => $user?->id,
@@ -198,7 +192,6 @@ class GeminiController extends Controller {
             'user_message_id'       => $userMessage?->id,
             'assistant_message_id'  => $assistantMessage->id,
             'usage'                 => $usage,
-            // Keep raw for debugging during development; consider removing in prod
             'raw'                   => $json,
         ]);
     }
