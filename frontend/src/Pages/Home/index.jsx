@@ -1,6 +1,5 @@
 import "./style.css";
 import Recommendation from "../../Components/Recommendation";
-import Statistic from "../../Components/Statistic";
 import FloatingChatbot from "../../Components/FloatingChatbot";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -76,11 +75,6 @@ const Home = () => {
           ) : (
             <p>No recommendations found.</p>
           )}
-        </div>
-        <div className="homePage-stats">
-          <Statistic value={"50%"} statTitle={"Career Exploration"} />
-          <Statistic value={"20%"} statTitle={"Mentorship Exploration"} />
-          <Statistic value={"30%"} statTitle={"Skills Learned"} />
         </div>
       </div>
       <FloatingChatbot />
