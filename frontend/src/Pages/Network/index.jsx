@@ -1,5 +1,6 @@
 import "./style.css";
 import { User, Send, Search, Mic, Square } from "lucide-react";
+import { useRef, useEffect } from "react";
 import useNetwork from "./logic";
 
 const Network = () => {
@@ -24,6 +25,33 @@ const Network = () => {
     filteredPeople,
     formatTime,
   } = useNetwork();
+
+  const messagesWrapRef = useRef(null);
+  const messagesEndRef = useRef(null);
+  const prevThreadIdRef = useRef(null);
+
+  const threadLen = selectedPerson
+    ? chatHistory[selectedPerson.id]?.length || 0
+    : 0;
+
+  useEffect(() => {
+    const el = messagesWrapRef.current;
+    if (!el) return;
+
+    const threadId = selectedPerson?.id ?? null;
+    const changed = prevThreadIdRef.current !== threadId;
+    const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+
+    if (changed || nearBottom) {
+      messagesEndRef.current?.scrollIntoView({
+        behavior: changed ? "auto" : "smooth",
+        block: "end",
+      });
+    }
+
+    prevThreadIdRef.current = threadId;
+  }, [selectedPerson?.id, threadLen]);
+  // --------------------------
 
   return (
     <div className="network-container">
@@ -97,7 +125,7 @@ const Network = () => {
             {loadingChats && !chatHistory[selectedPerson.id] ? (
               <div className="chat-messages loading">Loading chat…</div>
             ) : (
-              <div className="chat-messages">
+              <div className="chat-messages" ref={messagesWrapRef}>
                 {chatHistory[selectedPerson.id]?.map((message) => {
                   const outgoing = message.sender_id === myId;
                   return (
@@ -116,6 +144,8 @@ const Network = () => {
                     </div>
                   );
                 })}
+                {/* anchor for auto-scroll */}
+                <div ref={messagesEndRef} />
               </div>
             )}
 

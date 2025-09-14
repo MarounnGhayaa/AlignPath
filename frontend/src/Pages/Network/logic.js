@@ -301,6 +301,11 @@ export default function useNetwork() {
     }
 
     const socket = io(SOCKET_URL, { transports: ["websocket"], autoConnect: true });
+
+    if (socket.connected) {
+      console.log("socket fast-connected", socket.id, "→ joining user:", myId);
+      socket.emit("join", { userId: myId });
+    }
     socketRef.current = socket;
 
     const joinMyRoom = () => {
@@ -309,25 +314,50 @@ export default function useNetwork() {
     };
 
     socket.on("connect", joinMyRoom);
-    socket.io.on("reconnect", joinMyRoom);
-    socket.on("joined", ({ room }) => console.log("joined ack:", room));
+    socket.io?.on?.("reconnect", joinMyRoom);
 
+    socket.on("joined", (data) => {
+      console.log("joined:", data?.room);
+    });
+
+    // Robust, normalized receive handler
     socket.on("message.created", (data) => {
+      const senderId =
+        data?.sender_id ?? data?.senderId ?? data?.from_id ?? data?.fromId ?? null;
+      const recipientId =
+        data?.recipient_id ?? data?.recipientId ?? data?.to_id ?? data?.toId ?? null;
+      const senderRole = (data?.sender_role || data?.senderRole || "").toLowerCase();
+      const body = data?.message ?? data?.body ?? data?.text ?? "";
+      const when =
+        parseDate(data?.timestamp || data?.created_at || data?.createdAt) || new Date();
+
       const msg = {
         id: data?.id,
-        message: data?.message ?? data?.body ?? "",
-        sender_id: data?.sender_id ?? null,
+        message: body,
+        sender_id: senderId,
         isFromMentor:
           typeof data?.isFromMentor === "boolean"
             ? data.isFromMentor
-            : (data?.sender_role || "").toLowerCase() === "mentor",
-        timestamp: parseDate(data?.timestamp) || new Date(),
+            : senderRole === "mentor",
+        timestamp: when,
       };
 
-      const peerId =
-        data?.peer_id ?? (msg.sender_id === myId ? undefined : msg.sender_id);
+      // Decide which thread this belongs to
+      let peerId = data?.peer_id ?? data?.peerId ?? null;
+      if (!peerId) {
+        if (senderId && recipientId) {
+          peerId = senderId === myId ? recipientId : senderId;
+        } else if (senderId) {
+          peerId = senderId === myId ? (recipientId || selectedPerson?.id || null) : senderId;
+        } else if (recipientId) {
+          peerId = recipientId === myId ? (senderId || null) : recipientId;
+        }
+      }
 
-      if (!peerId) return;
+      if (!peerId) {
+        console.warn("message.created without resolvable peerId", data);
+        return;
+      }
 
       setChatHistory((prev) => ({
         ...prev,
@@ -335,9 +365,8 @@ export default function useNetwork() {
       }));
     });
 
-    socket.on("connect_error", (e) =>
-      console.warn("socket connect error", e?.message || e)
-    );
+    socket.on("connect_error", (e) => console.warn("socket connect error", e?.message || e));
+    socket.on("disconnect", (reason) => console.log("socket disconnected", reason));
 
     return () => {
       try {
@@ -349,7 +378,7 @@ export default function useNetwork() {
       } catch {}
       socketRef.current = null;
     };
-  }, [myId]);
+  }, [myId, selectedPerson?.id]);
 
   useEffect(() => {
     let cancelled = false;
@@ -493,6 +522,23 @@ export default function useNetwork() {
         sender_id: createdRaw.sender_id ?? myId ?? null,
       };
 
+      try {
+        const wirePayload = {
+          ...createdRaw,
+          id: created.id,
+          message: created.message,
+          sender_id: created.sender_id ?? myId ?? null,
+          recipient_id: selectedPerson?.id ?? null,
+          timestamp: created.timestamp,
+          sender_role: createdRaw.sender_role || (iAmMentor ? "mentor" : "user"),
+        };
+        socketRef.current?.emit?.("message.send", {
+          to: selectedPerson.id,
+          payload: wirePayload,
+        });
+      } catch (e) {
+        console.warn("socket emit failed", e);
+      }
       setChatHistory((prev) => ({
         ...prev,
         [selectedPerson.id]: [...(prev[selectedPerson.id] || []), created],
