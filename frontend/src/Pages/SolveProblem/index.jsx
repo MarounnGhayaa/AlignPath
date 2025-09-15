@@ -73,6 +73,7 @@ const SolveProblem = () => {
 
   const { title = "", question = "", options = [], points = 0 } = problem;
 
+  // eslint-disable-next-line no-unused-vars
   const pointsToPercent = (p) => {
     const val = Number(p) || 0;
     return Math.max(1, Math.round(val / 20));
