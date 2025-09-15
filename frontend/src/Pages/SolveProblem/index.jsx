@@ -16,6 +16,8 @@ const SolveProblem = () => {
   const registerState = useSelector((state) => state.register) || {};
   const token = registerState.token || localStorage.getItem("token");
   const [selected, setSelected] = useState("");
+  const [feedback, setFeedback] = useState(""); // "" | "incorrect" | "correct"
+  const [done, setDone] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,14 +40,19 @@ const SolveProblem = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setProblem({
+        const prob = {
           ...response.data,
           options: [
             response.data.first_answer,
             response.data.second_answer,
             response.data.third_answer,
           ],
-        });
+        };
+        setProblem(prob);
+        if (isCompletedLocal("problem", response.data.path_id, problemId)) {
+          setDone(true);
+          setFeedback("correct");
+        }
       } catch (err) {
         console.error("Error fetching problem:", err);
         setError("Failed to load problem.");
@@ -80,20 +87,24 @@ const SolveProblem = () => {
   };
 
   const onSubmit = async () => {
-    try {
-      if (!selected) return navigate(-1);
-      if (selected === problem.correct_answer) {
-        const pathId = problem.path_id;
-        if (pathId) {
-          persistCompletionLocal("problem", pathId, problemId);
-
-          const percent = await computeAdaptiveIncrement(pathId);
-          await dispatch(incrementAndPersist({ pathId, percent }));
-        }
-      }
-    } finally {
-      navigate(-1);
+    if (!selected || done) return;
+    if (selected !== problem.correct_answer) {
+      setFeedback("incorrect");
+      return; // allow retry without leaving page
     }
+
+    // Correct answer
+    setFeedback("correct");
+    setDone(true);
+
+    const pathId = problem.path_id;
+    if (pathId) {
+      persistCompletionLocal("problem", pathId, problemId);
+      const percent = await computeAdaptiveIncrement(pathId);
+      await dispatch(incrementAndPersist({ pathId, percent }));
+    }
+    // Redirect to Problems tab for this path
+    navigate("/pathNested", { state: { pathId, initialTab: "Problems" } });
   };
 
   return (
@@ -109,23 +120,34 @@ const SolveProblem = () => {
           </section>
           <section className="solve-problem-options">
             {options.map((option, index) => (
-              <label key={index} className="solve-problem-radio">
+              <label key={index} className={`solve-problem-radio ${feedback === "incorrect" && selected === option ? "incorrect" : ""}`}>
                 <input
                   type="radio"
                   name="option"
                   value={option}
                   checked={selected === option}
                   onChange={(e) => setSelected(e.target.value)}
+                  disabled={done}
                 />
                 <strong>{option}</strong>
               </label>
             ))}
           </section>
-          <Button
-            text={"Submit Answer"}
-            className={"primary-button"}
-            onClickListener={onSubmit}
-          />
+
+          {feedback === "incorrect" && (
+            <div className="solve-problem-feedback incorrect">Incorrect. Try again.</div>
+          )}
+          {done && (
+            <div className="solve-problem-feedback correct">Correct! Problem completed.</div>
+          )}
+
+          <div style={{ marginTop: 20 }}>
+            {done ? (
+              <Button text={"Completed"} className={"secondary-button"} onClickListener={() => {}} disabled />
+            ) : (
+              <Button text={"Submit Answer"} className={"primary-button"} onClickListener={onSubmit} />
+            )}
+          </div>
         </div>
       </div>
 
@@ -149,6 +171,10 @@ function getCompletedLocal(type, pathId) {
   } catch {
     return new Set();
   }
+}
+
+function isCompletedLocal(type, pathId, id) {
+  return getCompletedLocal(type, pathId).has(String(id));
 }
 
 function persistCompletionLocal(type, pathId, id) {

@@ -62,6 +62,7 @@ const Problem = ({ pathId }) => {
             <ProblemCard
               key={problem.id}
               id={problem.id}
+              pathId={pathId}
               title={problem.title}
               subtitle={problem.subtitle}
               points={problem.points}

@@ -57,6 +57,7 @@ const Path = () => {
           savedPaths.map((path, index) => {
             return (
               <SavedPath
+                pathId={path.id}
                 key={index}
                 title={path.title}
                 tag={"Path"}

@@ -5,8 +5,8 @@ import Problem from "../../Pages/Problem";
 import Resource from "../../Pages/Resource";
 import Skill from "../../Pages/Skill";
 
-const SubNavBar = ({ pathId }) => {
-  const [activeTab, setActiveTab] = useState("Quests");
+const SubNavBar = ({ pathId, initialTab = "Quests" }) => {
+  const [activeTab, setActiveTab] = useState(initialTab || "Quests");
 
   const tabs = ["Quests", "Problems", "Skills", "Resources"];
 

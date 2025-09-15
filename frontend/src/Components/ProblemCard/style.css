@@ -38,3 +38,20 @@ h4 {
   display: flex;
   justify-content: flex-end;
 }
+
+/* Completed state */
+.problem-card.done {
+  opacity: 0.7;
+  filter: grayscale(0.1);
+}
+
+.problem-card-status {
+  background-color: #2e7d32;
+  color: #fff;
+  border-radius: 90px;
+  padding: 0 10px 3px 10px;
+}
+
+.completed-title {
+  text-decoration: line-through;
+}

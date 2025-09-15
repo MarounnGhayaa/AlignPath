@@ -7,7 +7,7 @@ import FloatingChatbot from "../../Components/FloatingChatbot";
 const PathNested = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { pathId, title } = location.state || {};
+  const { pathId, title, initialTab } = location.state || {};
 
   return (
     <div className="pathNested-body">
@@ -21,7 +21,7 @@ const PathNested = () => {
           }}
         />
       </h1>
-      <SubNavBar pathId={pathId} />
+      <SubNavBar pathId={pathId} initialTab={initialTab} />
       <FloatingChatbot />
     </div>
   );
