@@ -19,10 +19,11 @@ export const persistSkills = createAsyncThunk(
     try {
       const state = getState();
       const items = state.skills?.byPathId?.[pathId]?.items || [];
-      // Persist each skill value
-      await Promise.all(
-        items.map((s) => API.put(`/user/skills/${s.id}`, { value: s.value }))
-      );
+      // Persist each skill value sequentially to ensure path progress reflects final average
+      for (const s of items) {
+        // eslint-disable-next-line no-await-in-loop
+        await API.put(`/user/skills/${s.id}`, { value: s.value });
+      }
       return { pathId };
     } catch (err) {
       return rejectWithValue({ pathId, message: err?.response?.data || "Failed to persist skills" });

@@ -13,7 +13,6 @@ import Path from "../Pages/Path";
 import Profile from "../Pages/Profile";
 import PathNested from "../Pages/PathNested";
 import Chat from "../Pages/Chat";
-import SolveQuest from "../Pages/SolveQuest";
 import SolveProblem from "../Pages/SolveProblem";
 import Preferences from "../Pages/Preferences";
 import AdminDashboard from "../Pages/Admin";
@@ -85,14 +84,6 @@ const MyRoutes = () => {
           element={
             <ProtectedRoute allowedRoles={["student", "mentor", "admin"]}>
               <Chat />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/solveQuest"
-          element={
-            <ProtectedRoute allowedRoles={["student", "mentor", "admin"]}>
-              <SolveQuest />
             </ProtectedRoute>
           }
         />

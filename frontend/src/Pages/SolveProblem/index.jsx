@@ -62,7 +62,8 @@ const SolveProblem = () => {
   }
 
   if (error) {
-    const msg = typeof error === "string" ? error : error?.message || "Unknown error";
+    const msg =
+      typeof error === "string" ? error : error?.message || "Unknown error";
     return <div className="solve-problem-body">Error: {msg}</div>;
   }
 
@@ -74,7 +75,6 @@ const SolveProblem = () => {
 
   const pointsToPercent = (p) => {
     const val = Number(p) || 0;
-    // 1% per 20 points, at least 1%
     return Math.max(1, Math.round(val / 20));
   };
 
@@ -84,9 +84,10 @@ const SolveProblem = () => {
       if (selected === problem.correct_answer) {
         const pathId = problem.path_id;
         if (pathId) {
-          await dispatch(
-            incrementAndPersist({ pathId, percent: pointsToPercent(points) })
-          );
+          persistCompletionLocal("problem", pathId, problemId);
+
+          const percent = await computeAdaptiveIncrement(pathId);
+          await dispatch(incrementAndPersist({ pathId, percent }));
         }
       }
     } finally {
@@ -133,3 +134,53 @@ const SolveProblem = () => {
 };
 
 export default SolveProblem;
+
+function lsKey(type, pathId) {
+  return `ap_completed_${type}_${pathId}`;
+}
+
+function getCompletedLocal(type, pathId) {
+  try {
+    const raw = localStorage.getItem(lsKey(type, pathId));
+    const arr = raw ? JSON.parse(raw) : [];
+    if (Array.isArray(arr)) return new Set(arr.map(String));
+    return new Set();
+  } catch {
+    return new Set();
+  }
+}
+
+function persistCompletionLocal(type, pathId, id) {
+  try {
+    const set = getCompletedLocal(type, pathId);
+    set.add(String(id));
+    localStorage.setItem(lsKey(type, pathId), JSON.stringify(Array.from(set)));
+  } catch {}
+}
+
+async function computeAdaptiveIncrement(pathId) {
+  try {
+    const [questsRes, probsRes, skillsRes] = await Promise.all([
+      API.get(`/user/quests/${pathId}`),
+      API.get(`/user/problems/${pathId}`),
+      API.get(`/user/skills/${pathId}`),
+    ]);
+    const totalTasks =
+      (questsRes.data?.length || 0) + (probsRes.data?.length || 0);
+    if (totalTasks <= 0) return 0;
+
+    const skills = Array.isArray(skillsRes.data) ? skillsRes.data : [];
+    const avg = skills.length
+      ? skills.reduce((sum, s) => sum + (Number(s.value) || 0), 0) /
+        skills.length
+      : 0;
+
+    const doneQ = getCompletedLocal("quest", pathId).size;
+    const doneP = getCompletedLocal("problem", pathId).size;
+    const remaining = Math.max(1, totalTasks - (doneQ + doneP));
+    const delta = Math.ceil((100 - avg) / remaining);
+    return Math.max(1, delta);
+  } catch (e) {
+    return 3;
+  }
+}
