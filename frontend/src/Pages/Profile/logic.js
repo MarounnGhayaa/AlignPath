@@ -11,7 +11,7 @@ import {
 
 export const useProfileLogic = () => {
   const dispatch = useDispatch();
-  const { username, email, password, location, errorMessage, successMessage } =
+  const { username, email, password, password_confirmation, location, errorMessage, successMessage } =
     useSelector((state) => state.profile);
 
   useEffect(() => {
@@ -46,9 +46,9 @@ export const useProfileLogic = () => {
     const user = JSON.parse(localStorage.getItem("user"));
 
     try {
-      const response = await API.put(
+      const response = await API.patch(
         `/user/updateInfo/${user.id}`,
-        { username, email, password, location },
+        { username, email, password, password_confirmation, location },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -79,6 +79,7 @@ export const useProfileLogic = () => {
     username,
     email,
     password,
+    password_confirmation,
     location,
     errorMessage,
     successMessage,

@@ -4,6 +4,7 @@ const initialState = {
   username: "",
   email: "",
   password: "",
+  password_confirmation: "",
   role: "",
   location: "",
   errorMessage: "",
@@ -44,6 +45,7 @@ const ProfileSlice = createSlice({
       state.username = "";
       state.email = "";
       state.password = "";
+      state.password_confirmation = "";
       state.location = "";
     },
     setAllFields: (state, action) => {

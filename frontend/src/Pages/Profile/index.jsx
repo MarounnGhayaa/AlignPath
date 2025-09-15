@@ -11,6 +11,7 @@ const Profile = () => {
     username,
     email,
     password,
+    password_confirmation,
     location,
     errorMessage,
     successMessage,
@@ -32,7 +33,10 @@ const Profile = () => {
             </div>
             <div className="profile-user-titles">
               <h3>{username}</h3>
-              <strong>{email}</strong>
+              <strong>
+                Note that every input down there is for "updating" even the
+                "password" field!
+              </strong>
             </div>
             <div className="profile-header-actions">
               <Button
@@ -90,6 +94,22 @@ const Profile = () => {
                 value={password}
                 onChangeListener={(e) =>
                   handleFieldChange("password", e.target.value)
+                }
+              />
+
+              <label htmlFor="password_confirmation">
+                <strong>Confirm Password</strong>
+              </label>
+              <Input
+                name="password_confirmation"
+                type="password"
+                required
+                hint="*************"
+                minLength={8}
+                maxLength={128}
+                value={password_confirmation}
+                onChangeListener={(e) =>
+                  handleFieldChange("password_confirmation", e.target.value)
                 }
               />
 
