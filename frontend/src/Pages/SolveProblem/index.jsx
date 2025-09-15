@@ -16,7 +16,7 @@ const SolveProblem = () => {
   const registerState = useSelector((state) => state.register) || {};
   const token = registerState.token || localStorage.getItem("token");
   const [selected, setSelected] = useState("");
-  const [feedback, setFeedback] = useState(""); // "" | "incorrect" | "correct"
+  const [feedback, setFeedback] = useState("");
   const [done, setDone] = useState(false);
   const dispatch = useDispatch();
 
@@ -90,10 +90,8 @@ const SolveProblem = () => {
     if (!selected || done) return;
     if (selected !== problem.correct_answer) {
       setFeedback("incorrect");
-      return; // allow retry without leaving page
+      return;
     }
-
-    // Correct answer
     setFeedback("correct");
     setDone(true);
 
@@ -103,7 +101,6 @@ const SolveProblem = () => {
       const percent = await computeAdaptiveIncrement(pathId);
       await dispatch(incrementAndPersist({ pathId, percent }));
     }
-    // Redirect to Problems tab for this path
     navigate("/pathNested", { state: { pathId, initialTab: "Problems" } });
   };
 
@@ -120,7 +117,14 @@ const SolveProblem = () => {
           </section>
           <section className="solve-problem-options">
             {options.map((option, index) => (
-              <label key={index} className={`solve-problem-radio ${feedback === "incorrect" && selected === option ? "incorrect" : ""}`}>
+              <label
+                key={index}
+                className={`solve-problem-radio ${
+                  feedback === "incorrect" && selected === option
+                    ? "incorrect"
+                    : ""
+                }`}
+              >
                 <input
                   type="radio"
                   name="option"
@@ -135,17 +139,30 @@ const SolveProblem = () => {
           </section>
 
           {feedback === "incorrect" && (
-            <div className="solve-problem-feedback incorrect">Incorrect. Try again.</div>
+            <div className="solve-problem-feedback incorrect">
+              Incorrect. Try again.
+            </div>
           )}
           {done && (
-            <div className="solve-problem-feedback correct">Correct! Problem completed.</div>
+            <div className="solve-problem-feedback correct">
+              Correct! Problem completed.
+            </div>
           )}
 
           <div style={{ marginTop: 20 }}>
             {done ? (
-              <Button text={"Completed"} className={"secondary-button"} onClickListener={() => {}} disabled />
+              <Button
+                text={"Completed"}
+                className={"secondary-button"}
+                onClickListener={() => {}}
+                disabled
+              />
             ) : (
-              <Button text={"Submit Answer"} className={"primary-button"} onClickListener={onSubmit} />
+              <Button
+                text={"Submit Answer"}
+                className={"primary-button"}
+                onClickListener={onSubmit}
+              />
             )}
           </div>
         </div>
