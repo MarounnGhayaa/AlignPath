@@ -139,13 +139,15 @@ function parseDurationToSeconds(value) {
   }
 
   const re =
-    /(\d+(?:\.\d+)?)\s*(h|hr|hrs|hour|hours|m|min|mins|minute|minutes|s|sec|secs|second|seconds)\b/g;
+    /(\d+(?:\.\d+)?)\s*(d|day|days|h|hr|hrs|hour|hours|m|min|mins|minute|minutes|s|sec|secs|second|seconds)\b/g;
   let match;
   let seconds = 0;
   while ((match = re.exec(v)) !== null) {
     const num = parseFloat(match[1]);
     const unit = match[2];
-    if (["h", "hr", "hrs", "hour", "hours"].includes(unit))
+    if (["d", "day", "days"].includes(unit))
+      seconds += num * 86400;
+    else if (["h", "hr", "hrs", "hour", "hours"].includes(unit))
       seconds += num * 3600;
     else if (["m", "min", "mins", "minute", "minutes"].includes(unit))
       seconds += num * 60;
