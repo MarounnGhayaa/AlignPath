@@ -113,6 +113,8 @@ const AdminDashboard = () => {
           onClickListener={() => {
             localStorage.removeItem("token");
             localStorage.removeItem("user");
+            localStorage.removeItem("aiChatThreadId");
+            localStorage.removeItem("aiChatUserId");
             navigate("/");
           }}
         />

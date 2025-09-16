@@ -5,6 +5,7 @@ import {
   setLoading,
   addMessage,
   setMessages,
+  clearChat,
 } from "../../Features/AiChat/AiChatSlice";
 import { useEffect, useRef, useState } from "react";
 
@@ -19,6 +20,14 @@ export const useAiChat = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const token = localStorage.getItem("token");
+  const currentUserId = (() => {
+    try {
+      const u = JSON.parse(localStorage.getItem("user") || "null");
+      return u?.id ? String(u.id) : null;
+    } catch (_) {
+      return null;
+    }
+  })();
   const scrollRef = useRef(null);
 
   const authHeader = { headers: { Authorization: `Bearer ${token}` } };
@@ -26,7 +35,16 @@ export const useAiChat = () => {
   const fetchThreads = async () => {
     try {
       const res = await API.get("/user/chat/threads?limit=30", authHeader);
-      setThreads(res.data?.items || []);
+      const items = res.data?.items || [];
+      setThreads(items);
+      if (
+        threadId &&
+        !items.some((t) => String(t.id) === String(threadId))
+      ) {
+        localStorage.removeItem("aiChatThreadId");
+        setThreadId(null);
+        dispatch(clearChat());
+      }
     } catch (e) {
       // no-op
     }
@@ -44,11 +62,25 @@ export const useAiChat = () => {
       dispatch(setMessages(msgs));
       setSidebarOpen(false);
     } catch (e) {
+      localStorage.removeItem("aiChatThreadId");
+      setThreadId(null);
     }
   };
 
   useEffect(() => {
+    const savedForUser = localStorage.getItem("aiChatUserId");
+    if (currentUserId && savedForUser && savedForUser !== String(currentUserId)) {
+      localStorage.removeItem("aiChatThreadId");
+      dispatch(clearChat());
+      setThreadId(null);
+    }
+    if (currentUserId) {
+      localStorage.setItem("aiChatUserId", String(currentUserId));
+    }
     fetchThreads();
+    if (!threadId) {
+      dispatch(clearChat());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -101,7 +133,6 @@ export const useAiChat = () => {
         dispatch(addMessage({ role: "model", content: "⚠️ No response from AI." }));
       }
 
-      // refresh sidebar ordering/preview
       fetchThreads();
     } catch (err) {
       dispatch(addMessage({ role: "model", content: "⚠️ Network error. Try again." }));
@@ -115,7 +146,7 @@ export const useAiChat = () => {
   const newChat = () => {
     localStorage.removeItem("aiChatThreadId");
     setThreadId(null);
-    dispatch(setMessages([]));
+    dispatch(clearChat());
   };
 
   return {
