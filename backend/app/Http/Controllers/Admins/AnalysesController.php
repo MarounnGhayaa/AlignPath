@@ -3,15 +3,12 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
-use App\Models\DailyConversationAnalysis;
-use Illuminate\Http\Request;
+use App\Services\Admins\AnalysesService;
 
 class AnalysesController extends Controller {
+    public function __construct(private AnalysesService $analyses) {}
+
     public function getAnalyses() {
-        return DailyConversationAnalysis::query()
-            ->select('id','user_id','thread_id','day','summary','attributes')
-            ->with(['user:id,username,email'])
-            ->orderByDesc('day')->orderByDesc('updated_at')
-            ->get();
+        return $this->analyses->list();
     }
 }
