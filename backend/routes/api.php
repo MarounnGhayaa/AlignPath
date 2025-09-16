@@ -16,6 +16,7 @@ use App\Http\Controllers\Users\MentorController;
 use App\Http\Controllers\Users\ChatController;
 use App\Http\Controllers\Users\UserDirectoryController;
 use App\Http\Controllers\Admins\AnalysesController;
+use App\Http\Controllers\Admins\UsersController;
 
 Route::group(["prefix" => "v0.1"], function () {
     Route::group(["middleware" => "auth:api"], function () {
@@ -62,6 +63,8 @@ Route::group(["prefix" => "v0.1"], function () {
         });
         Route::group(["prefix" => "admin"], function() {
             Route::get("/analyses", [AnalysesController::class, "getAnalyses"]);
+            Route::delete('/users/{user}', [UsersController::class, 'destroy'])
+                ->whereNumber('user');
         });
     });
 
