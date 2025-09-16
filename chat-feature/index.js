@@ -8,6 +8,42 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
+const API_BASE_URL = process.env.API_BASE_URL || "http://127.0.0.1:8000/api/v0.1";
+const REQUIRE_AUTH = (process.env.REQUIRE_AUTH ?? "true").toLowerCase() !== "false";
+
+async function validateBearerToken(bearerValue) {
+  try {
+    const raw = (bearerValue || "").trim();
+    if (!raw) return false;
+    const token = raw.toLowerCase().startsWith("bearer ") ? raw.slice(7).trim() : raw;
+
+    const _fetch = typeof fetch === "function" ? fetch : (await import("node-fetch")).default;
+    const res = await _fetch(`${API_BASE_URL}/user/paths`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+io.use(async (socket, next) => {
+  if (!REQUIRE_AUTH) return next();
+  try {
+    const hdr = socket.handshake?.headers?.["authorization"] || null;
+    const authToken = socket.handshake?.auth?.authorization || socket.handshake?.auth?.token || null;
+    const bearer = hdr || authToken || "";
+    const ok = await validateBearerToken(bearer);
+    if (!ok) return next(new Error("Unauthorized"));
+    socket.data = socket.data || {};
+    socket.data.authorization = bearer;
+    return next();
+  } catch (e) {
+    return next(new Error("Unauthorized"));
+  }
+});
+
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || "dev_secret";
 
 const normalizeMessageForRecipient = (payload, recipientId) => {

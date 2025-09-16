@@ -7,7 +7,10 @@ import FloatingChatbot from "../../Components/FloatingChatbot";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 
-const socket = io.connect("http://localhost:4000");
+const token = (typeof localStorage !== "undefined" && localStorage.getItem("token")) || "";
+const socket = io("http://localhost:4000", {
+  auth: token ? { authorization: `Bearer ${token}`, token: `Bearer ${token}` } : undefined,
+});
 
 const Chat = () => {
   const navigate = useNavigate();

@@ -11,7 +11,13 @@ const SOCKET_URL =
   "http://127.0.0.1:4000";
 
 export function createSocket({ myId, onMessage, onStatus }) {
-  const socket = io(SOCKET_URL, { transports: ["websocket"], autoConnect: true });
+  const token = (typeof localStorage !== "undefined" && localStorage.getItem("token")) || "";
+  const auth = token ? { authorization: `Bearer ${token}`, token: `Bearer ${token}` } : undefined;
+  const socket = io(SOCKET_URL, {
+    transports: ["websocket"],
+    autoConnect: true,
+    auth,
+  });
 
   const joinMyRoom = () => {
     try {
