@@ -5,7 +5,15 @@ import { useDispatch } from "react-redux";
 import API from "../../Services/axios";
 import { incrementAndPersist } from "../../Features/Skill/skillsSlice";
 
-const QuestCard = ({ id, pathId, title, subtitle, difficulty, duration }) => {
+const QuestCard = ({
+  id,
+  pathId,
+  title,
+  subtitle,
+  difficulty,
+  duration,
+  onMarkedDone,
+}) => {
   const dispatch = useDispatch();
   const subText =
     typeof subtitle === "string" ? subtitle : subtitle?.message || "";
@@ -50,6 +58,10 @@ const QuestCard = ({ id, pathId, title, subtitle, difficulty, duration }) => {
     setRemaining(0);
 
     persistCompletionLocal("quest", pathId, id);
+
+    try {
+      if (typeof onMarkedDone === "function") onMarkedDone();
+    } catch {}
 
     const percent = await computeAdaptiveIncrement(pathId);
     if (pathId && percent > 0) {

@@ -1,6 +1,6 @@
 import "./style.css";
 import QuestCard from "../../Components/QuestCard";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import API from "../../Services/axios";
 import { useSelector } from "react-redux";
 
@@ -31,7 +31,15 @@ const Quest = ({ pathId }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setQuests(response.data);
+        const data = Array.isArray(response.data) ? response.data : [];
+        // Sort so that completed quests are shown last
+        const completed = getCompletedLocal("quest", pathId);
+        const notDone = [];
+        const done = [];
+        for (const q of data) {
+          (completed.has(String(q.id)) ? done : notDone).push(q);
+        }
+        setQuests([...notDone, ...done]);
       } catch (err) {
         console.error("Error fetching quests:", err);
         setError("Failed to load quests.");
@@ -43,12 +51,24 @@ const Quest = ({ pathId }) => {
     fetchQuests();
   }, [token, pathId]);
 
+  const handleMarkedDone = useCallback((questId) => {
+    setQuests((prev) => {
+      const idx = prev.findIndex((q) => q.id === questId);
+      if (idx === -1) return prev;
+      const arr = prev.slice();
+      const [item] = arr.splice(idx, 1);
+      arr.push(item);
+      return arr;
+    });
+  }, []);
+
   if (loading) {
     return <div className="quest-body">Loading quests...</div>;
   }
 
   if (error) {
-    const msg = typeof error === "string" ? error : error?.message || "Unknown error";
+    const msg =
+      typeof error === "string" ? error : error?.message || "Unknown error";
     return <div className="quest-body">Error: {msg}</div>;
   }
 
@@ -67,6 +87,7 @@ const Quest = ({ pathId }) => {
               subtitle={quest.subtitle}
               difficulty={quest.difficulty}
               duration={quest.duration}
+              onMarkedDone={() => handleMarkedDone(quest.id)}
             />
           ))
         ) : (
@@ -78,3 +99,18 @@ const Quest = ({ pathId }) => {
 };
 
 export default Quest;
+
+function lsKey(type, pathId) {
+  return `ap_completed_${type}_${pathId}`;
+}
+
+function getCompletedLocal(type, pathId) {
+  try {
+    const raw = localStorage.getItem(lsKey(type, pathId));
+    const arr = raw ? JSON.parse(raw) : [];
+    if (Array.isArray(arr)) return new Set(arr.map(String));
+    return new Set();
+  } catch {
+    return new Set();
+  }
+}

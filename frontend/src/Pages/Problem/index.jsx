@@ -31,7 +31,15 @@ const Problem = ({ pathId }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setProblems(response.data);
+        const data = Array.isArray(response.data) ? response.data : [];
+        // Sort so that completed problems are shown last
+        const completed = getCompletedLocal("problem", pathId);
+        const notDone = [];
+        const done = [];
+        for (const p of data) {
+          (completed.has(String(p.id)) ? done : notDone).push(p);
+        }
+        setProblems([...notDone, ...done]);
       } catch (err) {
         console.error("Error fetching problems:", err);
         setError("Failed to load problems.");
@@ -77,3 +85,18 @@ const Problem = ({ pathId }) => {
 };
 
 export default Problem;
+
+function lsKey(type, pathId) {
+  return `ap_completed_${type}_${pathId}`;
+}
+
+function getCompletedLocal(type, pathId) {
+  try {
+    const raw = localStorage.getItem(lsKey(type, pathId));
+    const arr = raw ? JSON.parse(raw) : [];
+    if (Array.isArray(arr)) return new Set(arr.map(String));
+    return new Set();
+  } catch {
+    return new Set();
+  }
+}
