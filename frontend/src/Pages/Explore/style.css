@@ -79,7 +79,50 @@
   padding: 10px;
 }
 
-/* Tablet Responsive Design */
+.save-path-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.sticky-note {
+  position: absolute;
+  left: calc(100% + 15px);
+  top: 50%;
+  transform: translateY(-50%) rotate(-2deg);
+  width: 260px;
+  max-width: 40vw;
+  background: #fff7a3;
+  color: #2c2c2c;
+  border: 1px solid #e3d37a;
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+
+.sticky-note-heading {
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #8a6d00;
+}
+
+.sticky-note-body {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.sticky-arrow {
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-right: 12px solid #fff7a3;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+}
+
 @media (max-width: 1024px) {
   .explore-body {
     padding: 40px;
@@ -145,6 +188,26 @@
   .explore-left-button {
     font-size: 28px;
   }
+
+  .save-path-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .save-path-wrapper .sticky-note {
+    position: relative;
+    right: auto;
+    top: auto;
+    margin: 0 0 8px 0;
+    transform: none;
+    width: min(520px, 90%);
+    max-width: 90%;
+    text-align: left;
+  }
+  .save-path-wrapper .sticky-arrow {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
@@ -187,5 +250,14 @@
 
   .explore-left-button {
     font-size: 24px;
+  }
+
+  .save-path-wrapper {
+    width: 100%;
+    align-items: stretch;
+  }
+  .save-path-wrapper .sticky-note {
+    width: 100%;
+    max-width: 100%;
   }
 }

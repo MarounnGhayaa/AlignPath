@@ -102,12 +102,23 @@ const Explore = () => {
             navigate("/network");
           }}
         />
-        <Button
-          className={"primary-button"}
-          text={isSaving ? "Saving..." : "Save Path"}
-          disabled={isSaving}
-          onClickListener={handleSavePath}
-        />
+        <div className="save-path-wrapper">
+          <div className="sticky-note" role="note" aria-live="polite">
+            <div className="sticky-note-heading">Heads up!</div>
+            <div className="sticky-note-body">
+              saving a career takes some time because we are generating some
+              quests, problems, resources and skills you'll acquire... So get
+              ready!
+            </div>
+            <span className="sticky-arrow" aria-hidden="true" />
+          </div>
+          <Button
+            className={"primary-button"}
+            text={isSaving ? "Saving..." : "Save Path"}
+            disabled={isSaving}
+            onClickListener={handleSavePath}
+          />
+        </div>
       </div>
       <footer className="explore-designed-row">
         <img src={WhiteLogo} alt="AlignPath Logo" className="explore-WLogo" />
