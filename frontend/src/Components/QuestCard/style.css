@@ -4,7 +4,7 @@
   border-radius: 8px;
   border-style: solid;
   border-color: #d9d9d9;
-  width: 700px;
+  width: 450px;
   padding: 20px;
 }
 
@@ -40,7 +40,6 @@ h4 {
   justify-content: flex-end;
 }
 
-/* Running/Done states */
 .quest-card.done {
   opacity: 0.7;
   filter: grayscale(0.1);
