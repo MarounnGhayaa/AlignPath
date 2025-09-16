@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller {
     public function destroy(User $user) {
-        // Use the resolved guard from middleware instead of auth('api') to avoid type issues
         $auth = Auth::user();
         if (!$auth || $auth->role !== 'admin') {
             abort(403, 'Forbidden');

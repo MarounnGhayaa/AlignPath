@@ -42,8 +42,8 @@ const AdminDashboard = () => {
     }
   };
 
-  const [confirmUser, setConfirmUser] = useState(null); // { userId, userLabel }
-  const [toast, setToast] = useState(null); // { type: 'error'|'success', message }
+  const [confirmUser, setConfirmUser] = useState(null);
+  const [toast, setToast] = useState(null);
 
   const handleConfirmDelete = async () => {
     const userId = confirmUser?.userId;
@@ -55,15 +55,15 @@ const AdminDashboard = () => {
     } catch (err) {
       setToast({
         type: "error",
-        message:
-          `Failed to delete user: ${err?.response?.data?.message || err.message}`,
+        message: `Failed to delete user: ${
+          err?.response?.data?.message || err.message
+        }`,
       });
     } finally {
       setConfirmUser(null);
     }
   };
 
-  // Auto-hide toast after 3 seconds
   useEffect(() => {
     if (!toast) return;
     const id = setTimeout(() => setToast(null), 3000);
@@ -169,7 +169,9 @@ const AdminDashboard = () => {
                               userLabel:
                                 a?.user?.email ||
                                 a?.user?.username ||
-                                (a.user_id ? `User ${a.user_id}` : "Deleted user"),
+                                (a.user_id
+                                  ? `User ${a.user_id}`
+                                  : "Deleted user"),
                             })
                           }
                         >
@@ -187,7 +189,11 @@ const AdminDashboard = () => {
       </div>
 
       {toast && (
-        <div className={`toast ${toast.type === "error" ? "toast-error" : "toast-success"}`}>
+        <div
+          className={`toast ${
+            toast.type === "error" ? "toast-error" : "toast-success"
+          }`}
+        >
           {toast.message}
         </div>
       )}
@@ -197,12 +203,14 @@ const AdminDashboard = () => {
           <div className="modal">
             <h3 className="modal-title">Confirm Deletion</h3>
             <p className="modal-body">
-              Are you sure you want to delete
-              {" "}
+              Are you sure you want to delete{" "}
               <strong>{confirmUser.userLabel}</strong>?
             </p>
             <div className="modal-actions">
-              <button className="btn btn-secondary" onClick={() => setConfirmUser(null)}>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setConfirmUser(null)}
+              >
                 Cancel
               </button>
               <button className="btn btn-danger" onClick={handleConfirmDelete}>
