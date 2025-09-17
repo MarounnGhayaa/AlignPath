@@ -15,8 +15,6 @@ return new class extends Migration {
             $table->json('attributes')->nullable();
             $table->json('raw')->nullable();
             $table->timestamps();
-
-            $table->unique(['user_id', 'thread_id', 'day']);
         });
     }
     public function down(): void {
