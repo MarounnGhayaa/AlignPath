@@ -46,7 +46,7 @@ class AiAgentService {
         - title (string)
         - subtitle (string)
         - difficulty (one of: easy, medium, hard)
-        - duration (human string like '1 week', '2 hours')
+        - duration (human string like '1 week', '2 hours', '1 day', but not like daily and weekly)
 
       - Exactly 10 multiple-choice problems (1 per quest is fine), each with:
         - title (string)
