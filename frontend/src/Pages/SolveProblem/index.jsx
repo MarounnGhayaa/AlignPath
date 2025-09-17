@@ -153,14 +153,14 @@ const SolveProblem = () => {
             {done ? (
               <Button
                 text={"Completed"}
-                className={"secondary-button"}
+                className={"secondary-btn"}
                 onClickListener={() => {}}
                 disabled
               />
             ) : (
               <Button
                 text={"Submit Answer"}
-                className={"primary-button"}
+                className={"primary-btn"}
                 onClickListener={onSubmit}
               />
             )}
