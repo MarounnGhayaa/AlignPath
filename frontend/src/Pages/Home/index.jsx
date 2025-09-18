@@ -29,14 +29,7 @@ const Home = () => {
     const user =
       registerState.user || JSON.parse(localStorage.getItem("user") || "null");
     if (user) {
-      if (user.name) {
-        setUserName(user.name);
-      } else if (user.username) {
-        setUserName(user.username);
-      } else if (user.email) {
-        const emailPrefix = user.email.split("@")[0];
-        setUserName(emailPrefix);
-      }
+      setUserName(user.username);
     }
 
     const fetchRecommendations = async () => {

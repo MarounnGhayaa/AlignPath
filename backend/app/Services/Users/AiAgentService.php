@@ -18,7 +18,7 @@ class AiAgentService {
 
     public function recommendCareers(string $interests): array {
         $prompt = "Based on the following interests: {$interests}, 
-                   suggest exactly 3 career paths with a title and a short description for each. Respond in valid JSON like this:
+                   suggest exactly 6 career paths with a title and a short description for each. Respond in valid JSON like this:
                    {
                      \"career_paths\": [
                         {\"title\": \"string\", \"description\": \"string\"}
@@ -93,7 +93,7 @@ class AiAgentService {
         $parsed = $this->extractJson($raw) ?? [];
 
         $quests = $parsed['quests'] ?? [
-            ['title' => 'Learn sorting algorithms', 'subtitle' => 'Start with Bubble and Merge sort', 'difficulty' => 'easy', 'duration' => '1 week']
+            ['title' => 'Learn sorting algorithms', 'subtitle' => 'Start with Bubble and Merge sort', 'difficulty' => 'easy', 'duration' => '1 day']
         ];
 
         $problems = $parsed['problems'] ?? [
