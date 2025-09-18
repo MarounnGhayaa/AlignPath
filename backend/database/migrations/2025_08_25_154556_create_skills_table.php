@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger("path_id");
             $table->foreign("path_id")->references("id")->on("paths")->onDelete("cascade");
-            $table->string('name')->unique();
+            $table->string('name');
             $table->integer('value');
             $table->timestamps();
         });
