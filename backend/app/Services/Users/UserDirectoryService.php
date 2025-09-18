@@ -4,10 +4,8 @@ namespace App\Services\Users;
 
 use App\Models\User;
 
-class UserDirectoryService
-{
-    public function searchStudents(string $query, int $limit): array
-    {
+class UserDirectoryService {
+    public function searchStudents(string $query, int $limit) {
         $search = trim($query);
         $limit = $limit > 0 ? min($limit, 200) : 100;
 

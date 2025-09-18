@@ -7,10 +7,8 @@ use App\Models\ChatThread;
 use App\Models\User;
 use Illuminate\Support\Str;
 
-class GeminiThreadService
-{
-    public function listThreads(User $user, int $limit): array
-    {
+class GeminiThreadService {
+    public function listThreads(User $user, int $limit) {
         $threads = ChatThread::query()
             ->where('user_id', $user->id)
             ->withCount('messages')
@@ -41,8 +39,7 @@ class GeminiThreadService
         ];
     }
 
-    public function showThread(User $user, ChatThread $thread): array
-    {
+    public function showThread(User $user, ChatThread $thread) {
         $this->assertOwnership($user, $thread);
 
         $messages = $thread->messages()
@@ -67,8 +64,7 @@ class GeminiThreadService
         ];
     }
 
-    public function updateThread(User $user, ChatThread $thread, array $data): void
-    {
+    public function updateThread(User $user, ChatThread $thread, array $data) {
         $this->assertOwnership($user, $thread);
 
         $thread->update([
@@ -76,14 +72,12 @@ class GeminiThreadService
         ]);
     }
 
-    public function deleteThread(User $user, ChatThread $thread): void
-    {
+    public function deleteThread(User $user, ChatThread $thread) {
         $this->assertOwnership($user, $thread);
         $thread->delete();
     }
 
-    protected function assertOwnership(User $user, ChatThread $thread): void
-    {
+    protected function assertOwnership(User $user, ChatThread $thread) {
         if ($thread->user_id !== $user->id) {
             throw new ServiceException('Forbidden', 403, [
                 'message' => 'Forbidden',

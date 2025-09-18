@@ -5,17 +5,14 @@ namespace App\Services\Users;
 use App\Models\Skill;
 use App\Models\UserPath;
 
-class SkillService
-{
-    public function listByPath(int $pathId): array
-    {
+class SkillService {
+    public function listByPath(int $pathId) {
         return Skill::where('path_id', $pathId)
             ->get()
             ->toArray();
     }
 
-    public function updateValue(Skill $skill, int $value, int $userId): Skill
-    {
+    public function updateValue(Skill $skill, int $value, int $userId) {
         $skill->value = $value;
         $skill->save();
 
@@ -27,7 +24,6 @@ class SkillService
                     ->update(['progress_percentage' => (int) round($average)]);
             }
         } catch (\Throwable $e) {
-            // Intentionally swallow progress update errors to not block the main mutation.
         }
 
         return $skill;

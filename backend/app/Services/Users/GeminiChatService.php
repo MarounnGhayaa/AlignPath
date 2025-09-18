@@ -93,8 +93,7 @@ class GeminiChatService {
         ];
     }
 
-    protected function resolveThread($threadId, ?User $user): ?ChatThread
-    {
+    protected function resolveThread($threadId, ?User $user) {
         if (empty($threadId)) {
             return null;
         }
@@ -104,8 +103,7 @@ class GeminiChatService {
             ->first();
     }
 
-    protected function createThread(array $messages, ?User $user): ChatThread
-    {
+    protected function createThread(array $messages, ?User $user) {
         $firstUserMessage = collect($messages)->firstWhere('role', 'user');
 
         return ChatThread::create([
@@ -122,8 +120,7 @@ class GeminiChatService {
         ]);
     }
 
-    protected function persistUserMessage(ChatThread $thread, array $messages, ?User $user): ?ChatMessage
-    {
+    protected function persistUserMessage(ChatThread $thread, array $messages, ?User $user) {
         $lastUserMessage = collect($messages)->reverse()->firstWhere('role', 'user');
 
         if (!$lastUserMessage) {
@@ -141,8 +138,7 @@ class GeminiChatService {
         ]);
     }
 
-    protected function formatMessages(array $messages): array
-    {
+    protected function formatMessages(array $messages) {
         return array_map(function ($message) {
             return [
                 'role'  => $message['role'],
@@ -151,8 +147,7 @@ class GeminiChatService {
         }, $messages);
     }
 
-    protected function buildContext(?User $user): array
-    {
+    protected function buildContext(?User $user) {
         if (!$user) {
             return [
                 'user'            => null,
@@ -227,8 +222,7 @@ class GeminiChatService {
         return $context;
     }
 
-    protected function guardrailsText(): string
-    {
+    protected function guardrailsText() {
         return <<<TXT
     You are "Career Copilot" for our app. Your scope is strictly LIMITED to:
     - The user's saved career paths and recommendations

@@ -4,10 +4,8 @@ namespace App\Services\Users;
 
 use App\Models\User;
 
-class MentorService
-{
-    public function search(string $query, int $limit = 100): array
-    {
+class MentorService {
+    public function search(string $query, int $limit = 100) {
         $search = trim($query);
 
         return User::query()

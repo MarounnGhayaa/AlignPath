@@ -6,11 +6,11 @@ use App\Models\User;
 use App\Models\UserPath;
 
 class ProfileService {
-    public function getUser(int $id): ?User {
+    public function getUser(int $id)  {
         return User::find($id);
     }
 
-    public function updateUser(int $id, array $data): User {
+    public function updateUser(int $id, array $data)  {
         $user = User::findOrFail($id);
         $user->fill($data);
         $user->save();
