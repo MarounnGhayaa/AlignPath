@@ -2,43 +2,28 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Exceptions\ServiceException;
 use App\Http\Controllers\Controller;
-use App\Models\Conversation;
-use App\Models\Message;
 use App\Models\User;
+use App\Services\Users\ChatService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 
 class ChatController extends Controller {
+    protected ChatService $chatService;
+
+    public function __construct(ChatService $chatService) {
+        $this->chatService = $chatService;
+    }
+
     public function show(Request $request, User $person) {
         $me = Auth::user();
         abort_unless($me !== null, 401);
         abort_if($me->id === $person->id, 400, 'Cannot open chat with yourself.');
 
-        $conversation = $this->getOrCreateConversation($me->id, $person->id);
+        $messages = $this->chatService->getConversationMessages($me, $person);
 
-        $messages = Message::query()
-            ->where('conversation_id', $conversation->id)
-            ->orderBy('created_at', 'asc')
-            ->get();
-
-        $payload = $messages->map(function (Message $m) use ($me, $person) {
-            $senderIsMentor = $m->sender_id === $me->id
-                ? (strtolower((string) $me->role) === 'mentor')
-                : (strtolower((string) $person->role) === 'mentor');
-
-            return [
-                'id'           => $m->id,
-                'message'      => $m->body,
-                'sender_id'    => $m->sender_id,
-                'isFromMentor' => $senderIsMentor,
-                'timestamp'    => optional($m->created_at)?->toISOString(),
-            ];
-        });
-
-        return response()->json($payload);
+        return response()->json($messages);
     }
 
     public function store(Request $request, User $person){
@@ -51,21 +36,9 @@ class ChatController extends Controller {
 
         abort_if($me->id === $person->id, 400, 'Cannot message yourself.');
 
-        $conversation = $this->getOrCreateConversation($me->id, $person->id);
+        $message = $this->chatService->storeMessage($me, $person, $data['message']);
 
-        $msg = new Message();
-        $msg->conversation_id = $conversation->id;
-        $msg->sender_id = $me->id;
-        $msg->body = $data['message'];
-        $msg->save();
-
-        return response()->json([
-            'id'           => $msg->id,
-            'message'      => $msg->body,
-            'sender_id'    => $msg->sender_id,
-            'isFromMentor' => strtolower((string) $me->role) === 'mentor',
-            'timestamp'    => optional($msg->created_at)?->toISOString(),
-        ], 201);
+        return response()->json($message, 201);
     }
 
     public function transcribe(Request $request) {
@@ -79,52 +52,15 @@ class ChatController extends Controller {
             'language' => ['sometimes', 'string'],
         ]);
 
-        $sttUrl = rtrim((string) env('STT_FALLBACK_URL', ''), '/');
-        if ($sttUrl === '') {
-            return response()->json(['error' => 'STT_FALLBACK_URL is not set'], 500);
+        try {
+            $result = $this->chatService->transcribe(
+                $request->file('audio'),
+                $request->input('language')
+            );
+
+            return response()->json($result);
+        } catch (ServiceException $exception) {
+            return response()->json($exception->getPayload(), $exception->getStatus());
         }
-
-        $file     = $request->file('audio');
-        $language = $request->input('language');
-        $res = Http::asMultipart()
-            ->attach('audio', fopen($file->getRealPath(), 'r'), $file->getClientOriginalName())
-            ->attach('language', $language)
-            ->post($sttUrl);
-
-        if (!$res->successful()) {
-            return response()->json([
-                'source' => 'local-stt',
-                'error'  => $res->json() ?: $res->body(),
-            ], $res->status());
-        }
-
-        return response()->json([
-            'text' => (string) ($res->json('text') ?? ''),
-        ]);
-    }
-    protected function getOrCreateConversation(int $userA, int $userB): Conversation {
-        $ids = [$userA, $userB];
-        sort($ids);
-
-        $existingId = DB::table('conversations as c')
-            ->join('conversation_participants as p1', 'p1.conversation_id', '=', 'c.id')
-            ->join('conversation_participants as p2', 'p2.conversation_id', '=', 'c.id')
-            ->where('p1.user_id', $ids[0])
-            ->where('p2.user_id', $ids[1])
-            ->value('c.id');
-
-        if ($existingId) {
-            return Conversation::findOrFail($existingId);
-        }
-
-        $conv = new Conversation();
-        $conv->save();
-
-        DB::table('conversation_participants')->insert([
-            ['conversation_id' => $conv->id, 'user_id' => $ids[0]],
-            ['conversation_id' => $conv->id, 'user_id' => $ids[1]],
-        ]);
-
-        return $conv;
     }
 }

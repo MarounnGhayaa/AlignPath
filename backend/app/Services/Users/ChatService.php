@@ -2,15 +2,70 @@
 
 namespace App\Services\Users;
 
+use App\Exceptions\ServiceException;
 use App\Models\Conversation;
 use App\Models\Message;
+use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class ChatService {
-    public function getOrCreateConversation(int $userA, int $userB): Conversation
-    {
+    public function getConversationMessages(User $me, User $person) {
+        $conversation = $this->getOrCreateConversation($me->id, $person->id);
+
+        return Message::query()
+            ->where('conversation_id', $conversation->id)
+            ->orderBy('created_at', 'asc')
+            ->get()
+            ->map(fn(Message $message) => $this->formatMessage($message, $me, $person))
+            ->toArray();
+    }
+
+    public function storeMessage(User $me, User $person, string $body) {
+        $conversation = $this->getOrCreateConversation($me->id, $person->id);
+
+        $message = new Message();
+        $message->conversation_id = $conversation->id;
+        $message->sender_id = $me->id;
+        $message->body = $body;
+        $message->save();
+
+        return $this->formatMessage($message, $me, $person);
+    }
+
+    public function transcribe(UploadedFile $file, ?string $language = null) {
+        $sttUrl = rtrim((string) env('STT_FALLBACK_URL', ''), '/');
+        if ($sttUrl === '') {
+            throw new ServiceException('STT_FALLBACK_URL is not set', 500, [
+                'error' => 'STT_FALLBACK_URL is not set',
+            ]);
+        }
+
+        $request = Http::asMultipart()
+            ->attach('audio', fopen($file->getRealPath(), 'r'), $file->getClientOriginalName());
+
+        if ($language !== null) {
+            $request->attach('language', $language);
+        }
+
+        $response = $request->post($sttUrl);
+
+        if (!$response->successful()) {
+            $payload = [
+                'source' => 'local-stt',
+                'error'  => $response->json() ?: $response->body(),
+            ];
+
+            throw new ServiceException('Transcription failed', $response->status(), $payload);
+        }
+
+        return [
+            'text' => (string) ($response->json('text') ?? ''),
+        ];
+    }
+
+    protected function getOrCreateConversation(int $userA, int $userB) {
         $ids = [$userA, $userB];
         sort($ids);
 
@@ -25,38 +80,28 @@ class ChatService {
             return Conversation::findOrFail($existingId);
         }
 
-        $conv = new Conversation();
-        $conv->save();
+        $conversation = new Conversation();
+        $conversation->save();
 
         DB::table('conversation_participants')->insert([
-            ['conversation_id' => $conv->id, 'user_id' => $ids[0]],
-            ['conversation_id' => $conv->id, 'user_id' => $ids[1]],
+            ['conversation_id' => $conversation->id, 'user_id' => $ids[0]],
+            ['conversation_id' => $conversation->id, 'user_id' => $ids[1]],
         ]);
 
-        return $conv;
+        return $conversation;
     }
 
-    public function sendMessage(Conversation $conv, int $senderId, string $text): Message {
-        return Message::create([
-            'conversation_id' => $conv->id,
-            'user_id'         => $senderId,
-            'content'         => $text,
-        ]);
-    }
+    protected function formatMessage(Message $message, User $me, User $person) {
+        $senderIsMentor = $message->sender_id === $me->id
+            ? (strtolower((string) $me->role) === 'mentor')
+            : (strtolower((string) $person->role) === 'mentor');
 
-    public function transcribe(UploadedFile $audio, ?string $lang = null): string {
-        $res = Http::attach('audio', file_get_contents($audio->getRealPath()), $audio->getClientOriginalName())
-            ->post(config('services.local_stt.url', 'http://localhost:3030/transcribe'), array_filter([
-                'language' => $lang,
-            ]));
-
-        if ($res->failed()) {
-            abort($res->status(), json_encode([
-                'source' => 'local-stt',
-                'error'  => $res->json() ?: $res->body(),
-            ]));
-        }
-
-        return (string) ($res->json('text') ?? '');
+        return [
+            'id'           => $message->id,
+            'message'      => $message->body,
+            'sender_id'    => $message->sender_id,
+            'isFromMentor' => $senderIsMentor,
+            'timestamp'    => optional($message->created_at)?->toISOString(),
+        ];
     }
 }

@@ -4,18 +4,21 @@ namespace App\Services\Users;
 
 use App\Models\User;
 
-class MentorService
+class UserDirectoryService
 {
-    public function search(string $query, int $limit = 100): array
+    public function searchStudents(string $query, int $limit): array
     {
         $search = trim($query);
+        $limit = $limit > 0 ? min($limit, 200) : 100;
 
         return User::query()
             ->with('expertise')
-            ->where('role', 'mentor')
+            ->where('role', 'student')
             ->when($search !== '', function ($builder) use ($search) {
                 $builder->where(function ($nested) use ($search) {
                     $nested->where('username', 'like', "%{$search}%")
+                        ->orWhere('company', 'like', "%{$search}%")
+                        ->orWhere('position', 'like', "%{$search}%")
                         ->orWhereHas('expertise', fn($expertise) => $expertise->where('name', 'like', "%{$search}%"));
                 });
             })

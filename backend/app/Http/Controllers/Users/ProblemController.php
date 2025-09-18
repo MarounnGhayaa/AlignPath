@@ -2,37 +2,40 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Exceptions\ServiceException;
 use App\Http\Controllers\Controller;
-
-use App\Models\Problem;
+use App\Services\Users\ProblemService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProblemController extends Controller {
+    protected ProblemService $problems;
 
-        public function getProblemsByPath(Request $request, $pathId)
-    {
+    public function __construct(ProblemService $problems) {
+        $this->problems = $problems;
+    }
+
+    public function getProblemsByPath(Request $request, $pathId) {
         $user = Auth::user();
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $problems = Problem::where('path_id', $pathId)->get();
+        $problems = $this->problems->listByPath((int) $pathId);
 
         return response()->json($problems);
     }
 
-    public function getProblemById(Request $request, $problemId)
-    {
+    public function getProblemById(Request $request, $problemId) {
         $user = Auth::user();
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $problem = Problem::find($problemId);
-
-        if (!$problem) {
-            return response()->json(['error' => 'Problem not found'], 404);
+        try {
+            $problem = $this->problems->findById((int) $problemId);
+        } catch (ServiceException $exception) {
+            return response()->json($exception->getPayload(), $exception->getStatus());
         }
 
         return response()->json($problem);
