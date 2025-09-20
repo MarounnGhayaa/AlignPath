@@ -15,8 +15,6 @@ const QuestCard = ({
   onMarkedDone,
 }) => {
   const dispatch = useDispatch();
-  const subText =
-    typeof subtitle === "string" ? subtitle : subtitle?.message || "";
 
   const [status, setStatus] = useState("idle");
   const [remaining, setRemaining] = useState(0);
@@ -78,7 +76,7 @@ const QuestCard = ({
           {title}
         </h3>
       </div>
-      <h4 className="quest-card-subtitle">{subText}</h4>
+      <h4 className="quest-card-subtitle">{subtitle}</h4>
       <div className="quest-card-tags">
         <span>{difficulty}</span>
         <span>{duration}</span>
@@ -145,8 +143,7 @@ function parseDurationToSeconds(value) {
   while ((match = re.exec(v)) !== null) {
     const num = parseFloat(match[1]);
     const unit = match[2];
-    if (["d", "day", "days"].includes(unit))
-      seconds += num * 86400;
+    if (["d", "day", "days"].includes(unit)) seconds += num * 86400;
     else if (["h", "hr", "hrs", "hour", "hours"].includes(unit))
       seconds += num * 3600;
     else if (["m", "min", "mins", "minute", "minutes"].includes(unit))

@@ -3,9 +3,8 @@ import Button from "../Button";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
-const ProblemCard = ({ id, pathId, title, subtitle, difficulty, points }) => {
+const ProblemCard = ({ id, pathId, title, subtitle, points }) => {
   const navigate = useNavigate();
-  const subText = typeof subtitle === "string" ? subtitle : subtitle?.message || "";
   const [done, setDone] = useState(false);
 
   useEffect(() => {
@@ -17,7 +16,7 @@ const ProblemCard = ({ id, pathId, title, subtitle, difficulty, points }) => {
   return (
     <div className={`problem-card${done ? " done" : ""}`}>
       <h3 className={done ? "completed-title" : undefined}>{title}</h3>
-      <h4>{subText}</h4>
+      <h4>{subtitle}</h4>
       <div className="problem-card-tags">
         <span>{points} points</span>
         {done && <span className="problem-card-status">Completed</span>}
