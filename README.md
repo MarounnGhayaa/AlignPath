@@ -43,20 +43,34 @@
 
 ### Users Screens
 
-| Login screen                   | Register screen                       |
-| ------------------------------ | ------------------------------------- |
-| ![Landing](./readme/demo/.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| Get Recommendations                                   | Save Path                                   |
+| ----------------------------------------------------- | ------------------------------------------- |
+| ![Recommendations](./readme/demo/Recommendations.gif) | ![SavingPath](./readme/demo/SavingPath.gif) |
+
+| Quests & Problems                                         | Save Path                             |
+| --------------------------------------------------------- | ------------------------------------- |
+| ![QuestsAndProblems](./readme/demo/QuestsAndProblems.gif) | ![Chatbot](./readme/demo/Chatbot.gif) |
+
+| Live Chatting                            | Speech to Text                                  |
+| ---------------------------------------- | ----------------------------------------------- |
+| ![Chatting](./readme/demo/LiveChats.gif) | ![SpeechToText](./readme/demo/SpeechToText.gif) |
+
+### Admin Screen
+
+| Admin Dashboard                               |
+| --------------------------------------------- |
+| ![AminScreen](./readme/demo/AdminFeature.gif) |
 
 <br><br>
 
 <!-- Development & Testing -->
 <img src="./readme/title6.svg"/>
 
-### Separation of concerns, Input validation, test cases
+### Functionality & Reliability
 
-| Services                                                                                   | Validation                                                                                   | Testing                                                                          |
-| ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| ![Landing](./readme/demo/FrontendService.png) ![Landing](./readme/demo/BackendService.png) | ![fsdaf](./readme/demo/FrontendValidation.png) ![fsdaf](./readme/demo/BackendValidation.png) | ![fsdaf](./readme/demo/FrontendTest.png) ![fsdaf](./readme/demo/BackendTest.png) |
+| Services                                                                                                  | Validation                                                                                                            | Testing                                                                                       |
+| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| ![FrontendService](./readme/demo/FrontendService.png) ![BackendService](./readme/demo/BackendService.png) | ![FrontendValidation](./readme/demo/FrontendValidation.png) ![BackendValidation](./readme/demo/BackendValidation.png) | ![FrontendTest](./readme/demo/FrontendTest.png) ![BackendTest](./readme/demo/BackendTest.png) |
 
 <br><br>
 
@@ -67,8 +81,8 @@
 
 - Screenshots of Postman tests for the core APIs: Login, Career Recommendation, and Get Saved Paths.
 
-| Postman API 1                      | Postman API 2                    | Postman API 3                    |
-| ---------------------------------- | -------------------------------- | -------------------------------- |
-| ![Landing](./readme/demo/API1.png) | ![fsdaf](./readme/demo/API2.png) | ![fsdaf](./readme/demo/API3.png) |
+| Postman API 1                          | Postman API 2                          | Postman API 3                          |
+| -------------------------------------- | -------------------------------------- | -------------------------------------- |
+| ![PostmanAPI1](./readme/demo/API1.png) | ![PostmanAPI2](./readme/demo/API2.png) | ![PostmanAPI3](./readme/demo/API3.png) |
 
 <br><br>
