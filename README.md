@@ -29,7 +29,7 @@
 ### AlignPath main features
 
 - Personalized Career Recommendations:
-  Analyzes students’ preferences to suggest tailored career paths and to generate quests, problems and skills that best fit their unique profiles with an AI chatbot to elaborate more on the saved careers.
+  Analyzes students' preferences to suggest tailored career paths and to generate quests, problems and skills that best fit their unique profiles with an AI chatbot to elaborate more on the saved careers.
 
 - Chatting feature with speech-to-text:
   Allows students to start conversations with mentors and vice-versa with an option to record a voice and auto transcribe it to text to facilitates communication.
@@ -43,7 +43,7 @@
 
 ### Users Screens
 
-|                                | Register screen                       |
+| Login screen                   | Register screen                       |
 | ------------------------------ | ------------------------------------- |
 | ![Landing](./readme/demo/.png) | ![fsdaf](./readme/demo/1440x1024.png) |
 
@@ -52,11 +52,11 @@
 <!-- Development & Testing -->
 <img src="./readme/title6.svg"/>
 
-### Add Title Here
+### Separation of concerns, Input validation, test cases
 
-| Services                                | Validation                            | Testing                               |
-| --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| Services                                                                                   | Validation                                                                                   | Testing                                                                          |
+| ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| ![Landing](./readme/demo/FrontendService.png) ![Landing](./readme/demo/BackendService.png) | ![fsdaf](./readme/demo/FrontendValidation.png) ![fsdaf](./readme/demo/BackendValidation.png) | ![fsdaf](./readme/demo/FrontendTest.png) ![fsdaf](./readme/demo/BackendTest.png) |
 
 <br><br>
 
