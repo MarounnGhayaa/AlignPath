@@ -63,12 +63,12 @@
 <!-- Deployment -->
 <img src="./readme/title7.svg"/>
 
-### Add Title Here
+### API Testing with Postman
 
-- Description here.
+- Screenshots of Postman tests for the core APIs: Login, Career Recommendation, and Get Saved Paths.
 
-| Postman API 1                           | Postman API 2                         | Postman API 3                         |
-| --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| Postman API 1                      | Postman API 2                    | Postman API 3                    |
+| ---------------------------------- | -------------------------------- | -------------------------------- |
+| ![Landing](./readme/demo/API1.png) | ![fsdaf](./readme/demo/API2.png) | ![fsdaf](./readme/demo/API3.png) |
 
 <br><br>
