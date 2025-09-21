@@ -57,9 +57,37 @@
 
 ### Admin Screen
 
-| Admin Dashboard                               |
-| --------------------------------------------- |
-| ![AminScreen](./readme/demo/AdminFeature.gif) |
+| Admin Dashboard                                |
+| ---------------------------------------------- |
+| ![AdminScreen](./readme/demo/AdminFeature.gif) |
+
+<br><br>
+
+### Swagger
+
+- To access the Swagger UI hit this endpoint: http://localhost:8000/api/documentation
+
+| APIs Documentation                    |
+| ------------------------------------- |
+| ![Swagger](./readme/demo/Swagger.gif) |
+
+<br><br>
+
+### Linear
+
+- Ticketing system linked with github (commits include ticket id referring to the task)
+
+| Issues in Linear                    |
+| ----------------------------------- |
+| ![Linear](./readme/demo/Linear.gif) |
+
+<br><br>
+
+### Future Work
+
+- Develop a Communities feature to group users with similar saved fields, enabling them to exchange knowledge, experiences, and resources.
+
+- Introduce a Points & Rewards System where users earn points for contributions (e.g., solving quests, problems ...) and redeem them for perks such as leveling, premium features and certifications.
 
 <br><br>
 
