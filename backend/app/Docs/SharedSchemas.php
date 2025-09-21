@@ -13,3 +13,4 @@ namespace App\Docs;
  * )
  */
 class SharedSchemas {}
+

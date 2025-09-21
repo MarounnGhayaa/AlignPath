@@ -5,106 +5,116 @@ namespace App\Docs;
 /**
  * @OA\Post(
  *     path="/user/chat",
- *     summary="Send a chat message to the AI assistant",
- *     description="Creates/uses a chat thread and returns the assistant's reply.",
+ *     summary="Send messages to the Gemini-powered assistant",
+ *     description="Creates or continues a chat thread with the Gemini assistant and returns the assistant response.",
  *     tags={"Gemini"},
  *     security={{"bearerAuth"={}}},
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
- *             required={"message"},
- *             @OA\Property(property="message", type="string", example="How do I start learning Python?"),
- *             @OA\Property(property="thread_id", type="integer", nullable=true, example=12, description="Existing thread id to continue in; omitted to create a new one"),
- *             @OA\Property(property="context", type="object", nullable=true, description="Optional context to steer the assistant")
+ *             required={"messages"},
+ *             @OA\Property(property="thread_id", type="integer", nullable=true, example=18, description="Existing thread identifier to continue"),
+ *             @OA\Property(
+ *                 property="messages",
+ *                 type="array",
+ *                 @OA\Items(
+ *                     required={"role","content"},
+ *                     @OA\Property(property="role", type="string", enum={"user","model"}, example="user"),
+ *                     @OA\Property(property="content", type="string", example="How can I improve my data analysis skills?")
+ *                 )
+ *             ),
+ *             @OA\Property(property="system", type="string", nullable=true, example="Focus on project-based advice"),
+ *             @OA\Property(property="temperature", type="number", format="float", nullable=true, example=0.6),
+ *             @OA\Property(property="maxOutputTokens", type="integer", nullable=true, example=1024)
  *         )
  *     ),
  *     @OA\Response(
  *         response=200,
  *         description="Assistant reply",
  *         @OA\JsonContent(
- *             @OA\Property(property="reply", type="string", example="Here's a roadmap to get you started..."),
- *             @OA\Property(property="blocked", type="boolean", example=false),
- *             @OA\Property(property="thread_id", type="integer", example=12),
- *             @OA\Property(property="user_message_id", type="integer", example=101),
- *             @OA\Property(property="assistant_message_id", type="integer", example=102),
- *             @OA\Property(property="usage", type="object", example={"input_tokens": 123, "output_tokens": 456}),
- *             @OA\Property(property="raw", type="object", description="Raw provider response (debug)")
+ *             @OA\Property(property="reply", type="string", nullable=true, example="Start with exploratory data analysis on open datasets."),
+ *             @OA\Property(property="blocked", type="string", nullable=true, example=null),
+ *             @OA\Property(property="thread_id", type="integer", example=18),
+ *             @OA\Property(property="user_message_id", type="integer", nullable=true, example=3101),
+ *             @OA\Property(property="assistant_message_id", type="integer", example=3102),
+ *             @OA\Property(property="usage", type="object", nullable=true, example={"promptTokenCount":230,"candidatesTokenCount":180}),
+ *             @OA\Property(property="raw", type="object", description="Raw payload returned by Gemini for debugging")
  *         )
  *     ),
- *     @OA\Response(response=401, description="Unauthorized"),
- *     @OA\Response(response=422, description="Validation error")
+ *     @OA\Response(response=401, description="Unauthenticated user"),
+ *     @OA\Response(response=422, description="Validation error"),
+ *     @OA\Response(response=500, description="Gemini API error")
  * )
- * 
+ *
  * @OA\Get(
  *     path="/user/chat/threads",
  *     summary="List chat threads",
- *     description="Paginated list of the user's chat threads, newest first.",
+ *     description="Returns the authenticated user's chat threads ordered by last activity.",
  *     tags={"Gemini"},
  *     security={{"bearerAuth"={}}},
- *     @OA\Parameter(name="limit", in="query", required=false, @OA\Schema(type="integer", minimum=1, maximum=100, default=20)),
+ *     @OA\Parameter(name="limit", in="query", required=false, @OA\Schema(type="integer", minimum=1, maximum=100, example=20)),
  *     @OA\Response(
  *         response=200,
- *         description="Threads",
- *         @OA\JsonContent(type="array", @OA\Items(
- *             @OA\Property(property="id", type="integer", example=12),
- *             @OA\Property(property="title", type="string", example="Learning Python"),
- *             @OA\Property(property="last_message_at", type="string", format="date-time", example="2025-09-10T20:12:00Z")
- *         ))
+ *         description="Threads list",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="items",
+ *                 type="array",
+ *                 @OA\Items(
+ *                     @OA\Property(property="id", type="integer", example=18),
+ *                     @OA\Property(property="title", type="string", example="Learning SQL"),
+ *                     @OA\Property(property="last_message_at", type="string", format="date-time", nullable=true, example="2025-09-21T17:45:00Z"),
+ *                     @OA\Property(property="messages_count", type="integer", example=12),
+ *                     @OA\Property(property="preview", type="string", nullable=true, example="Focus on real datasets to..." )
+ *                 )
+ *             ),
+ *             @OA\Property(
+ *                 property="meta",
+ *                 type="object",
+ *                 @OA\Property(property="current_page", type="integer", example=1),
+ *                 @OA\Property(property="per_page", type="integer", example=20),
+ *                 @OA\Property(property="total", type="integer", example=37),
+ *                 @OA\Property(property="last_page", type="integer", example=2)
+ *             )
+ *         )
  *     ),
- *     @OA\Response(response=401, description="Unauthorized")
+ *     @OA\Response(response=401, description="Unauthenticated user")
  * )
- * 
+ *
  * @OA\Get(
  *     path="/user/chat/threads/{thread}",
- *     summary="Get a chat thread",
- *     description="Fetch a single thread and its messages.",
+ *     summary="Retrieve a chat thread",
+ *     description="Fetches a single chat thread with its messages.",
  *     tags={"Gemini"},
  *     security={{"bearerAuth"={}}},
- *     @OA\Parameter(name="thread", in="path", required=true, @OA\Schema(type="integer", example=12)),
+ *     @OA\Parameter(name="thread", in="path", required=true, @OA\Schema(type="integer", example=18)),
  *     @OA\Response(
  *         response=200,
  *         description="Thread detail",
  *         @OA\JsonContent(
- *             @OA\Property(property="id", type="integer", example=12),
- *             @OA\Property(property="title", type="string", example="Learning Python"),
- *             @OA\Property(property="messages", type="array", @OA\Items(
- *                 @OA\Property(property="id", type="integer", example=102),
- *                 @OA\Property(property="role", type="string", example="assistant"),
- *                 @OA\Property(property="content", type="string", example="Start with basics like variables..."),
- *                 @OA\Property(property="created_at", type="string", format="date-time")
- *             ))
+ *             @OA\Property(
+ *                 property="thread",
+ *                 type="object",
+ *                 @OA\Property(property="id", type="integer", example=18),
+ *                 @OA\Property(property="title", type="string", example="Learning SQL"),
+ *                 @OA\Property(property="last_message_at", type="string", format="date-time", nullable=true)
+ *             ),
+ *             @OA\Property(
+ *                 property="messages",
+ *                 type="array",
+ *                 @OA\Items(
+ *                     @OA\Property(property="id", type="integer", example=4101),
+ *                     @OA\Property(property="role", type="string", enum={"user","model"}, example="model"),
+ *                     @OA\Property(property="content", type="string", example="Start with SELECT queries..."),
+ *                     @OA\Property(property="created_at", type="string", format="date-time", example="2025-09-21T17:45:00Z")
+ *                 )
+ *             )
  *         )
  *     ),
- *     @OA\Response(response=401, description="Unauthorized"),
- *     @OA\Response(response=403, description="Forbidden"),
- *     @OA\Response(response=404, description="Not found")
- * )
- * 
- * @OA\Patch(
- *     path="/user/chat/threads/{thread}",
- *     summary="Rename a chat thread",
- *     description="Update only the title of a chat thread.",
- *     tags={"Gemini"},
- *     security={{"bearerAuth"={}}},
- *     @OA\Parameter(name="thread", in="path", required=true, @OA\Schema(type="integer", example=12)),
- *     @OA\RequestBody(required=true, @OA\JsonContent(@OA\Property(property="title", type="string", example="My Python Journey"))),
- *     @OA\Response(response=200, description="Renamed", @OA\JsonContent(@OA\Property(property="ok", type="boolean", example=true))),
- *     @OA\Response(response=401, description="Unauthorized"),
- *     @OA\Response(response=403, description="Forbidden"),
- *     @OA\Response(response=404, description="Not found")
- * )
- * 
- * @OA\Delete(
- *     path="/user/chat/threads/{thread}",
- *     summary="Delete a chat thread",
- *     description="Permanently delete a thread belonging to the authenticated user.",
- *     tags={"Gemini"},
- *     security={{"bearerAuth"={}}},
- *     @OA\Parameter(name="thread", in="path", required=true, @OA\Schema(type="integer", example=12)),
- *     @OA\Response(response=200, description="Deleted", @OA\JsonContent(@OA\Property(property="ok", type="boolean", example=true))),
- *     @OA\Response(response=401, description="Unauthorized"),
- *     @OA\Response(response=403, description="Forbidden"),
- *     @OA\Response(response=404, description="Not found")
+ *     @OA\Response(response=401, description="Unauthenticated user"),
+ *     @OA\Response(response=403, description="Thread does not belong to the user"),
+ *     @OA\Response(response=404, description="Thread not found")
  * )
  */
 class GeminiDocs {}
+

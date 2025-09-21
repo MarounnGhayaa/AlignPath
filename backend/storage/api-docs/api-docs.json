@@ -6,13 +6,152 @@
         "version": "v0.1"
     },
     "paths": {
+        "/admin/analyses": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "List conversation analyses",
+                "description": "Returns the latest daily conversation analyses including related user information. Requires admin role.",
+                "operationId": "60ddd565cf48c8213311da5b6afa9bd3",
+                "responses": {
+                    "200": {
+                        "description": "Analyses",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 12
+                                            },
+                                            "user_id": {
+                                                "type": "integer",
+                                                "example": 44
+                                            },
+                                            "thread_id": {
+                                                "type": "integer",
+                                                "example": 18,
+                                                "nullable": true
+                                            },
+                                            "day": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2025-09-20"
+                                            },
+                                            "summary": {
+                                                "type": "string",
+                                                "example": "Strong engagement with mentor support."
+                                            },
+                                            "attributes": {
+                                                "type": "object",
+                                                "example": {
+                                                    "sentiment": "positive"
+                                                },
+                                                "nullable": true
+                                            },
+                                            "user": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 44
+                                                    },
+                                                    "username": {
+                                                        "type": "string",
+                                                        "example": "student_sara"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "format": "email",
+                                                        "example": "sara@example.com"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/users/{user}": {
+            "delete": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Delete a user",
+                "description": "Deletes the specified user. Only admins can delete accounts and cannot delete themselves.",
+                "operationId": "efb91e796f8999970a370ef9c5e1dfda",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "User id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 77
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deletion succeeded",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "ok"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Cannot delete yourself"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/user/accept-path": {
             "post": {
                 "tags": [
                     "AiAgent"
                 ],
-                "summary": "Accept/Save a learning path for the user",
-                "description": "Associate a path to the authenticated user (creates a UserPath).",
+                "summary": "Accept a recommended path",
+                "description": "Creates a learning path from an existing recommendation and links it to the authenticated user.",
                 "operationId": "e9df16bdb5cc873309d727139e3ae3ea",
                 "requestBody": {
                     "required": true,
@@ -20,12 +159,13 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "path_id"
+                                    "recommendation_id"
                                 ],
                                 "properties": {
-                                    "path_id": {
+                                    "recommendation_id": {
+                                        "description": "Identifier of the recommendation being accepted",
                                         "type": "integer",
-                                        "example": 10
+                                        "example": 42
                                     }
                                 },
                                 "type": "object"
@@ -40,27 +180,17 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "user_path": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "integer",
-                                                    "example": 33
-                                                },
-                                                "user_id": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "path_id": {
-                                                    "type": "integer",
-                                                    "example": 10
-                                                },
-                                                "progress_percentage": {
-                                                    "type": "number",
-                                                    "format": "float",
-                                                    "example": 0
-                                                }
-                                            },
-                                            "type": "object"
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Path accepted and saved successfully"
+                                        },
+                                        "path_id": {
+                                            "type": "integer",
+                                            "example": 15
+                                        },
+                                        "career_name": {
+                                            "type": "string",
+                                            "example": "AI Research Scientist"
                                         }
                                     },
                                     "type": "object"
@@ -69,10 +199,10 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthenticated user"
                     },
                     "404": {
-                        "description": "Path not found"
+                        "description": "Recommendation not found"
                     },
                     "422": {
                         "description": "Validation error"
@@ -90,38 +220,12 @@
                 "tags": [
                     "AiAgent"
                 ],
-                "summary": "Recommend careers based on interests",
-                "description": "Use the AI agent to recommend career paths and persist them as recommendations.",
+                "summary": "Generate fresh career recommendations",
+                "description": "Uses the user's saved preferences to request career recommendations from the AI agent and store them.",
                 "operationId": "5b4224199e769f75dae86ecbc5ec0de8",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "interests"
-                                ],
-                                "properties": {
-                                    "interests": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
-                                        },
-                                        "example": [
-                                            "AI",
-                                            "Cloud",
-                                            "Frontend"
-                                        ]
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
-                        "description": "Career paths",
+                        "description": "Career recommendations",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -136,7 +240,7 @@
                                                     },
                                                     "description": {
                                                         "type": "string",
-                                                        "example": "Build and deploy ML models...",
+                                                        "example": "Design and deploy predictive systems.",
                                                         "nullable": true
                                                     }
                                                 },
@@ -150,10 +254,13 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthenticated user"
+                    },
+                    "404": {
+                        "description": "User preferences missing"
                     },
                     "502": {
-                        "description": "AI agent failed"
+                        "description": "AI provider failure"
                     }
                 },
                 "security": [
@@ -168,19 +275,26 @@
                 "tags": [
                     "AiAgent"
                 ],
-                "summary": "Generate quests, problems, skills and resources",
-                "description": "Invoke the AI agent to generate learning content, then persist and return it.",
+                "summary": "Generate learning content for a path",
+                "description": "Asks the AI agent to generate quests, problems, skills, and learning resources for the given career and path.",
                 "operationId": "ee31100287ec51e8421ee7d992d569f6",
                 "requestBody": {
-                    "required": false,
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "career",
+                                    "path_id"
+                                ],
                                 "properties": {
+                                    "career": {
+                                        "type": "string",
+                                        "example": "Product Design"
+                                    },
                                     "path_id": {
                                         "type": "integer",
-                                        "example": 10,
-                                        "nullable": true
+                                        "example": 7
                                     }
                                 },
                                 "type": "object"
@@ -190,7 +304,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Generated content",
+                        "description": "Generated learning entities",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -199,17 +313,28 @@
                                             "type": "array",
                                             "items": {
                                                 "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": 1
-                                                    },
                                                     "title": {
                                                         "type": "string",
-                                                        "example": "Intro to Python"
+                                                        "example": "Design discovery"
                                                     },
-                                                    "description": {
+                                                    "subtitle": {
                                                         "type": "string",
+                                                        "example": "Understand user needs",
                                                         "nullable": true
+                                                    },
+                                                    "difficulty": {
+                                                        "type": "string",
+                                                        "example": "intermediate",
+                                                        "nullable": true
+                                                    },
+                                                    "duration": {
+                                                        "type": "string",
+                                                        "example": "2 weeks",
+                                                        "nullable": true
+                                                    },
+                                                    "path_id": {
+                                                        "type": "integer",
+                                                        "example": 7
                                                     }
                                                 },
                                                 "type": "object"
@@ -219,17 +344,37 @@
                                             "type": "array",
                                             "items": {
                                                 "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": 5
-                                                    },
                                                     "title": {
                                                         "type": "string",
-                                                        "example": "FizzBuzz"
+                                                        "example": "User persona mismatch"
                                                     },
-                                                    "description": {
+                                                    "question": {
                                                         "type": "string",
-                                                        "nullable": true
+                                                        "example": "Which change best satisfies the new research findings?"
+                                                    },
+                                                    "first_answer": {
+                                                        "type": "string",
+                                                        "example": "Adjust personas to match new segments"
+                                                    },
+                                                    "second_answer": {
+                                                        "type": "string",
+                                                        "example": "Ignore the research"
+                                                    },
+                                                    "third_answer": {
+                                                        "type": "string",
+                                                        "example": "Delay the launch"
+                                                    },
+                                                    "correct_answer": {
+                                                        "type": "string",
+                                                        "example": "first_answer"
+                                                    },
+                                                    "points": {
+                                                        "type": "integer",
+                                                        "example": 10
+                                                    },
+                                                    "path_id": {
+                                                        "type": "integer",
+                                                        "example": 7
                                                     }
                                                 },
                                                 "type": "object"
@@ -239,13 +384,17 @@
                                             "type": "array",
                                             "items": {
                                                 "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": 7
-                                                    },
                                                     "name": {
                                                         "type": "string",
-                                                        "example": "Control Flow"
+                                                        "example": "Rapid prototyping"
+                                                    },
+                                                    "value": {
+                                                        "type": "integer",
+                                                        "example": 20
+                                                    },
+                                                    "path_id": {
+                                                        "type": "integer",
+                                                        "example": 7
                                                     }
                                                 },
                                                 "type": "object"
@@ -255,13 +404,9 @@
                                             "type": "array",
                                             "items": {
                                                 "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": 9
-                                                    },
-                                                    "title": {
+                                                    "name": {
                                                         "type": "string",
-                                                        "example": "Official Python Tutorial"
+                                                        "example": "Design sprint playbook"
                                                     },
                                                     "type": {
                                                         "type": "string",
@@ -269,7 +414,8 @@
                                                     },
                                                     "url": {
                                                         "type": "string",
-                                                        "example": "https://docs.python.org/3/tutorial/"
+                                                        "format": "uri",
+                                                        "example": "https://example.com/design-sprint"
                                                     },
                                                     "description": {
                                                         "type": "string",
@@ -285,11 +431,11 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized"
+                    "422": {
+                        "description": "Invalid payload"
                     },
                     "502": {
-                        "description": "AI agent failed"
+                        "description": "AI provider failure"
                     }
                 },
                 "security": [
@@ -305,7 +451,7 @@
                     "Auth"
                 ],
                 "summary": "Login",
-                "description": "Authenticate user and return a JWT token.",
+                "description": "Authenticate a user and receive a JWT token plus user details.",
                 "operationId": "8d9d239bb6156ec94070eb87c3222375",
                 "requestBody": {
                     "required": true,
@@ -319,10 +465,12 @@
                                 "properties": {
                                     "email": {
                                         "type": "string",
+                                        "format": "email",
                                         "example": "user@example.com"
                                     },
                                     "password": {
                                         "type": "string",
+                                        "format": "password",
                                         "example": "password123"
                                     }
                                 },
@@ -338,9 +486,43 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "access_token": {
+                                        "status": {
                                             "type": "string",
-                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+                                            "example": "success"
+                                        },
+                                        "payload": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 12
+                                                },
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "mentor_mike"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "user@example.com"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "mentor"
+                                                },
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "eyJ0eXAiOiJKV1QiLCJhbGciOi..."
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -349,7 +531,23 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid credentials"
+                        "description": "Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "payload": {
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -360,7 +558,7 @@
                     "Auth"
                 ],
                 "summary": "User registration",
-                "description": "Register a new user and return a JWT token.",
+                "description": "Register a new user and receive a JWT token plus stored profile details.",
                 "operationId": "1b57f2354c3492616b19658bcf065170",
                 "requestBody": {
                     "required": true,
@@ -368,30 +566,33 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "name",
+                                    "username",
                                     "email",
                                     "password",
-                                    "password_confirmation"
+                                    "role"
                                 ],
                                 "properties": {
-                                    "name": {
+                                    "username": {
                                         "type": "string",
-                                        "example": "John Doe"
+                                        "example": "student_sara"
                                     },
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "john.doe@example.com"
+                                        "example": "sara@example.com"
                                     },
                                     "password": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "password"
+                                        "example": "password123"
                                     },
-                                    "password_confirmation": {
+                                    "role": {
                                         "type": "string",
-                                        "format": "password",
-                                        "example": "password"
+                                        "enum": [
+                                            "student",
+                                            "mentor"
+                                        ],
+                                        "example": "student"
                                     }
                                 },
                                 "type": "object"
@@ -406,12 +607,43 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "user": {
-                                            "type": "object"
-                                        },
-                                        "token": {
+                                        "status": {
                                             "type": "string",
-                                            "example": "jwt_token_here"
+                                            "example": "success"
+                                        },
+                                        "payload": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 25
+                                                },
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "student_sara"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "sara@example.com"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "student"
+                                                },
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "eyJ0eXAiOiJKV1QiLCJhbGciOi..."
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -420,32 +652,102 @@
                         }
                     },
                     "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The given data was invalid."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "description": "Validation error"
                     }
                 }
             }
         },
-        "/user/chat": {
+        "/user/mentors/{person}/chats": {
+            "get": {
+                "tags": [
+                    "Chats"
+                ],
+                "summary": "Fetch chat history with a mentor",
+                "description": "Return chronological messages exchanged with the specified mentor.",
+                "operationId": "42b05042469c6ff4cfe43955b7a15599",
+                "parameters": [
+                    {
+                        "name": "person",
+                        "in": "path",
+                        "description": "Mentor user id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 91
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Messages",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1201
+                                            },
+                                            "message": {
+                                                "type": "string",
+                                                "example": "Great job on completing the SQL quest!"
+                                            },
+                                            "sender_id": {
+                                                "type": "integer",
+                                                "example": 33
+                                            },
+                                            "isFromMentor": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "timestamp": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-09-21T18:12:43Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Attempting to open a chat with yourself"
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/mentors/{person}/messages": {
             "post": {
                 "tags": [
-                    "Gemini"
+                    "Chats"
                 ],
-                "summary": "Send a chat message to the AI assistant",
-                "description": "Creates/uses a chat thread and returns the assistant's reply.",
-                "operationId": "fc9009abeb5047c89958c4004792a393",
+                "summary": "Send a message to a mentor",
+                "description": "Persist a new message in the conversation with the given mentor.",
+                "operationId": "e8a2bdfff034f3f655abf6e11ae7291f",
+                "parameters": [
+                    {
+                        "name": "person",
+                        "in": "path",
+                        "description": "Mentor user id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 91
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -457,17 +759,350 @@
                                 "properties": {
                                     "message": {
                                         "type": "string",
-                                        "example": "How do I start learning Python?"
+                                        "example": "Could you review my portfolio outline?"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1450
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "sender_id": {
+                                            "type": "integer",
+                                            "example": 12
+                                        },
+                                        "isFromMentor": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "timestamp": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2025-09-21T18:19:00Z"
+                                        }
                                     },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Attempting to message yourself"
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/users/{person}/chats": {
+            "get": {
+                "tags": [
+                    "Chats"
+                ],
+                "summary": "Fetch chat history with a student",
+                "description": "Return chronological messages exchanged with the specified student.",
+                "operationId": "2b9fd9f58fef4c5c24c0d69c836607da",
+                "parameters": [
+                    {
+                        "name": "person",
+                        "in": "path",
+                        "description": "Student user id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 44
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Messages",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 2201
+                                            },
+                                            "message": {
+                                                "type": "string",
+                                                "example": "Let's schedule our next mentoring session."
+                                            },
+                                            "sender_id": {
+                                                "type": "integer",
+                                                "example": 44
+                                            },
+                                            "isFromMentor": {
+                                                "type": "boolean",
+                                                "example": false
+                                            },
+                                            "timestamp": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Attempting to open a chat with yourself"
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/users/{person}/messages": {
+            "post": {
+                "tags": [
+                    "Chats"
+                ],
+                "summary": "Send a message to a student",
+                "description": "Persist a new message in the conversation with the given student.",
+                "operationId": "51be5af9615ab07d45f0f3232e219d54",
+                "parameters": [
+                    {
+                        "name": "person",
+                        "in": "path",
+                        "description": "Student user id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 44
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "message"
+                                ],
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Great progress, keep going!"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 2288
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "sender_id": {
+                                            "type": "integer",
+                                            "example": 91
+                                        },
+                                        "isFromMentor": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "timestamp": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Attempting to message yourself"
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/transcribe": {
+            "post": {
+                "tags": [
+                    "Chats"
+                ],
+                "summary": "Transcribe an audio message",
+                "description": "Uploads an audio clip for speech-to-text transcription using the configured fallback service.",
+                "operationId": "3dc9e2d35b640038f56bf51891119885",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "audio"
+                                ],
+                                "properties": {
+                                    "audio": {
+                                        "description": "Audio file to transcribe (mp3, wav, webm, mp4, ogg)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "language": {
+                                        "type": "string",
+                                        "example": "en",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Transcription result",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "text": {
+                                            "type": "string",
+                                            "example": "Hi mentor, I finished the assignment."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    },
+                    "422": {
+                        "description": "Invalid file upload"
+                    },
+                    "500": {
+                        "description": "Transcription service error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/chat": {
+            "post": {
+                "tags": [
+                    "Gemini"
+                ],
+                "summary": "Send messages to the Gemini-powered assistant",
+                "description": "Creates or continues a chat thread with the Gemini assistant and returns the assistant response.",
+                "operationId": "fc9009abeb5047c89958c4004792a393",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "messages"
+                                ],
+                                "properties": {
                                     "thread_id": {
-                                        "description": "Existing thread id to continue in; omitted to create a new one",
+                                        "description": "Existing thread identifier to continue",
                                         "type": "integer",
-                                        "example": 12,
+                                        "example": 18,
                                         "nullable": true
                                     },
-                                    "context": {
-                                        "description": "Optional context to steer the assistant",
-                                        "type": "object",
+                                    "messages": {
+                                        "type": "array",
+                                        "items": {
+                                            "required": [
+                                                "role",
+                                                "content"
+                                            ],
+                                            "properties": {
+                                                "role": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "user",
+                                                        "model"
+                                                    ],
+                                                    "example": "user"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "How can I improve my data analysis skills?"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "system": {
+                                        "type": "string",
+                                        "example": "Focus on project-based advice",
+                                        "nullable": true
+                                    },
+                                    "temperature": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 0.6,
+                                        "nullable": true
+                                    },
+                                    "maxOutputTokens": {
+                                        "type": "integer",
+                                        "example": 1024,
                                         "nullable": true
                                     }
                                 },
@@ -485,33 +1120,37 @@
                                     "properties": {
                                         "reply": {
                                             "type": "string",
-                                            "example": "Here's a roadmap to get you started..."
+                                            "example": "Start with exploratory data analysis on open datasets.",
+                                            "nullable": true
                                         },
                                         "blocked": {
-                                            "type": "boolean",
-                                            "example": false
+                                            "type": "string",
+                                            "example": null,
+                                            "nullable": true
                                         },
                                         "thread_id": {
                                             "type": "integer",
-                                            "example": 12
+                                            "example": 18
                                         },
                                         "user_message_id": {
                                             "type": "integer",
-                                            "example": 101
+                                            "example": 3101,
+                                            "nullable": true
                                         },
                                         "assistant_message_id": {
                                             "type": "integer",
-                                            "example": 102
+                                            "example": 3102
                                         },
                                         "usage": {
                                             "type": "object",
                                             "example": {
-                                                "input_tokens": 123,
-                                                "output_tokens": 456
-                                            }
+                                                "promptTokenCount": 230,
+                                                "candidatesTokenCount": 180
+                                            },
+                                            "nullable": true
                                         },
                                         "raw": {
-                                            "description": "Raw provider response (debug)",
+                                            "description": "Raw payload returned by Gemini for debugging",
                                             "type": "object"
                                         }
                                     },
@@ -521,10 +1160,13 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthenticated user"
                     },
                     "422": {
                         "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Gemini API error"
                     }
                 },
                 "security": [
@@ -540,7 +1182,7 @@
                     "Gemini"
                 ],
                 "summary": "List chat threads",
-                "description": "Paginated list of the user's chat threads, newest first.",
+                "description": "Returns the authenticated user's chat threads ordered by last activity.",
                 "operationId": "ff275d96dd132b75fcacdac55576f5b1",
                 "parameters": [
                     {
@@ -549,43 +1191,79 @@
                         "required": false,
                         "schema": {
                             "type": "integer",
-                            "default": 20,
                             "maximum": 100,
-                            "minimum": 1
+                            "minimum": 1,
+                            "example": 20
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Threads",
+                        "description": "Threads list",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer",
-                                                "example": 12
-                                            },
-                                            "title": {
-                                                "type": "string",
-                                                "example": "Learning Python"
-                                            },
-                                            "last_message_at": {
-                                                "type": "string",
-                                                "format": "date-time",
-                                                "example": "2025-09-10T20:12:00Z"
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 18
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Learning SQL"
+                                                    },
+                                                    "last_message_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-09-21T17:45:00Z",
+                                                        "nullable": true
+                                                    },
+                                                    "messages_count": {
+                                                        "type": "integer",
+                                                        "example": 12
+                                                    },
+                                                    "preview": {
+                                                        "type": "string",
+                                                        "example": "Focus on real datasets to...",
+                                                        "nullable": true
+                                                    }
+                                                },
+                                                "type": "object"
                                             }
                                         },
-                                        "type": "object"
-                                    }
+                                        "meta": {
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "per_page": {
+                                                    "type": "integer",
+                                                    "example": 20
+                                                },
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 37
+                                                },
+                                                "last_page": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthenticated user"
                     }
                 },
                 "security": [
@@ -600,8 +1278,8 @@
                 "tags": [
                     "Gemini"
                 ],
-                "summary": "Get a chat thread",
-                "description": "Fetch a single thread and its messages.",
+                "summary": "Retrieve a chat thread",
+                "description": "Fetches a single chat thread with its messages.",
                 "operationId": "eaee0f145f71e3c36b458b03602d7d1a",
                 "parameters": [
                     {
@@ -610,7 +1288,7 @@
                         "required": true,
                         "schema": {
                             "type": "integer",
-                            "example": 12
+                            "example": 18
                         }
                     }
                 ],
@@ -621,13 +1299,23 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 12
-                                        },
-                                        "title": {
-                                            "type": "string",
-                                            "example": "Learning Python"
+                                        "thread": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 18
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Learning SQL"
+                                                },
+                                                "last_message_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
                                         },
                                         "messages": {
                                             "type": "array",
@@ -635,19 +1323,24 @@
                                                 "properties": {
                                                     "id": {
                                                         "type": "integer",
-                                                        "example": 102
+                                                        "example": 4101
                                                     },
                                                     "role": {
                                                         "type": "string",
-                                                        "example": "assistant"
+                                                        "enum": [
+                                                            "user",
+                                                            "model"
+                                                        ],
+                                                        "example": "model"
                                                     },
                                                     "content": {
                                                         "type": "string",
-                                                        "example": "Start with basics like variables..."
+                                                        "example": "Start with SELECT queries..."
                                                     },
                                                     "created_at": {
                                                         "type": "string",
-                                                        "format": "date-time"
+                                                        "format": "date-time",
+                                                        "example": "2025-09-21T17:45:00Z"
                                                     }
                                                 },
                                                 "type": "object"
@@ -660,131 +1353,13 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthenticated user"
                     },
                     "403": {
-                        "description": "Forbidden"
+                        "description": "Thread does not belong to the user"
                     },
                     "404": {
-                        "description": "Not found"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "Gemini"
-                ],
-                "summary": "Delete a chat thread",
-                "description": "Permanently delete a thread belonging to the authenticated user.",
-                "operationId": "31491eb3f807d3aec3b67959117de67f",
-                "parameters": [
-                    {
-                        "name": "thread",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "example": 12
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Deleted",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "ok": {
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "Not found"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "patch": {
-                "tags": [
-                    "Gemini"
-                ],
-                "summary": "Rename a chat thread",
-                "description": "Update only the title of a chat thread.",
-                "operationId": "2962b3f1b98c695b2ac38e39dfd7a9fb",
-                "parameters": [
-                    {
-                        "name": "thread",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "example": 12
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "title": {
-                                        "type": "string",
-                                        "example": "My Python Journey"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Renamed",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "ok": {
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "Not found"
+                        "description": "Thread not found"
                     }
                 },
                 "security": [
@@ -800,6 +1375,7 @@
                     "LearningResources"
                 ],
                 "summary": "List learning resources for a path",
+                "description": "Return curated learning resources for the given learning path.",
                 "operationId": "358b210ca50db88e4e26007e24781d61",
                 "parameters": [
                     {
@@ -829,7 +1405,7 @@
                                                 "type": "integer",
                                                 "example": 10
                                             },
-                                            "title": {
+                                            "name": {
                                                 "type": "string",
                                                 "example": "Official Python Tutorial"
                                             },
@@ -839,6 +1415,7 @@
                                             },
                                             "url": {
                                                 "type": "string",
+                                                "format": "uri",
                                                 "example": "https://docs.python.org/3/tutorial/"
                                             },
                                             "description": {
@@ -853,7 +1430,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthenticated user"
                     }
                 },
                 "security": [
@@ -863,12 +1440,381 @@
                 ]
             }
         },
+        "/user/mentors": {
+            "get": {
+                "tags": [
+                    "Mentors"
+                ],
+                "summary": "Search mentors",
+                "description": "Return mentors that match the authenticated user's saved recommendations and optional search term.",
+                "operationId": "9bf494d2410f39719debc3ac0bf1c639",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Filter mentors by name, company, position, or expertise",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "design"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Mentor list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 91
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Daniel Rivera"
+                                            },
+                                            "position": {
+                                                "type": "string",
+                                                "example": "Product Designer at Acme"
+                                            },
+                                            "company": {
+                                                "type": "string",
+                                                "example": "Acme",
+                                                "nullable": true
+                                            },
+                                            "expertise": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string",
+                                                    "example": "UX"
+                                                }
+                                            },
+                                            "avatar": {
+                                                "type": "string",
+                                                "example": "https://cdn.alignpath.io/avatars/91.png",
+                                                "nullable": true
+                                            },
+                                            "isOnline": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "lastSeen": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-09-20T20:01:00Z",
+                                                "nullable": true
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/guest/chat-messages": {
+            "get": {
+                "tags": [
+                    "Automation"
+                ],
+                "summary": "Export chat messages for automation",
+                "description": "Provide N8N (or other automation tooling) access to chat messages for a given day, optionally filtered by thread.",
+                "operationId": "9a7a3e165035a37b489b1e28fcfeadce",
+                "parameters": [
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "description": "Day to export (ISO 8601 date)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-09-20"
+                        }
+                    },
+                    {
+                        "name": "tz",
+                        "in": "query",
+                        "description": "IANA timezone for the provided day",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Europe/Berlin"
+                        }
+                    },
+                    {
+                        "name": "thread_id",
+                        "in": "query",
+                        "description": "Filter messages to a thread",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 18
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Maximum number of messages to return (max 1000)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 200
+                        }
+                    },
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "description": "Pagination cursor returned from a previous call",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "MjAyNS0wOS0yMFQxMjowMDowMFo=|1201"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message export",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "meta": {
+                                            "properties": {
+                                                "start_local": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-09-20T00:00:00+02:00"
+                                                },
+                                                "end_local": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-09-21T00:00:00+02:00"
+                                                },
+                                                "tz": {
+                                                    "type": "string",
+                                                    "example": "Europe/Berlin"
+                                                },
+                                                "count": {
+                                                    "type": "integer",
+                                                    "example": 120
+                                                },
+                                                "next_cursor": {
+                                                    "type": "string",
+                                                    "example": "MjAyNS0wOS0yMFQyMTo0NTowMFo=|980",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 3201
+                                                    },
+                                                    "thread_id": {
+                                                        "type": "integer",
+                                                        "example": 18
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 12,
+                                                        "nullable": true
+                                                    },
+                                                    "role": {
+                                                        "type": "string",
+                                                        "example": "model"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Here is a reflection of today's progress..."
+                                                    },
+                                                    "meta": {
+                                                        "description": "Provider metadata",
+                                                        "type": "object",
+                                                        "nullable": true
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-09-20T11:15:42Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "nullable": true
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/guest/daily-conversation-analyses": {
+            "post": {
+                "tags": [
+                    "Automation"
+                ],
+                "summary": "Store conversation analyses",
+                "description": "Creates or updates one or more daily conversation analyses, typically from an automation workflow.",
+                "operationId": "4d193ad9f88bae7dc8ab8bd6efe25778",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "required": [
+                                        "user_id",
+                                        "day"
+                                    ],
+                                    "properties": {
+                                        "user_id": {
+                                            "type": "integer",
+                                            "example": 44
+                                        },
+                                        "thread_id": {
+                                            "type": "integer",
+                                            "example": 18,
+                                            "nullable": true
+                                        },
+                                        "day": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2025-09-20"
+                                        },
+                                        "summary": {
+                                            "type": "string",
+                                            "example": "Student maintained positive engagement.",
+                                            "nullable": true
+                                        },
+                                        "attributes": {
+                                            "type": "object",
+                                            "example": {
+                                                "sentiment": "positive",
+                                                "topics": "portfolio"
+                                            },
+                                            "nullable": true
+                                        },
+                                        "raw": {
+                                            "type": "object",
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "minItems": 1
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Stored analyses",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "count": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 17
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 44
+                                                    },
+                                                    "thread_id": {
+                                                        "type": "integer",
+                                                        "example": 18,
+                                                        "nullable": true
+                                                    },
+                                                    "day": {
+                                                        "type": "string",
+                                                        "format": "date",
+                                                        "example": "2025-09-20"
+                                                    },
+                                                    "summary": {
+                                                        "type": "string",
+                                                        "nullable": true
+                                                    },
+                                                    "attributes": {
+                                                        "type": "object",
+                                                        "nullable": true
+                                                    },
+                                                    "raw": {
+                                                        "type": "object",
+                                                        "nullable": true
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "nullable": true
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "nullable": true
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
         "/user/problems/{pathId}": {
             "get": {
                 "tags": [
                     "Problems"
                 ],
                 "summary": "List problems for a path",
+                "description": "Return the multiple-choice problems linked to the given learning path.",
                 "operationId": "1beaf4296b719c7a1e68e53bc5f96b6a",
                 "parameters": [
                     {
@@ -902,9 +1848,34 @@
                                                 "type": "string",
                                                 "example": "Two Sum"
                                             },
-                                            "description": {
+                                            "subtitle": {
                                                 "type": "string",
+                                                "example": "Find indices adding up to target",
                                                 "nullable": true
+                                            },
+                                            "question": {
+                                                "type": "string",
+                                                "example": "Given an array of integers..."
+                                            },
+                                            "first_answer": {
+                                                "type": "string",
+                                                "example": "Use a hash map"
+                                            },
+                                            "second_answer": {
+                                                "type": "string",
+                                                "example": "Sort the list"
+                                            },
+                                            "third_answer": {
+                                                "type": "string",
+                                                "example": "Brute force"
+                                            },
+                                            "correct_answer": {
+                                                "type": "string",
+                                                "example": "first_answer"
+                                            },
+                                            "points": {
+                                                "type": "integer",
+                                                "example": 100
                                             }
                                         },
                                         "type": "object"
@@ -914,7 +1885,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthenticated user"
                     }
                 },
                 "security": [
@@ -930,6 +1901,7 @@
                     "Problems"
                 ],
                 "summary": "Get a problem by id",
+                "description": "Fetch the detailed statement for the specified problem.",
                 "operationId": "929de602180418e5bd5151ded0acad58",
                 "parameters": [
                     {
@@ -961,10 +1933,29 @@
                                             "type": "string",
                                             "example": "Two Sum"
                                         },
-                                        "description": {
+                                        "subtitle": {
                                             "type": "string",
-                                            "example": "Given an array of integers...",
                                             "nullable": true
+                                        },
+                                        "question": {
+                                            "type": "string",
+                                            "example": "Given an array of integers..."
+                                        },
+                                        "first_answer": {
+                                            "type": "string"
+                                        },
+                                        "second_answer": {
+                                            "type": "string"
+                                        },
+                                        "third_answer": {
+                                            "type": "string"
+                                        },
+                                        "correct_answer": {
+                                            "type": "string"
+                                        },
+                                        "points": {
+                                            "type": "integer",
+                                            "example": 100
                                         }
                                     },
                                     "type": "object"
@@ -973,7 +1964,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthenticated user"
                     },
                     "404": {
                         "description": "Problem not found"
@@ -992,17 +1983,17 @@
                     "Profile"
                 ],
                 "summary": "Get user info",
-                "description": "Return the public profile for a given user id.",
+                "description": "Return the public profile data for the given user id.",
                 "operationId": "db5ac8b1c91a35e83a10492678d11855",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "User ID",
+                        "description": "User identifier",
                         "required": true,
                         "schema": {
                             "type": "integer",
-                            "example": 1
+                            "example": 3
                         }
                     }
                 ],
@@ -1012,13 +2003,57 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/UserBasic"
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "payload": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "learner_jane"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "jane@example.com"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "student"
+                                                },
+                                                "location": {
+                                                    "type": "string",
+                                                    "example": "Berlin, DE",
+                                                    "nullable": true
+                                                },
+                                                "avatar_url": {
+                                                    "type": "string",
+                                                    "example": "https://cdn.alignpath.io/avatars/3.png",
+                                                    "nullable": true
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            },
+                                            "type": "object",
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
                     },
                     "404": {
                         "description": "User not found"
@@ -1061,9 +2096,8 @@
                                                 "example": "data_science"
                                             },
                                             "progress_percentage": {
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 42.5
+                                                "type": "integer",
+                                                "example": 45
                                             },
                                             "date_saved": {
                                                 "type": "string",
@@ -1078,7 +2112,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthenticated user"
                     }
                 },
                 "security": [
@@ -1089,13 +2123,13 @@
             }
         },
         "/user/updateInfo/{id}": {
-            "put": {
+            "patch": {
                 "tags": [
                     "Profile"
                 ],
                 "summary": "Update user profile",
-                "description": "Update fields on the user's profile.",
-                "operationId": "3de46a78a3a9121b61a3764da3081b33",
+                "description": "Updates selected fields on the user's profile. Fields are optional and will only be updated when provided.",
+                "operationId": "c06ce5d008d34fb47f4377d3fb6c2151",
                 "parameters": [
                     {
                         "name": "id",
@@ -1103,7 +2137,7 @@
                         "required": true,
                         "schema": {
                             "type": "integer",
-                            "example": 1
+                            "example": 3
                         }
                     }
                 ],
@@ -1113,23 +2147,32 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "name": {
+                                    "username": {
                                         "type": "string",
-                                        "example": "Jane Doe"
+                                        "example": "learner_jane",
+                                        "nullable": true
                                     },
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "jane@example.com"
-                                    },
-                                    "bio": {
-                                        "type": "string",
-                                        "example": "Curious lifelong learner.",
+                                        "example": "jane@example.com",
                                         "nullable": true
                                     },
-                                    "avatar_url": {
+                                    "password": {
                                         "type": "string",
-                                        "example": "https://cdn.example.com/avatars/1.png",
+                                        "format": "password",
+                                        "example": "newPassword123",
+                                        "nullable": true
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newPassword123",
+                                        "nullable": true
+                                    },
+                                    "location": {
+                                        "type": "string",
+                                        "example": "Berlin, DE",
                                         "nullable": true
                                     }
                                 },
@@ -1144,13 +2187,41 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/UserBasic"
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "payload": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "learner_jane"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "jane@example.com"
+                                                },
+                                                "location": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthenticated user"
                     },
                     "422": {
                         "description": "Validation error"
@@ -1169,7 +2240,7 @@
                     "Quests"
                 ],
                 "summary": "List quests for a path",
-                "description": "Return all quests for the specified path.",
+                "description": "Return all quests that belong to the supplied learning path.",
                 "operationId": "c63d61ae0d3bbfbaeeeccd9314632be0",
                 "parameters": [
                     {
@@ -1203,8 +2274,33 @@
                                                 "type": "string",
                                                 "example": "Intro to Python"
                                             },
+                                            "subtitle": {
+                                                "type": "string",
+                                                "example": "Understand core syntax",
+                                                "nullable": true
+                                            },
                                             "description": {
                                                 "type": "string",
+                                                "nullable": true
+                                            },
+                                            "difficulty": {
+                                                "type": "string",
+                                                "example": "beginner",
+                                                "nullable": true
+                                            },
+                                            "duration": {
+                                                "type": "string",
+                                                "example": "1 week",
+                                                "nullable": true
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "nullable": true
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time",
                                                 "nullable": true
                                             }
                                         },
@@ -1215,7 +2311,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthenticated user"
                     }
                 },
                 "security": [
@@ -1277,6 +2373,7 @@
                     "Skills"
                 ],
                 "summary": "List skills for a path",
+                "description": "Return the current skill ratings attached to a learning path.",
                 "operationId": "7e935542e73954d892985884319ea6ab",
                 "parameters": [
                     {
@@ -1309,6 +2406,10 @@
                                             "name": {
                                                 "type": "string",
                                                 "example": "Control Flow"
+                                            },
+                                            "value": {
+                                                "type": "integer",
+                                                "example": 60
                                             }
                                         },
                                         "type": "object"
@@ -1318,7 +2419,190 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthenticated user"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/skills/{skill}": {
+            "put": {
+                "tags": [
+                    "Skills"
+                ],
+                "summary": "Update a skill progress value",
+                "description": "Update the numeric progress value for a specific skill and propagate the user's path progress.",
+                "operationId": "d8942eeedbdc44a50f2c5a0d105fae0a",
+                "parameters": [
+                    {
+                        "name": "skill",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 7
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "value"
+                                ],
+                                "properties": {
+                                    "value": {
+                                        "type": "integer",
+                                        "maximum": 100,
+                                        "minimum": 0,
+                                        "example": 75
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated skill",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 7
+                                        },
+                                        "path_id": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Control Flow"
+                                        },
+                                        "value": {
+                                            "type": "integer",
+                                            "example": 75
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/users": {
+            "get": {
+                "tags": [
+                    "UserDirectory"
+                ],
+                "summary": "Search students",
+                "description": "Allow mentors to search the directory of students by name, company, position, or expertise.",
+                "operationId": "a839c8e98992b753ec0115f7dd5abcc5",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Case-insensitive search term",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "frontend"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Maximum number of students to return (max 200)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 50
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Students list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 44
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Sofia Patel"
+                                            },
+                                            "position": {
+                                                "type": "string",
+                                                "example": "Frontend Developer at Vanta",
+                                                "nullable": true
+                                            },
+                                            "company": {
+                                                "type": "string",
+                                                "example": "Vanta",
+                                                "nullable": true
+                                            },
+                                            "expertise": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string",
+                                                    "example": "React"
+                                                }
+                                            },
+                                            "avatar": {
+                                                "type": "string",
+                                                "example": "https://cdn.alignpath.io/avatars/44.png",
+                                                "nullable": true
+                                            },
+                                            "isOnline": {
+                                                "type": "boolean",
+                                                "example": false
+                                            },
+                                            "lastSeen": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-09-19T09:15:00Z",
+                                                "nullable": true
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    },
+                    "403": {
+                        "description": "User is not a mentor"
                     }
                 },
                 "security": [
@@ -1334,7 +2618,7 @@
                     "UserPreference"
                 ],
                 "summary": "Save user preferences",
-                "description": "Create or update learning preferences for the authenticated user.",
+                "description": "Create or update the authenticated user's learning preferences. All fields are required and stored as plain strings.",
                 "operationId": "60b8dc6a933482ee8b8d1e7c30614983",
                 "requestBody": {
                     "required": true,
@@ -1342,46 +2626,27 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "interests"
+                                    "skills",
+                                    "interests",
+                                    "values",
+                                    "careers"
                                 ],
                                 "properties": {
+                                    "skills": {
+                                        "type": "string",
+                                        "example": "Python, SQL, Statistics"
+                                    },
                                     "interests": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
-                                        },
-                                        "example": [
-                                            "AI",
-                                            "Web Development"
-                                        ]
-                                    },
-                                    "goals": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
-                                        },
-                                        "example": [
-                                            "Switch careers",
-                                            "Build a portfolio"
-                                        ]
-                                    },
-                                    "learning_style": {
                                         "type": "string",
-                                        "example": "hands_on"
+                                        "example": "Data science, automation"
                                     },
-                                    "time_availability": {
+                                    "values": {
                                         "type": "string",
-                                        "example": "10h/week"
+                                        "example": "Innovation, impact"
                                     },
-                                    "languages": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
-                                        },
-                                        "example": [
-                                            "en",
-                                            "fr"
-                                        ]
+                                    "careers": {
+                                        "type": "string",
+                                        "example": "Data Analyst, ML Engineer"
                                     }
                                 },
                                 "type": "object"
@@ -1396,37 +2661,44 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 3
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
                                         },
-                                        "user_id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "interests": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "goals": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "learning_style": {
-                                            "type": "string"
-                                        },
-                                        "time_availability": {
-                                            "type": "string"
-                                        },
-                                        "languages": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
+                                        "payload": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "skills": {
+                                                    "type": "string"
+                                                },
+                                                "interests": {
+                                                    "type": "string"
+                                                },
+                                                "values": {
+                                                    "type": "string"
+                                                },
+                                                "careers": {
+                                                    "type": "string"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "nullable": true
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -1435,7 +2707,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthenticated user"
                     },
                     "422": {
                         "description": "Validation error"
@@ -1484,6 +2756,10 @@
     },
     "tags": [
         {
+            "name": "Admin",
+            "description": "Admin"
+        },
+        {
             "name": "AiAgent",
             "description": "AiAgent"
         },
@@ -1492,12 +2768,24 @@
             "description": "Auth"
         },
         {
+            "name": "Chats",
+            "description": "Chats"
+        },
+        {
             "name": "Gemini",
             "description": "Gemini"
         },
         {
             "name": "LearningResources",
             "description": "LearningResources"
+        },
+        {
+            "name": "Mentors",
+            "description": "Mentors"
+        },
+        {
+            "name": "Automation",
+            "description": "Automation"
         },
         {
             "name": "Problems",
@@ -1518,6 +2806,10 @@
         {
             "name": "Skills",
             "description": "Skills"
+        },
+        {
+            "name": "UserDirectory",
+            "description": "UserDirectory"
         },
         {
             "name": "UserPreference",

@@ -23,3 +23,4 @@ namespace App\Docs;
  * )
  */
 class OpenApi {}
+

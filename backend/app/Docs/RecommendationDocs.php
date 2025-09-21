@@ -21,3 +21,4 @@ namespace App\Docs;
  * )
  */
 class RecommendationDocs {}
+
