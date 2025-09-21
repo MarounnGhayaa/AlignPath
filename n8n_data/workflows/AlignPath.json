@@ -1,0 +1,314 @@
+{
+  "name": "AlignPath",
+  "nodes": [
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "a18a152d-b290-4763-8e7a-392372967834",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        896,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json.payload}}",
+        "options": {}
+      },
+      "id": "4e5d6bbc-6bce-414c-828e-de34ae0da927",
+      "name": "Analyze with Gemini",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1312,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "MxAbx8IbshMpvZZD",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build Transcript — works after HTTP Request\n\n// 1) Extract rows from typical HTTP shapes\nlet rows = [];\nconst first = items[0]?.json;\n\nif (Array.isArray(first?.data)) {\n  // HTTP returned { meta, data: [...] }\n  rows = first.data;\n} else if (Array.isArray(first)) {\n  // Rare: HTTP node returned raw array\n  rows = first;\n} else if (Array.isArray(items) && items.length && items.every(i => i?.json && !('data' in i.json))) {\n  // Upstream produced one item per row already\n  rows = items.map(i => i.json);\n} else {\n  rows = []; // nothing we recognize\n}\n\n// 2) Group by (student_id|user_id, thread_id, day)\nconst groups = new Map();\n\nfor (const r0 of rows) {\n  const r = r0 || {};\n\n  const sid = r.student_id ?? r.user_id ?? null;\n  const tid = r.thread_id ?? null;\n  const day = r.day ?? (r.created_at ? String(r.created_at).slice(0, 10) : null);\n\n  if (sid == null || tid == null || day == null) continue;\n\n  const key = `${sid}|${tid}|${day}`;\n  if (!groups.has(key)) {\n    groups.set(key, { student_id: sid, thread_id: tid, day, transcript: [] });\n  }\n\n  groups.get(key).transcript.push({\n    id: r.id,\n    role: r.role,\n    content: r.content,\n    created_at: r.created_at,\n    meta: r.meta ?? {},\n  });\n}\n\n// 3) Sort transcripts by created_at ascending (optional but nice)\nfor (const g of groups.values()) {\n  g.transcript.sort((a, b) => {\n    const ta = new Date(a.created_at).getTime() || 0;\n    const tb = new Date(b.created_at).getTime() || 0;\n    return ta - tb;\n  });\n}\n\n// 4) Build output items — ALWAYS return something for visibility\nconst out = Array.from(groups.values()).map(v => ({ json: v }));\n\nif (out.length === 0) {\n  // return a debug item so you can see what arrived from HTTP\n  return [{\n    json: {\n      note: \"No groups produced. Inspect `input_sample` to see what came from HTTP.\",\n      hint: \"Ensure your HTTP node returns { data: [...] } or adapt extraction in step (1).\",\n      input_sample: first ?? null\n    }\n  }];\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        -176
+      ],
+      "id": "91243aae-8fc7-4549-b852-067160e3488a",
+      "name": "Build Transcript"
+    },
+    {
+      "parameters": {
+        "jsCode": "const meta = {\n  student_id: $json.student_id,\n  thread_id:  $json.thread_id,\n  day:        $json.day,\n};\n\nconst transcript = $json.transcript ?? [];\nconst text =\n  'SYSTEM:\\nYou are \"Career Copilot – Mentor Analyzer\". Output STRICT JSON only. No markdown or prose outside JSON.\\n\\nTRANSCRIPT (ordered):\\n' +\n  JSON.stringify(transcript);\n\nreturn [{\n  json: {\n    ...meta,\n    payload: {\n      contents: [ { role: 'user', parts: [ { text } ] } ],\n      systemInstruction: {\n        parts: [ { text:\n          'Return ONLY JSON with these keys exactly:\\n' +\n          '{\\n' +\n          '  \"summary\": \"<=120 words\",\\n' +\n          '  \"engagement_score\": 0.0,\\n' +\n          '  \"sentiment\": \"positive|neutral|negative|mixed\",\\n' +\n          '  \"confidence_level\": \"low|medium|high\",\\n' +\n          '  \"key_topics\": [],\\n' +\n          '  \"skills_practiced\": [],\\n' +\n          '  \"confusions_or_blocks\": [],\\n' +\n          '  \"risk_flags\": [],\\n' +\n          '  \"next_actions_for_student\": [],\\n' +\n          '  \"suggested_interventions_for_mentor\": [],\\n' +\n          '  \"quotes\": []\\n' +\n          '}\\n' +\n          'If info is missing, use empty arrays.'\n        } ]\n      },\n      generationConfig: {\n        responseMimeType: 'application/json',\n        temperature: 0.4,\n        maxOutputTokens: 1024,\n      }\n    }\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        192
+      ],
+      "id": "1ced1c97-b792-4e28-841c-9fab4a9362c7",
+      "name": "Build Gemini Payload"
+    },
+    {
+      "parameters": {
+        "jsCode": "// meta from Build Gemini Payload (previous item)\nconst meta = {\n  student_id: $items(\"Build Gemini Payload\")[0].json.student_id,\n  thread_id:  $items(\"Build Gemini Payload\")[0].json.thread_id,\n  day:        $items(\"Build Gemini Payload\")[0].json.day,\n};\n\n// HTTP response from Gemini\nconst res  = items[0].json;\nconst text = res?.candidates?.[0]?.content?.parts?.[0]?.text ?? \"\";\n\nlet parsed;\ntry { parsed = JSON.parse(text); }\ncatch {\n  const m = text.match(/\\{[\\s\\S]*\\}$/);\n  parsed = m ? JSON.parse(m[0]) : {\n    summary: \"\", engagement_score: 0, sentiment: \"neutral\",\n    confidence_level: \"low\", key_topics: [], skills_practiced: [],\n    confusions_or_blocks: [], risk_flags: [],\n    next_actions_for_student: [], suggested_interventions_for_mentor: [], quotes: []\n  };\n}\n\nif (typeof parsed.engagement_score === 'number') {\n  parsed.engagement_score = Math.max(0, Math.min(1, parsed.engagement_score));\n}\n\nreturn [{\n  user_id: meta.student_id,\n  thread_id:  meta.thread_id,\n  day:        meta.day,\n  summary:    parsed.summary ?? \"\",\n  attributes: parsed,\n  raw:        res\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1504,
+        208
+      ],
+      "id": "44ad53a5-0e8a-43c4-8916-fdfc46eb25f2",
+      "name": "Parse Analyses"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        112,
+        0
+      ],
+      "id": "06213ca7-094c-4d1e-b9bd-6f9a27c6b05d",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const tz = 'Asia/Beirut';\n\nfunction ymdParts(date, timeZone) {\n  const parts = new Intl.DateTimeFormat('en-CA', {\n    timeZone, year: 'numeric', month: '2-digit', day: '2-digit'\n  }).formatToParts(date);\n  const get = t => parts.find(p => p.type === t).value;\n  return { y: +get('year'), m: +get('month'), d: +get('day') };\n}\n\n// \"Today\" in tz (calendar)\nconst now = new Date();\nconst { y, m, d } = ymdParts(now, tz);\n\n// Build an instant that is calendar-yesterday at 12:00 UTC, then format in tz.\n// (Using UTC noon avoids DST edge cases.)\nconst utcNoonToday = new Date(Date.UTC(y, m - 1, d, 12, 0, 0));\nconst utcNoonYesterday = new Date(utcNoonToday);\nutcNoonYesterday.setUTCDate(utcNoonYesterday.getUTCDate() - 1);\n\nconst day = new Intl.DateTimeFormat('en-CA', {\n  timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit'\n}).format(utcNoonYesterday);\n\nreturn [{\n  json: {\n    tz,\n    day,                          // e.g. \"2025-09-20\"\n    start: `${day} 00:00:00`,\n    end:   `${day} 23:59:59`\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        -160
+      ],
+      "id": "7f73e9e3-365d-494c-88b5-87cb6042a5e9",
+      "name": "Set Windows"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { continue: true } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2064,
+        272
+      ],
+      "id": "eae748b7-2806-46f0-8c33-29a35aaac1ed",
+      "name": "Next Batch"
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/api/v0.1/guest/chat-messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "start",
+              "value": "={{ $json.start }}"
+            },
+            {
+              "name": "tz",
+              "value": "={{ $json.tz }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        496,
+        -32
+      ],
+      "id": "9c96739f-479d-42d0-b5f1-2febd895aba4",
+      "name": "Get Daily Chats",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "aVqQZ4S6x4AkGWTt",
+          "name": "Bearer Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/api/v0.1/guest/daily-conversation-analyses",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1776,
+        16
+      ],
+      "id": "04b82f7f-534d-446c-87a4-9a17698bf737",
+      "name": "Insert Daily Analysis",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "aVqQZ4S6x4AkGWTt",
+          "name": "Bearer Auth account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "Build Gemini Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Transcript": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Gemini Payload": {
+      "main": [
+        [
+          {
+            "node": "Analyze with Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze with Gemini": {
+      "main": [
+        [
+          {
+            "node": "Parse Analyses",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Analyses": {
+      "main": [
+        [
+          {
+            "node": "Insert Daily Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Windows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Windows": {
+      "main": [
+        [
+          {
+            "node": "Get Daily Chats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Next Batch": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Daily Chats": {
+      "main": [
+        [
+          {
+            "node": "Build Transcript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Daily Analysis": {
+      "main": [
+        [
+          {
+            "node": "Next Batch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Beirut",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "fa1b4486-acce-427e-8ab3-6303b524dc00",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b0e1299786686833d7233f050a8426fdb5b162e2de2315bf79492092b4800cc5"
+  },
+  "id": "yKxu46DZCMp2aOQq",
+  "tags": []
+}
