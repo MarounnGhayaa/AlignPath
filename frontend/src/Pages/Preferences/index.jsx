@@ -94,7 +94,7 @@ const Preferences = () => {
                 "Growth",
                 "Integrity & Ethics",
                 "Collaboration & Teamwork",
-                "Growth & Learning",
+                "Learning",
                 "Impact & Contribution",
                 "Well-being & Balance",
               ].map((item) => (
