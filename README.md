@@ -47,7 +47,7 @@
 | ----------------------------------------------------- | ------------------------------------------- |
 | ![Recommendations](./readme/demo/Recommendations.gif) | ![SavingPath](./readme/demo/SavingPath.gif) |
 
-| Quests & Problems                                         | Save Path                             |
+| Quests & Problems                                         | AI-Chatbot                            |
 | --------------------------------------------------------- | ------------------------------------- |
 | ![QuestsAndProblems](./readme/demo/QuestsAndProblems.gif) | ![Chatbot](./readme/demo/Chatbot.gif) |
 
