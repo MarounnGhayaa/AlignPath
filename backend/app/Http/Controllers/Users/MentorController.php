@@ -15,8 +15,9 @@ class MentorController extends Controller {
 
     public function index(Request $request) {
         $query = trim((string) $request->query('search', ''));
+        $user  = $request->user();
 
-        $mentors = $this->mentors->search($query);
+        $mentors = $this->mentors->search($user, $query);
 
         return response()->json($mentors);
     }
