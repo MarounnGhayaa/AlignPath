@@ -1,15 +1,14 @@
 import "./style.css";
 import Logo from "../../Assets/LogoOrangeNoBg.png";
 import Button from "../../Components/Button";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../../Services/axios";
 import { Trash2 } from "lucide-react";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const isActive = (path) => location.pathname === path;
+
   const getDailyAnalyses = async (token) => {
     try {
       const res = await API.get("admin/analyses", {
@@ -94,18 +93,6 @@ const AdminDashboard = () => {
           <strong>
             Align<span>Path</span>
           </strong>
-        </div>
-        <div>
-          <Link
-            to="/adminDashboard"
-            className={
-              isActive("/adminDashboard")
-                ? "adminNav-links active"
-                : "adminNav-links"
-            }
-          >
-            Analytics
-          </Link>
         </div>
         <Button
           text={"Log Out"}
