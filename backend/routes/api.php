@@ -17,6 +17,8 @@ use App\Http\Controllers\Users\ChatController;
 use App\Http\Controllers\Users\UserDirectoryController;
 use App\Http\Controllers\Admins\AnalysesController;
 use App\Http\Controllers\Admins\UsersController;
+use App\Http\Controllers\N8N\ChatMessageController;
+use App\Http\Controllers\N8N\DailyConversationAnalysisController;
 
 Route::group(["prefix" => "v0.1"], function () {
     Route::group(["middleware" => "auth:api"], function () {
@@ -71,5 +73,8 @@ Route::group(["prefix" => "v0.1"], function () {
     Route::group(["prefix" => "guest"], function () {
         Route::post("/login", [AuthController::class, "login"]);
         Route::post("/register", [AuthController::class, "register"]);
+
+        Route::get('/chat-messages', [ChatMessageController::class, 'index']);
+        Route::post('/daily-conversation-analyses', [DailyConversationAnalysisController::class, 'store']);
     });
 });
