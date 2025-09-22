@@ -81,4 +81,3 @@ namespace App\Docs;
  * )
  */
 class AuthDocs {}
-

@@ -8,7 +8,7 @@ namespace App\Docs;
  *     summary="List quests for a path",
  *     description="Return all quests that belong to the supplied learning path.",
  *     tags={"Quests"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="pathId", in="path", required=true, @OA\Schema(type="integer", example=10)),
  *     @OA\Response(
  *         response=200,
@@ -32,4 +32,3 @@ namespace App\Docs;
  * )
  */
 class QuestDocs {}
-

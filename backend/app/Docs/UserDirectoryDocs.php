@@ -8,7 +8,7 @@ namespace App\Docs;
  *     summary="Search students",
  *     description="Allow mentors to search the directory of students by name, company, position, or expertise.",
  *     tags={"UserDirectory"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="search", in="query", required=false, description="Case-insensitive search term", @OA\Schema(type="string", example="frontend")),
  *     @OA\Parameter(name="limit", in="query", required=false, description="Maximum number of students to return (max 200)", @OA\Schema(type="integer", example=50)),
  *     @OA\Response(
@@ -33,4 +33,3 @@ namespace App\Docs;
  * )
  */
 class UserDirectoryDocs {}
-

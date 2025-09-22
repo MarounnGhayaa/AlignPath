@@ -8,7 +8,7 @@ namespace App\Docs;
  *     summary="List skills for a path",
  *     description="Return the current skill ratings attached to a learning path.",
  *     tags={"Skills"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="pathId", in="path", required=true, @OA\Schema(type="integer", example=10)),
  *     @OA\Response(
  *         response=200,
@@ -31,7 +31,7 @@ namespace App\Docs;
  *     summary="Update a skill progress value",
  *     description="Update the numeric progress value for a specific skill and propagate the user's path progress.",
  *     tags={"Skills"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="skill", in="path", required=true, @OA\Schema(type="integer", example=7)),
  *     @OA\RequestBody(
  *         required=true,
@@ -55,4 +55,3 @@ namespace App\Docs;
  * )
  */
 class SkillDocs {}
-

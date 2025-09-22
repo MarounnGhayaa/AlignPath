@@ -8,7 +8,7 @@ namespace App\Docs;
  *     summary="Search mentors",
  *     description="Return mentors that match the authenticated user's saved recommendations and optional search term.",
  *     tags={"Mentors"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="search", in="query", required=false, description="Filter mentors by name, company, position, or expertise", @OA\Schema(type="string", example="design")),
  *     @OA\Response(
  *         response=200,
@@ -31,4 +31,3 @@ namespace App\Docs;
  * )
  */
 class MentorDocs {}
-

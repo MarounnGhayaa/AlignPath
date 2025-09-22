@@ -8,7 +8,7 @@ namespace App\Docs;
  *     summary="Save user preferences",
  *     description="Create or update the authenticated user's learning preferences. All fields are required and stored as plain strings.",
  *     tags={"UserPreference"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
@@ -43,4 +43,3 @@ namespace App\Docs;
  * )
  */
 class UserPreferenceDocs {}
-

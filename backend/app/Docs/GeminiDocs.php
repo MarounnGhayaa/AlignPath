@@ -8,7 +8,7 @@ namespace App\Docs;
  *     summary="Send messages to the Gemini-powered assistant",
  *     description="Creates or continues a chat thread with the Gemini assistant and returns the assistant response.",
  *     tags={"Gemini"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
@@ -51,7 +51,7 @@ namespace App\Docs;
  *     summary="List chat threads",
  *     description="Returns the authenticated user's chat threads ordered by last activity.",
  *     tags={"Gemini"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="limit", in="query", required=false, @OA\Schema(type="integer", minimum=1, maximum=100, example=20)),
  *     @OA\Response(
  *         response=200,
@@ -86,7 +86,7 @@ namespace App\Docs;
  *     summary="Retrieve a chat thread",
  *     description="Fetches a single chat thread with its messages.",
  *     tags={"Gemini"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="thread", in="path", required=true, @OA\Schema(type="integer", example=18)),
  *     @OA\Response(
  *         response=200,
@@ -117,4 +117,3 @@ namespace App\Docs;
  * )
  */
 class GeminiDocs {}
-

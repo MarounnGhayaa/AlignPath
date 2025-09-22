@@ -8,7 +8,7 @@ namespace App\Docs;
  *     summary="List conversation analyses",
  *     description="Returns the latest daily conversation analyses including related user information. Requires admin role.",
  *     tags={"Admin"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Response(
  *         response=200,
  *         description="Analyses",
@@ -40,7 +40,7 @@ namespace App\Docs;
  *     summary="Delete a user",
  *     description="Deletes the specified user. Only admins can delete accounts and cannot delete themselves.",
  *     tags={"Admin"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="user", in="path", required=true, description="User id", @OA\Schema(type="integer", example=77)),
  *     @OA\Response(
  *         response=200,
@@ -53,4 +53,3 @@ namespace App\Docs;
  * )
  */
 class AdminDocs {}
-

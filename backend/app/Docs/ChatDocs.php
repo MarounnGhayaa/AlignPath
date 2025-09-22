@@ -8,7 +8,7 @@ namespace App\Docs;
  *     summary="Fetch chat history with a mentor",
  *     description="Return chronological messages exchanged with the specified mentor.",
  *     tags={"Chats"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="person", in="path", required=true, description="Mentor user id", @OA\Schema(type="integer", example=91)),
  *     @OA\Response(
  *         response=200,
@@ -33,7 +33,7 @@ namespace App\Docs;
  *     summary="Send a message to a mentor",
  *     description="Persist a new message in the conversation with the given mentor.",
  *     tags={"Chats"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="person", in="path", required=true, description="Mentor user id", @OA\Schema(type="integer", example=91)),
  *     @OA\RequestBody(
  *         required=true,
@@ -63,7 +63,7 @@ namespace App\Docs;
  *     summary="Fetch chat history with a student",
  *     description="Return chronological messages exchanged with the specified student.",
  *     tags={"Chats"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="person", in="path", required=true, description="Student user id", @OA\Schema(type="integer", example=44)),
  *     @OA\Response(
  *         response=200,
@@ -88,7 +88,7 @@ namespace App\Docs;
  *     summary="Send a message to a student",
  *     description="Persist a new message in the conversation with the given student.",
  *     tags={"Chats"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="person", in="path", required=true, description="Student user id", @OA\Schema(type="integer", example=44)),
  *     @OA\RequestBody(
  *         required=true,
@@ -118,7 +118,7 @@ namespace App\Docs;
  *     summary="Transcribe an audio message",
  *     description="Uploads an audio clip for speech-to-text transcription using the configured fallback service.",
  *     tags={"Chats"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\MediaType(
@@ -146,4 +146,3 @@ namespace App\Docs;
  * )
  */
 class ChatDocs {}
-

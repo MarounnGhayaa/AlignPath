@@ -2,9 +2,15 @@
     "openapi": "3.0.0",
     "info": {
         "title": "AlignPath APIs",
-        "description": "RESTful APIs for AlignPath, offering endpoints for authentication, user management, and personalized career recommendations with their corresponding quests, problems, skills and resources.",
+        "description": "RESTful APIs for AlignPath, offering endpoints for authentication, user management, and personalized career recommendations with their corresponding quests, problems, skills, and resources.",
         "version": "v0.1"
     },
+    "servers": [
+        {
+            "url": "/api/v0.1",
+            "description": "Base path for v0.1 API"
+        }
+    ],
     "paths": {
         "/admin/analyses": {
             "get": {

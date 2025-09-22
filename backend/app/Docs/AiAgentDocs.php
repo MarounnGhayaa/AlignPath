@@ -8,7 +8,7 @@ namespace App\Docs;
  *     summary="Accept a recommended path",
  *     description="Creates a learning path from an existing recommendation and links it to the authenticated user.",
  *     tags={"AiAgent"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
@@ -40,7 +40,7 @@ namespace App\Docs;
  *     summary="Generate fresh career recommendations",
  *     description="Uses the user's saved preferences to request career recommendations from the AI agent and store them.",
  *     tags={"AiAgent"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Response(
  *         response=200,
  *         description="Career recommendations",
@@ -65,7 +65,7 @@ namespace App\Docs;
  *     summary="Generate learning content for a path",
  *     description="Asks the AI agent to generate quests, problems, skills, and learning resources for the given career and path.",
  *     tags={"AiAgent"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
@@ -129,4 +129,3 @@ namespace App\Docs;
  * )
  */
 class AiAgentDocs {}
-

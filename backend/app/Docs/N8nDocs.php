@@ -92,4 +92,3 @@ namespace App\Docs;
  * )
  */
 class N8nDocs {}
-

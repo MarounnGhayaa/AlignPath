@@ -8,7 +8,7 @@ namespace App\Docs;
  *     summary="List problems for a path",
  *     description="Return the multiple-choice problems linked to the given learning path.",
  *     tags={"Problems"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="pathId", in="path", required=true, @OA\Schema(type="integer", example=10)),
  *     @OA\Response(
  *         response=200,
@@ -37,7 +37,7 @@ namespace App\Docs;
  *     summary="Get a problem by id",
  *     description="Fetch the detailed statement for the specified problem.",
  *     tags={"Problems"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="problemId", in="path", required=true, @OA\Schema(type="integer", example=50)),
  *     @OA\Response(
  *         response=200,
@@ -60,4 +60,3 @@ namespace App\Docs;
  * )
  */
 class ProblemDocs {}
-

@@ -8,7 +8,7 @@ namespace App\Docs;
  *     summary="Get user info",
  *     description="Return the public profile data for the given user id.",
  *     tags={"Profile"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
@@ -44,7 +44,7 @@ namespace App\Docs;
  *     summary="List user's learning paths",
  *     description="Return all learning paths saved by the authenticated user.",
  *     tags={"Profile"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Response(
  *         response=200,
  *         description="Array of user paths",
@@ -67,7 +67,7 @@ namespace App\Docs;
  *     summary="Update user profile",
  *     description="Updates selected fields on the user's profile. Fields are optional and will only be updated when provided.",
  *     tags={"Profile"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer", example=3)),
  *     @OA\RequestBody(
  *         required=true,
@@ -99,4 +99,3 @@ namespace App\Docs;
  * )
  */
 class ProfileDocs {}
-

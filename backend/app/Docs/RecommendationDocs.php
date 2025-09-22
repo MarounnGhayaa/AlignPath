@@ -7,7 +7,7 @@ namespace App\Docs;
  *     path="/user/recommendations",
  *     summary="List user's saved recommendations",
  *     tags={"Recommendations"},
- *     security={{"bearerAuth"={}}},
+ *     security={{"bearerAuth":{}}},
  *     @OA\Response(
  *         response=200,
  *         description="Array of recommendations",
@@ -21,4 +21,3 @@ namespace App\Docs;
  * )
  */
 class RecommendationDocs {}
-
