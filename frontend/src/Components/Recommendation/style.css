@@ -1,0 +1,31 @@
+.recommendation-card {
+  background-color: white;
+  padding: 40px;
+  border-width: 1px;
+  border-radius: 8px;
+  border-style: solid;
+  border-color: #d9d9d9;
+  width: 320px;
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.recommendation-card h4 {
+  display: flex;
+  justify-content: center;
+  width: 300px;
+  text-align: center;
+}
+
+.recommendation-card h6 {
+  padding: 10px;
+  padding-top: 0px;
+  width: 300px;
+  font-size: 18px;
+  font-weight: normal;
+  text-align: center;
+}

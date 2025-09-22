@@ -1,0 +1,263 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.explore-body {
+  padding: 50px;
+  text-align: center;
+  color: white;
+  background-color: #424242;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.explore-heading {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.explore-description {
+  margin-top: 50px;
+  padding: 30px;
+  font-style: italic;
+  font-size: larger;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.explore-description p {
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+.explore-row-btns {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.explore-designed-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.explore-WLogo {
+  height: 200px;
+  width: auto;
+  max-width: 100%;
+}
+
+.explore-OLogo {
+  height: 100px;
+  width: 100px;
+  object-fit: contain;
+  max-width: 100%;
+}
+
+.explore-left-button {
+  background-color: #424242;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 40px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.save-path-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.sticky-note {
+  position: absolute;
+  left: calc(100% + 15px);
+  top: 50%;
+  transform: translateY(-50%) rotate(-2deg);
+  width: 260px;
+  max-width: 40vw;
+  background: #fff7a3;
+  color: #2c2c2c;
+  border: 1px solid #e3d37a;
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+
+.sticky-note-heading {
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #8a6d00;
+}
+
+.sticky-note-body {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.sticky-arrow {
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-right: 12px solid #fff7a3;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+}
+
+@media (max-width: 1024px) {
+  .explore-body {
+    padding: 40px;
+  }
+
+  .explore-description {
+    margin-top: 40px;
+    padding: 25px;
+    font-size: large;
+  }
+
+  .explore-WLogo {
+    height: 150px;
+  }
+
+  .explore-OLogo {
+    height: 80px;
+    width: 80px;
+  }
+
+  .explore-left-button {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .explore-body {
+    padding: 30px 20px;
+  }
+
+  .explore-heading {
+    gap: 20px;
+  }
+
+  .explore-description {
+    margin-top: 30px;
+    padding: 20px;
+    font-size: medium;
+  }
+
+  .explore-description p {
+    margin-bottom: 30px;
+  }
+
+  .explore-row-btns {
+    gap: 20px;
+  }
+
+  .explore-designed-row {
+    margin-top: 30px;
+    gap: 15px;
+  }
+
+  .explore-WLogo {
+    height: 120px;
+  }
+
+  .explore-OLogo {
+    height: 60px;
+    width: 60px;
+  }
+
+  .explore-left-button {
+    font-size: 28px;
+  }
+
+  .save-path-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .save-path-wrapper .sticky-note {
+    position: relative;
+    right: auto;
+    top: auto;
+    margin: 0 0 8px 0;
+    transform: none;
+    width: min(520px, 90%);
+    max-width: 90%;
+    text-align: left;
+  }
+  .save-path-wrapper .sticky-arrow {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .explore-body {
+    padding: 20px 15px;
+  }
+
+  .explore-heading {
+    gap: 15px;
+  }
+
+  .explore-description {
+    margin-top: 20px;
+    padding: 15px;
+    font-size: small;
+  }
+
+  .explore-description p {
+    margin-bottom: 20px;
+  }
+
+  .explore-row-btns {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .explore-designed-row {
+    margin-top: 20px;
+    gap: 10px;
+  }
+
+  .explore-WLogo {
+    height: 100px;
+  }
+
+  .explore-OLogo {
+    height: 50px;
+    width: 50px;
+  }
+
+  .explore-left-button {
+    font-size: 24px;
+  }
+
+  .save-path-wrapper {
+    width: 100%;
+    align-items: stretch;
+  }
+  .save-path-wrapper .sticky-note {
+    width: 100%;
+    max-width: 100%;
+  }
+}

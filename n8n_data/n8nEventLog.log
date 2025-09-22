@@ -1,0 +1,2 @@
+{"__type":"$$EventMessageAudit","id":"de9a9a6f-3745-4c0f-87e4-408b21f03f9c","ts":"2025-09-17T11:35:09.549+00:00","eventName":"n8n.audit.user.login.success","message":"n8n.audit.user.login.success","payload":{"userId":"467f32d1-897b-4506-9f02-b83c7e2ccc3c","_email":"marounghaya15@gmail.com","_firstName":"Maroun","_lastName":"Ghaya","globalRole":"global:owner","authenticationMethod":"email"}}
+{"__type":"$$EventMessageConfirm","confirm":"de9a9a6f-3745-4c0f-87e4-408b21f03f9c","ts":"2025-09-17T11:35:09.599+00:00","source":{"id":"0","name":"eventBus"}}

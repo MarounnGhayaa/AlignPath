@@ -1,0 +1,23 @@
+.landing-stat {
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d9d9d9;
+  width: 285px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.landing-stat h2 {
+  padding: 10px;
+}
+
+.landing-stat h3 {
+  padding: 10px;
+  width: 250px;
+  font-weight: normal;
+}

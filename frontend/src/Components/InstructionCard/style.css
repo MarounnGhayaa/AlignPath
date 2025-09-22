@@ -1,0 +1,34 @@
+.landing-instruction {
+  background-color: white;
+  width: 300px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.landing-instruction h6 {
+  font-size: 18px;
+  font-weight: normal;
+  padding: 30px;
+}
+
+.landing-instruction-icon-container {
+  padding-top: 5px;
+  margin: 20px;
+  width: 40px;
+  height: 40px;
+  border-style: solid;
+  border-color: #f46530;
+  border-radius: 8px;
+  background-color: #ffe8be;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.landing-instruction-icon {
+  color: #f46530;
+  size: 24px;
+}

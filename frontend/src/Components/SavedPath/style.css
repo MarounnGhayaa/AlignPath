@@ -1,0 +1,90 @@
+.path-card {
+  text-align: center;
+  border-width: 1px;
+  border-radius: 8px;
+  border-style: solid;
+  border-color: #d9d9d9;
+  width: 100%;
+  max-width: 400px;
+  min-width: 300px;
+  padding: 20px;
+  margin: 20px;
+  flex: 1;
+}
+
+.path-card-header {
+  display: flex;
+  justify-content: space-between;
+  direction: row;
+}
+
+.path-card-header h4 {
+  background-color: #424242;
+  color: white;
+  border-radius: 90px;
+  font-weight: lighter;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 3px;
+}
+
+.path-card-subtitle {
+  text-align: left;
+  font-weight: normal;
+}
+
+.path-card-progress {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  direction: row;
+}
+
+.path-card-footer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  direction: row;
+}
+
+.path-card-footer h5 {
+  margin-top: 12px;
+  font-weight: normal;
+}
+
+.path-card-progress-bar {
+  margin-top: 10px;
+}
+
+@media (max-width: 1024px) {
+  .path-card {
+    max-width: 350px;
+    min-width: 280px;
+    margin: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .path-card {
+    max-width: 100%;
+    min-width: 250px;
+    margin: 10px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .path-card {
+    margin: 5px;
+    padding: 10px;
+    min-width: 200px;
+  }
+
+  .path-card-header h4 {
+    font-size: 12px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 2px;
+  }
+}

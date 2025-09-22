@@ -13,9 +13,13 @@
 <!-- System Design -->
 <img src="./readme/title3.svg"/>
 
-### Add Title Here
+### System Architecture
 
-- To be decided on later on.
+<img src="./readme/demo/SystemArchitecture.png"/>
+
+### ER Diagram
+
+<img src="./readme/demo/ERDiagram.png"/>
 
 <br><br>
 
@@ -25,52 +29,88 @@
 ### AlignPath main features
 
 - Personalized Career Recommendations:
-  Analyzes students’ social interests, activities, and strengths to suggest tailored career paths that best fit their unique profiles.
+  Analyzes students' preferences to suggest tailored career paths and to generate quests, problems and skills that best fit their unique profiles with an AI chatbot to elaborate more on the saved careers.
 
-- AI-Powered Career Exploration Chatbot:
-  Provides detailed insights and explains various career fields to help students understand the opportunities and requirements of each profession.
+- Chatting feature with speech-to-text:
+  Allows students to start conversations with mentors and vice-versa with an option to record a voice and auto transcribe it to text to facilitates communication.
 
-- Automated Professional Networking:
-  Facilitates connections between students and industry mentors and professionals, seeking guidance, motivation, and real-world career insights.
+- Automated Workflow:
+  Collects chats between users and the AI-chatbot and provides a summary about each chat to assess the chatbot responses and users intentions while using the chatbot.
   <br><br>
 
 <!-- Demo -->
 <img src="./readme/title5.svg"/>
 
-### User Screens (Mobile)
+### Users Screens
 
-| Login screen                            | Register screen                       | Register screen                       |
-| --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| Get Recommendations                                   | Save Path                                   |
+| ----------------------------------------------------- | ------------------------------------------- |
+| ![Recommendations](./readme/demo/Recommendations.gif) | ![SavingPath](./readme/demo/SavingPath.gif) |
 
-### Admin Screens (Web)
+| Quests & Problems                                         | AI-Chatbot                            |
+| --------------------------------------------------------- | ------------------------------------- |
+| ![QuestsAndProblems](./readme/demo/QuestsAndProblems.gif) | ![Chatbot](./readme/demo/Chatbot.gif) |
 
-| Login screen                            | Register screen                       |
-| --------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| Live Chatting                            | Speech to Text                                  |
+| ---------------------------------------- | ----------------------------------------------- |
+| ![Chatting](./readme/demo/LiveChats.gif) | ![SpeechToText](./readme/demo/SpeechToText.gif) |
+
+### Admin Screen
+
+| Admin Dashboard                                |
+| ---------------------------------------------- |
+| ![AdminScreen](./readme/demo/AdminFeature.gif) |
+
+<br><br>
+
+### Swagger
+
+- To access the Swagger UI hit this endpoint: http://localhost:8000/api/documentation
+
+| APIs Documentation                    |
+| ------------------------------------- |
+| ![Swagger](./readme/demo/Swagger.gif) |
+
+<br><br>
+
+### Linear
+
+- Ticketing system linked with github (commits include ticket id referring to the task)
+
+| Issues in Linear                    |
+| ----------------------------------- |
+| ![Linear](./readme/demo/Linear.gif) |
+
+<br><br>
+
+### Future Work
+
+- Develop a Communities feature to group users with similar saved fields, enabling them to exchange knowledge, experiences, and resources.
+
+- Introduce a Points & Rewards System where users earn points for contributions (e.g., solving quests, problems ...) and redeem them for perks such as leveling, premium features and certifications.
 
 <br><br>
 
 <!-- Development & Testing -->
 <img src="./readme/title6.svg"/>
 
-### Add Title Here
+### Functionality & Reliability
 
-| Services                                | Validation                            | Testing                               |
-| --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| Services                                                                                                  | Validation                                                                                                            | Testing                                                                                       |
+| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| ![FrontendService](./readme/demo/FrontendService.png) ![BackendService](./readme/demo/BackendService.png) | ![FrontendValidation](./readme/demo/FrontendValidation.png) ![BackendValidation](./readme/demo/BackendValidation.png) | ![FrontendTest](./readme/demo/FrontendTest.png) ![BackendTest](./readme/demo/BackendTest.png) |
 
 <br><br>
 
 <!-- Deployment -->
 <img src="./readme/title7.svg"/>
 
-### Add Title Here
+### API Testing with Postman
 
-- Description here.
+- Screenshots of Postman tests for the core APIs: Login, Career Recommendation, and Get Saved Paths.
 
-| Postman API 1                           | Postman API 2                         | Postman API 3                         |
-| --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| Postman API 1                          | Postman API 2                          | Postman API 3                          |
+| -------------------------------------- | -------------------------------------- | -------------------------------------- |
+| ![PostmanAPI1](./readme/demo/API1.png) | ![PostmanAPI2](./readme/demo/API2.png) | ![PostmanAPI3](./readme/demo/API3.png) |
 
 <br><br>

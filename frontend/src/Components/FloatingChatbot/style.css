@@ -1,0 +1,125 @@
+.floating-chatbot-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd07b 0%, #ee5a24 100%);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.floating-chatbot-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+}
+
+.floating-chatbot-button:active {
+  transform: translateY(0);
+}
+
+.floating-chatbot-button.open {
+  background: linear-gradient(135deg, #ffd07b 0%, #ee5a24 100%);
+}
+
+.chatbot-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-left: 0;
+  padding-right: 120px;
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+.chatbot-container {
+  background-color: transparent;
+  border-radius: 12px;
+  box-shadow: none;
+  width: 90%;
+  max-width: 450px;
+  height: 75%;
+  max-height: 600px;
+  animation: slideUp 0.3s ease;
+  overflow: hidden;
+}
+
+.chatbot-container .ai-chat-container {
+  position: relative;
+  top: auto;
+  right: auto;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .floating-chatbot-button {
+    bottom: 20px;
+    right: 20px;
+    width: 55px;
+    height: 55px;
+  }
+
+  .chatbot-container {
+    width: 95%;
+    height: 85%;
+    max-height: 500px;
+  }
+
+  .chatbot-overlay {
+    justify-content: flex-end;
+    padding-left: 0;
+    padding-right: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .floating-chatbot-button {
+    bottom: 15px;
+    right: 15px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .chatbot-container {
+    width: 98%;
+    height: 90%;
+    max-height: 450px;
+  }
+}

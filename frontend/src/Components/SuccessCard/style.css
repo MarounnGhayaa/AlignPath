@@ -1,0 +1,25 @@
+.landing-story {
+  background-color: #424242;
+  color: white;
+  width: 400px;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+}
+
+.landing-story h6 {
+  margin-bottom: 30px;
+  padding: 20px;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.landing-story h3 {
+  margin-left: 20px;
+  font-weight: 500;
+}
+
+.landing-story h4 {
+  font-weight: normal;
+  margin-left: 20px;
+}

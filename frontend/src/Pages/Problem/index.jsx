@@ -1,0 +1,102 @@
+import "./style.css";
+import ProblemCard from "../../Components/ProblemCard";
+import { useEffect, useState } from "react";
+import API from "../../Services/axios";
+import { useSelector } from "react-redux";
+
+const Problem = ({ pathId }) => {
+  const [problems, setProblems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const registerState = useSelector((state) => state.register) || {};
+  const token = registerState.token || localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchProblems = async () => {
+      try {
+        if (!token) {
+          setError("Unauthorized. Please log in again.");
+          setLoading(false);
+          return;
+        }
+
+        if (!pathId) {
+          setError("Path ID is missing.");
+          setLoading(false);
+          return;
+        }
+
+        const response = await API.get(`/user/problems/${pathId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = Array.isArray(response.data) ? response.data : [];
+        // Sort so that completed problems are shown last
+        const completed = getCompletedLocal("problem", pathId);
+        const notDone = [];
+        const done = [];
+        for (const p of data) {
+          (completed.has(String(p.id)) ? done : notDone).push(p);
+        }
+        setProblems([...notDone, ...done]);
+      } catch (err) {
+        console.error("Error fetching problems:", err);
+        setError("Failed to load problems.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProblems();
+  }, [token, pathId]);
+
+  if (loading) {
+    return <div className="problem-body">Loading problems...</div>;
+  }
+
+  if (error) {
+    const msg = typeof error === "string" ? error : error?.message || "Unknown error";
+    return <div className="problem-body">Error: {msg}</div>;
+  }
+
+  return (
+    <div className="problem-body">
+      <h1>Practice Problems</h1>
+      <p>Solve coding challenges and earn XP points</p>
+      <div className="problem-body-row">
+        {problems.length > 0 ? (
+          problems.map((problem) => (
+            <ProblemCard
+              key={problem.id}
+              id={problem.id}
+              pathId={pathId}
+              title={problem.title}
+              subtitle={problem.subtitle}
+              points={problem.points}
+            />
+          ))
+        ) : (
+          <p>No problems found.</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Problem;
+
+function lsKey(type, pathId) {
+  return `ap_completed_${type}_${pathId}`;
+}
+
+function getCompletedLocal(type, pathId) {
+  try {
+    const raw = localStorage.getItem(lsKey(type, pathId));
+    const arr = raw ? JSON.parse(raw) : [];
+    if (Array.isArray(arr)) return new Set(arr.map(String));
+    return new Set();
+  } catch {
+    return new Set();
+  }
+}

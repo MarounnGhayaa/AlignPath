@@ -1,0 +1,93 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.sharedNav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #424242;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.sharedNav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: "Times New Roman", Times, serif;
+  color: white;
+}
+
+.sharedNav-logo-img {
+  width: 100px;
+  height: auto;
+}
+
+.sharedNav-logo span {
+  color: #f46530;
+}
+
+.sharedNav-links {
+  text-decoration: none;
+  color: white;
+  margin-left: 50px;
+  font-size: large;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.sharedNav-links.active {
+  color: #f46530;
+}
+
+.sharedNav-links:hover {
+  color: #f46530;
+}
+
+@media (max-width: 768px) {
+  .sharedNav {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .sharedNav-logo {
+    font-size: 24px;
+  }
+
+  .sharedNav-logo-img {
+    width: 80px;
+  }
+
+  .sharedNav-links {
+    margin-left: 0;
+    font-size: medium;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sharedNav {
+    padding: 10px;
+  }
+
+  .sharedNav-logo {
+    font-size: 20px;
+  }
+
+  .sharedNav-logo-img {
+    width: 60px;
+  }
+
+  .sharedNav-links {
+    font-size: small;
+    padding: 8px;
+  }
+}

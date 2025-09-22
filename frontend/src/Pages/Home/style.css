@@ -1,0 +1,98 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.homePage {
+  padding: 20px;
+}
+
+.homePage h1 {
+  margin: 40px;
+  text-align: center;
+}
+
+.homePage-careers {
+  text-align: center;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 40px;
+  border-radius: 8px;
+  width: 100%;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.homePage-stats {
+  text-align: center;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 40px;
+  border-radius: 8px;
+  width: 100%;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.homePage-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  .homePage-body {
+    gap: 30px;
+    padding: 15px;
+  }
+
+  .homePage-careers,
+  .homePage-stats {
+    padding: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .homePage {
+    padding: 10px;
+  }
+
+  .homePage h1 {
+    margin: 20px;
+    font-size: 24px;
+  }
+
+  .homePage-body {
+    gap: 20px;
+    padding: 10px;
+  }
+
+  .homePage-careers,
+  .homePage-stats {
+    padding: 20px;
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .homePage h1 {
+    margin: 15px;
+    font-size: 20px;
+  }
+
+  .homePage-careers,
+  .homePage-stats {
+    padding: 15px;
+  }
+}

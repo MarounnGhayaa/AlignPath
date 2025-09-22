@@ -1,0 +1,34 @@
+.input-style {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  width: 100%;
+  background-color: white;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+.input-style:focus {
+  outline: none;
+  border-color: #f46530;
+  box-shadow: 0 0 0 2px rgba(244, 101, 48, 0.2);
+}
+
+.input-style:hover {
+  border-color: #b3b3b3;
+}
+
+@media (max-width: 768px) {
+  .input-style {
+    padding: 14px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .input-style {
+    padding: 12px;
+    font-size: 14px;
+  }
+}

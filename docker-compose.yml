@@ -1,0 +1,137 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: alignpath-server
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/var/www/html
+    working_dir: /var/www/html
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: alignpath_db
+      DB_USERNAME: alignpath
+      DB_PASSWORD: alignpass
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      /bin/sh -lc "
+        composer install --no-interaction --prefer-dist --no-progress &&
+        if [ ! -f .env ] && [ -f .env.example ]; then cp .env.example .env; fi &&
+        php artisan key:generate --force || true &&
+        php artisan migrate --force &&
+        php artisan serve --host=0.0.0.0 --port=8000
+      "
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: alignpath-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app:delegated
+      - /app/node_modules
+    working_dir: /app
+    command: npm start
+    stdin_open: true
+    tty: true
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+      FAST_REFRESH: "false"
+      HOST: 0.0.0.0
+      PORT: 3000
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0.39
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: alignpath_db
+      MYSQL_USER: alignpath
+      MYSQL_PASSWORD: alignpass
+      MYSQL_ROOT_HOST: "%"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test:
+        ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -proot || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 64M
+      PMA_ARBITRARY: "1"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  n8n:
+    image: n8nio/n8n
+    container_name: alignpath-n8n
+    ports:
+      - "5680:5678"
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    restart: unless-stopped
+
+  chat:
+    build:
+      context: ./chat-feature
+      dockerfile: Dockerfile
+    container_name: alignpath-chat
+    ports:
+      - "4100:4000"
+    working_dir: /usr/src/app
+    volumes:
+      - ./chat-feature:/usr/src/app:delegated
+      - /usr/src/app/node_modules
+    environment:
+      NODE_ENV: development
+      HOST: 0.0.0.0
+      PORT: 4000
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: alignpath_db
+      DB_USERNAME: alignpath
+      DB_PASSWORD: alignpass
+      CORS_ORIGIN: "http://localhost:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -lc "npm install && (npm run dev || npm start)"
+    restart: unless-stopped
+
+  stt-service:
+    build:
+      context: ./transcriber/stt-service
+      dockerfile: Dockerfile
+    container_name: alignpath-stt
+    ports:
+      - "8001:8001"
+    environment:
+      STT_MODEL: base
+      STT_COMPUTE: int8
+    restart: unless-stopped
+
+volumes:
+  db_data: {}

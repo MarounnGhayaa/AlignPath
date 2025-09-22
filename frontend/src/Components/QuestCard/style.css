@@ -1,0 +1,69 @@
+.quest-card {
+  background-color: white;
+  border-width: 1px;
+  border-radius: 8px;
+  border-style: solid;
+  border-color: #d9d9d9;
+  width: 450px;
+  padding: 20px;
+}
+
+.quest-card h3,
+h4 {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.quest-card h4 {
+  font-weight: normal;
+  font-size: 18px;
+}
+
+.quest-card-tags {
+  display: flex;
+  direction: row;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.quest-card-tags span {
+  background-color: #424242;
+  color: white;
+  border-radius: 90px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 3px;
+}
+
+.quest-card-btn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.quest-card.done {
+  opacity: 0.7;
+  filter: grayscale(0.1);
+}
+
+.completed-title {
+  text-decoration: line-through;
+}
+
+.quest-card-timer {
+  background-color: #ff9800;
+  color: #fff;
+  border-radius: 90px;
+  padding: 0 10px 3px 10px;
+}
+
+.quest-card-status {
+  background-color: #2e7d32;
+  color: #fff;
+  border-radius: 90px;
+  padding: 0 10px 3px 10px;
+}
+
+.quest-card-actions {
+  display: flex;
+  gap: 12px;
+}
