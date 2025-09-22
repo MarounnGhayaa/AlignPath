@@ -64,16 +64,6 @@
 
 <br><br>
 
-### Linear
-
-- Ticketing system linked with github (commits include ticket id referring to the task)
-
-| Issues in Linear                    |
-| ----------------------------------- |
-| ![Linear](./readme/demo/Linear.gif) |
-
-<br><br>
-
 ### Future Work
 
 - Develop a Communities feature to group users with similar saved fields, enabling them to exchange knowledge, experiences, and resources.
@@ -116,3 +106,13 @@
 | APIs Documentation                    |
 | ------------------------------------- |
 | ![Swagger](./readme/demo/Swagger.gif) |
+
+<br><br>
+
+### Linear
+
+- Ticketing system linked with github (commits include ticket id referring to the task)
+
+| Issues in Linear                    |
+| ----------------------------------- |
+| ![Linear](./readme/demo/Linear.gif) |
