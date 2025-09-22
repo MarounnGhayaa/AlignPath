@@ -129,9 +129,9 @@
 
 - To access the Swagger UI hit this endpoint: http://localhost:8000/api/documentation
 
-| APIs Documentation                    |
-| ------------------------------------- |
-| ![Swagger](./readme/demo/Swagger.gif) |
+| APIs Documentation                    | Register/Swagger                            | GetInfo/Authentication                              |
+| ------------------------------------- | ------------------------------------------- | --------------------------------------------------- |
+| ![Swagger](./readme/demo/Swagger.gif) | ![RegSwagger](./readme/demo/RegSwagger.gif) | ![GetInfoSwagger](./readme/demo/GetInfoSwagger.gif) |
 
 <br><br>
 
