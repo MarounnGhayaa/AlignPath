@@ -19,7 +19,8 @@
 
 ### ER Diagram
 
-<img src="./readme/demo/ERDiagram.png"/>
+- Link to eraser (https://app.eraser.io/workspace/2edjoRzOZ3BAU3XtT2s1?origin=share)
+- <img src="./readme/demo/ERDiagram.png"/>
 
 <br><br>
 
