@@ -115,6 +115,14 @@
 <!-- Deployment -->
 <img src="./readme/title7.svg"/>
 
+### CI Workflow
+
+| List of Workflow runs         | CI Jobs                       |
+| ----------------------------- | ----------------------------- |
+| ![CI1](./readme/demo/CI1.png) | ![CI2](./readme/demo/CI2.png) |
+
+<br><br>
+
 ### API Testing with Postman
 
 - Screenshots of Postman tests for the core APIs: Login, Career Recommendation, and Get Saved Paths.
