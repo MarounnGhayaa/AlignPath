@@ -87,6 +87,9 @@
 
 ### Functionality & Reliability
 
+- Used for the frontend tests: jest(testing library) & for the backend Laravel TestCase
+- Commands: npm test (frontend) & php artisan test (backend)
+
 | Services                                                                                                  | Validation                                                                                                            | Testing                                                                                       |
 | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | ![FrontendService](./readme/demo/FrontendService.png) ![BackendService](./readme/demo/BackendService.png) | ![FrontendValidation](./readme/demo/FrontendValidation.png) ![BackendValidation](./readme/demo/BackendValidation.png) | ![FrontendTest](./readme/demo/FrontendTest.png) ![BackendTest](./readme/demo/BackendTest.png) |
