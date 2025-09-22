@@ -138,6 +138,7 @@
 ### Linear
 
 - Ticketing system linked with github (commits include ticket id referring to the task)
+- Link: https://linear.app/alignpath-steps/team/ALI/all
 
 | Issues in Linear                    |
 | ----------------------------------- |
