@@ -84,6 +84,10 @@
   - When you send a message, the backend adds context before asking Gemini for a reply.
   - The reply is saved along with your messages, so your learning journey is fully recorded.
 
+| Agents Flows                          |
+| ------------------------------------- |
+| ![BPMN](./readme/demo/AgentsBPMN.png) |
+
 <br><br>
 
 ### Future Work
