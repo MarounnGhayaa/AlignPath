@@ -78,6 +78,12 @@
   - The system uses these to suggest career paths.
   - If the user accepts one, the AI generates a learning plan: quests, problems, skills to build, and recommended resources.
 
+- AI Chatbot Agent
+  - A floating button opens the chatbot panel.
+  - The bot remembers past conversations and can pick up where you left off.
+  - When you send a message, the backend adds context before asking Gemini for a reply.
+  - The reply is saved along with your messages, so your learning journey is fully recorded.
+
 <br><br>
 
 ### Future Work
