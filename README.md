@@ -63,16 +63,6 @@
 
 <br><br>
 
-### Swagger
-
-- To access the Swagger UI hit this endpoint: http://localhost:8000/api/documentation
-
-| APIs Documentation                    |
-| ------------------------------------- |
-| ![Swagger](./readme/demo/Swagger.gif) |
-
-<br><br>
-
 ### Linear
 
 - Ticketing system linked with github (commits include ticket id referring to the task)
@@ -114,3 +104,11 @@
 | ![PostmanAPI1](./readme/demo/API1.png) | ![PostmanAPI2](./readme/demo/API2.png) | ![PostmanAPI3](./readme/demo/API3.png) |
 
 <br><br>
+
+### Swagger
+
+- To access the Swagger UI hit this endpoint: http://localhost:8000/api/documentation
+
+| APIs Documentation                    |
+| ------------------------------------- |
+| ![Swagger](./readme/demo/Swagger.gif) |
