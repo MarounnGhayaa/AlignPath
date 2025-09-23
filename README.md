@@ -90,6 +90,14 @@
 
 <br><br>
 
+### N8N Workflow
+
+| AlignPath Workflow            |
+| ----------------------------- |
+| ![N8N](./readme/demo/N8N.png) |
+
+<br><br>
+
 ### Future Work
 
 - Develop a Communities feature to group users with similar saved fields, enabling them to exchange knowledge, experiences, and resources.
@@ -114,14 +122,6 @@
 
 <!-- Deployment -->
 <img src="./readme/title7.svg"/>
-
-### CI Workflow
-
-| List of Workflow runs         | CI Jobs                       |
-| ----------------------------- | ----------------------------- |
-| ![CI1](./readme/demo/CI1.png) | ![CI2](./readme/demo/CI2.png) |
-
-<br><br>
 
 ### API Testing with Postman
 
